@@ -422,6 +422,43 @@ class Grundriss:
         self.b.rechteck(X, Y, b * self.s, h * self.s, fill="#fff", w=1.1)
         self.b.rechteck(X + 2, Y + 2, b * self.s - 4, h * self.s - 4, fill=TINTE, stroke=None)
 
+    def palisade(self, pts, r=.55, geschlossen=True):
+        """Palisade als Reihe von Pfählen entlang eines Zugs (Schritt-Koordinaten)."""
+        pix = [self.P(x, y) for x, y in pts] + ([self.P(*pts[0])] if geschlossen else [])
+        for (x1, y1), (x2, y2) in zip(pix, pix[1:]):
+            l = math.hypot(x2 - x1, y2 - y1)
+            n = max(1, int(l / (r * self.s * 2)))
+            for i in range(n):
+                t = i / n
+                self.b.kreis(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, r * self.s, fill="#fff", w=.9)
+
+    def saeule(self, x, y, r=.45):
+        X, Y = self.P(x, y)
+        self.b.kreis(X, Y, r * self.s, fill=TINTE, stroke=None)
+
+    def pfahlhaus(self, x, y, b, h, d=.5):
+        """Haus auf Pfählen: Pfähle als Punkte unter einem Wandring."""
+        for px in (x - .6, x + b / 2, x + b + .6):
+            for py in (y - .6, y + h + .6):
+                X, Y = self.P(px, py)
+                self.b.kreis(X, Y, .35 * self.s, fill=TINTE, stroke=None)
+        self.mauer_rechteck(x, y, b, h, d=d)
+
+    def rundbau(self, x, y, r, d=.8, zustand="fertig"):
+        X, Y = self.P(x, y)
+        R, D = r * self.s, d * self.s
+        if zustand == "fertig":
+            self.b.kreis(X, Y, R - D / 2, fill="#fff", stroke=TINTE, w=D)
+        else:
+            self.b.kreis(X, Y, R - D / 2, fill="#fff", stroke=TINTE, w=1, dash="7 5")
+
+    def laterne(self, x, y):
+        X, Y = self.P(x, y)
+        self.b.kreis(X, Y, 2.6, fill="#fff", w=.8)
+        for a in range(0, 360, 45):
+            c, s_ = math.cos(math.radians(a)), math.sin(math.radians(a))
+            self.b.linie([(X + 3.8 * c, Y + 3.8 * s_), (X + 6 * c, Y + 6 * s_)], w=.5)
+
     def nummer(self, x, y, n):
         X, Y = self.P(x, y)
         self.b.nummer(X, Y, n)

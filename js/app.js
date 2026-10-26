@@ -130,7 +130,8 @@
      Chronik: gespielte Geschichten und was sie festgelegt haben
      ========================================================== */
   const chronik = RW.chronik || [];
-  const karten = RW.karten || [];
+  const kartenNr = c => c.station ? (RW.stationen.find(s => s.id === c.station) || {}).nr ?? 99 : -1;
+  const karten = (RW.karten || []).slice().sort((a, b) => kartenNr(a) - kartenNr(b));
   const kartenAn = id => karten.filter(c => c.station === id);
   const haltSchluessel = id => (orte.some(o => o.id === id) ? "ort:" : "station:") + id;
   const chronikZiele = c => new Set([

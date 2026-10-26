@@ -199,7 +199,7 @@ RW.glossar = [
 RW.ausbaustufen = [
   { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar, automatische Querverweise mit Vorschau, Rückverweise, Suche, Tag- und Nachtansicht.", erledigt: true },
   { nr: 2, titel: "Figuren", text: "Zwei Figuren pro Station und vier Reisende auf der ganzen Strecke, mit Rolle, Erscheinung, Auftreten, Motiv, Zitat und drei möglichen Geheimnissen; Porträts; Übersicht aller Figuren. Offen: Spielwerte.", erledigt: true },
-  { nr: 3, titel: "Gebäude und Orte", text: "Grundriss der Musterstation und Pläne der Schauplätze Sonnenfeld, Rommilyser Kreuz, Feste Hohenstein, Natterbrücke und Kanzlei Mardramund (vorhanden). Offen: Pläne der übrigen Stationen.", erledigt: true },
+  { nr: 3, titel: "Gebäude und Orte", text: "Grundriss der Musterstation und ein Plan für jede der zwölf Stationen, mit Legende (vorhanden). Offen: Obergeschosse und Innenstädte von Gareth und Perricum.", erledigt: true },
   { nr: 4, titel: "Karte und Strecke", text: "Schematische Karte der ganzen Strecke (vorhanden). Offen: Reisezeitrechner, Wegpunkte zwischen den Stationen." },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
