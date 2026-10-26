@@ -284,6 +284,7 @@ th { font-family: var(--schrift-kapit); font-weight: 700; color: var(--rubrik); 
 tbody tr:hover { background: var(--blatt-hell); }
 td.zahl, th.zahl { text-align: right; font-variant-numeric: tabular-nums; }
 .tabelle-huelle { overflow-x: auto; max-width: var(--mass); }
+.tabelle-huelle.breit { max-width: 52rem; }
 
 /* ---------- Kennzeichen ---------- */
 .marke-kanon, .marke-eigen, .bau { display: inline-block; font-size: .82rem; line-height: 1.3; padding: .05rem .5rem; border-radius: 2px; vertical-align: middle; white-space: nowrap; }
@@ -390,6 +391,19 @@ td.zahl, th.zahl { text-align: right; font-variant-numeric: tabular-nums; }
 .zitat p { margin: 0; }
 section[id] > h2 a { color: inherit; text-decoration: none; }
 section[id] > h2 a:hover { color: var(--rubrik); }
+
+/* ---------- Tempel ---------- */
+.tempel-kasten {
+  max-width: var(--mass); margin: 2.4rem 0 1rem; padding: .2rem 1.4rem 1rem;
+  background: var(--blatt-hell); border: 1px solid var(--linie); border-top: 4px double var(--gold);
+}
+.tempel-kasten h2 { margin-top: 1rem; }
+.tempel-zeile { color: var(--tinte-weich); display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.tempel-daten { display: grid; grid-template-columns: max-content 1fr; gap: .45rem 1.1rem; margin: 1rem 0; }
+.tempel-daten dt { font-family: var(--schrift-kapit); color: var(--rubrik); }
+.tempel-daten dd { margin: 0; }
+.tempel-eintrag { max-width: var(--mass); padding-bottom: 1rem; border-bottom: 1px solid var(--linie); }
+@media (max-width: 600px) { .tempel-daten { grid-template-columns: 1fr; } .tempel-daten dt { margin-top: .4rem; } }
 
 /* ---------- Fußzeile ---------- */
 .fuss { padding: 0 1.25rem 2.5rem; font-size: .85rem; color: var(--tinte-weich); }

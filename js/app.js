@@ -67,6 +67,15 @@
     begriffe: [f.name, ...(f.begriffe || [])], href: `#/figur/${f.id}`, kurz: f.kurz,
     text: [f.kurz, f.aussehen, f.auftreten, f.motiv, f.zitat].join(" ")
   }));
+  const tempel = RW.tempel || [];
+  const GENITIV = { Praios: "des Praios", Rondra: "der Rondra", Efferd: "des Efferd", Travia: "der Travia", Boron: "des Boron", Hesinde: "der Hesinde",
+    Firun: "des Firun", Tsa: "der Tsa", Phex: "des Phex", Peraine: "der Peraine", Ingerimm: "des Ingerimm", Rahja: "der Rahja" };
+  const tempelArt = t => `${t.art} ${GENITIV[t.gottheit] || t.gottheit}`;
+  tempel.forEach(t => eintragen({
+    schluessel: "tempel:" + t.id, art: tempelArt(t), name: t.name,
+    begriffe: [t.name, ...(t.begriffe || [])], href: `#/tempel/${t.id}`, kurz: t.kurz,
+    text: [t.kurz, ...(t.beschreibung || []), t.brauch, t.stempel, t.dienste, t.geweihte, t.spannung].join(" ")
+  }));
   RW.glossar.forEach(g => eintragen({
     schluessel: "glossar:" + g.id, art: "Begriff", name: g.name,
     begriffe: [g.name, ...(g.begriffe || [])], href: `#/anhang/${g.id}`, kurz: g.text, text: g.text
@@ -103,7 +112,7 @@
     });
   });
 
-  const reihenfolge = { ort: 0, station: 1, figur: 2, macht: 3, kapitel: 4, glossar: 5 };
+  const reihenfolge = { ort: 0, station: 1, tempel: 2, figur: 3, macht: 4, kapitel: 5, glossar: 6 };
   const nrVon = e => (RW.stationen.find(s => e.schluessel.endsWith(":" + s.id)) || {}).nr;
   function sortiert(menge) {
     return [...(menge || [])].map(k => register.get(k)).filter(Boolean).sort((a, b) => {
@@ -229,6 +238,7 @@
       <ul>
         <li><a href="#/maechte" data-route="maechte">Mächte am Weg</a></li>
         <li><a href="#/figuren" data-route="figuren">Figuren</a></li>
+        <li><a href="#/tempel" data-route="tempel">Die zwölf Tempel</a></li>
         <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
       <p class="nav-gruppe">Anhang</p>
@@ -381,11 +391,25 @@
         <div><a class="figur-name" href="#/figur/${f.id}">${esc(f.name)}</a><span class="figur-rolle">${esc(f.rolle)}</span><p>${esc(f.kurz)}</p></div>
       </li>`).join("")}</ul>`;
   }
+  const tempelAn = id => tempel.find(t => t.station === id);
+  function tempelKasten(t) {
+    return `<section class="tempel-kasten">
+        <h2>${esc(t.name)}</h2>
+        <p class="tempel-zeile">${esc(tempelArt(t))} ${bauMarke({ status: t.zustand })}</p>
+        <p>${esc(t.kurz)}</p>
+        <dl class="tempel-daten">
+          <dt>Brauch</dt><dd>${esc(t.brauch)}</dd>
+          <dt>Stempel</dt><dd>${esc(t.stempel)}</dd>
+          <dt>Gehütet von</dt><dd>${esc(t.geweihte)}</dd>
+        </dl>
+        <p><a href="#/tempel/${t.id}">Ganzer Eintrag im Tempelverzeichnis</a></p>
+      </section>`;
+  }
   const figurenAn = id => figuren.filter(f => f.station === id);
   const figurenVon = mid => figuren.filter(f => (f.maechte || []).includes(mid));
 
   function verbindungsBlock(schluessel) {
-    const vor = sortiert(erwaehnt.get(schluessel)).filter(e => /^(station|ort|macht|figur):/.test(e.schluessel));
+    const vor = sortiert(erwaehnt.get(schluessel)).filter(e => /^(station|ort|macht|figur|tempel):/.test(e.schluessel));
     const rueck = sortiert(rueckverweise.get(schluessel)).filter(e => !e.schluessel.startsWith("glossar:"));
     let html = "";
     if (vor.length) html += `<section><h3>Verbunden mit</h3><ul class="verbindungen">${vor.map(e => `<li>${verweisLink(e)}<br><small>${esc(e.art)}</small></li>`).join("")}</ul></section>`;
@@ -476,6 +500,7 @@
           <h2>Was hier brodelt</h2>
           <p>${esc(s.konflikt)}</p>
           ${s.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(s.meister.hintergrund)}</p></div>` : ""}
+          ${tempelAn(s.id) ? tempelKasten(tempelAn(s.id)) : ""}
           ${figurenAn(s.id).length ? `<h2>Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
         </div>
         <aside class="seitenleiste">
@@ -484,6 +509,7 @@
             <dl>
               <dt>Gottheit</dt><dd>${esc(s.gottheit)}</dd>
               <dt>Emblem</dt><dd>${esc(s.emblem)}</dd>
+              ${tempelAn(s.id) ? `<dt>Tempel</dt><dd><a href="#/tempel/${tempelAn(s.id).id}">${esc(tempelAn(s.id).name)}</a></dd>` : ""}
               <dt>Ab Gareth</dt><dd>Meile ${meileText(s)}</dd>
               <dt>Etappe</dt><dd>${etappeText(s)} Meilen von <a href="${linkZu(vor)}">${esc(vor.name)}</a></dd>
               <dt>Bauzustand</dt><dd>${bauMarke(s)}</dd>
@@ -619,6 +645,40 @@
     };
   }
 
+  function seiteTempel() {
+    const zeilen = tempel.map(t => {
+      const st = RW.stationen.find(s => s.id === t.station);
+      return `<tr><td class="zahl">${st.nr}</td><td><a href="#/station/${st.id}">${esc(st.name)}</a></td><td>${esc(t.gottheit)}</td><td><a href="#/tempel/${t.id}">${esc(t.name)}</a></td><td>${esc(t.art)}</td><td>${bauMarke({ status: t.zustand })}</td></tr>`;
+    }).join("");
+    const eintraege = tempel.map(t => {
+      const st = RW.stationen.find(s => s.id === t.station);
+      return `
+      <section class="tempel-eintrag" id="${t.id}">
+        <h2>${esc(t.name)}</h2>
+        <p class="tempel-zeile">${esc(tempelArt(t))} in <a href="#/station/${st.id}">${st.nr} ${esc(st.name)}</a> ${bauMarke({ status: t.zustand })}</p>
+        ${absaetze(t.beschreibung)}
+        <dl class="tempel-daten">
+          <dt>Brauch</dt><dd>${esc(t.brauch)}</dd>
+          <dt>Stempel</dt><dd>${esc(t.stempel)}</dd>
+          <dt>Dienste</dt><dd>${esc(t.dienste)}</dd>
+          <dt>Gehütet von</dt><dd>${esc(t.geweihte)}</dd>
+          <dt>Was schwelt</dt><dd>${esc(t.spannung)}</dd>
+        </dl>
+        <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(t.meister)}</p></div>
+      </section>`;
+    }).join("");
+    return {
+      html: `<h1>Die zwölf Tempel</h1>
+      <p class="einleitung initiale">Jede Station des Raulswegs ist einer der Zwölfgötter geweiht. Manche Weihestätte ist älter als die Straße, andere sind erst halb gebaut, und eine ist nur ein Herdfeuer.</p>
+      <p>Zu jedem Tempel gehört ein Brauch, den Reisende pflegen, und ein Stationsstempel, der nicht einfach ausgegeben wird, sondern verdient sein will. Wer alle zwölf sammelt, hat den Raulsweg wirklich bereist.</p>
+      <div class="tabelle-huelle breit"><table>
+        <thead><tr><th class="zahl">Nr.</th><th>Station</th><th>Gottheit</th><th>Weihestätte</th><th>Art</th><th>Zustand</th></tr></thead>
+        <tbody>${zeilen}</tbody></table></div>
+      ${eintraege}`,
+      eigene: []
+    };
+  }
+
   function seiteBauplan() {
     const liste = RW.ausbaustufen.map(a => `
       <li class="${a.erledigt ? "erledigt" : ""}">
@@ -657,12 +717,14 @@
       else if (teil === "maechte") seite = seiteMaechte();
       else if (teil === "figuren") seite = seiteFiguren();
       else if (teil === "figur") seite = seiteFigur(id);
+      else if (teil === "tempel") seite = seiteTempel();
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;
-      if (teil === "maechte") {
-        // Jede Macht verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
-        main.querySelectorAll(".macht").forEach(sek => verlinken(sek, ["macht:" + sek.id]));
+      if (teil === "maechte" || teil === "tempel") {
+        // Jeder Eintrag verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
+        if (teil === "maechte") main.querySelectorAll(".macht").forEach(sek => verlinken(sek, ["macht:" + sek.id]));
+        else main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
       } else verlinken(main, seite.eigene);
       bilderAbsichern();
       letzteSeite = seitenSchluessel;

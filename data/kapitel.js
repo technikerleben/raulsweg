@@ -60,6 +60,7 @@ RW.kapitel = {
 
       <h2>Die Weihe der Stationen</h2>
       <p>Jede der zwölf Stationen ist einem der Zwölfgötter geweiht. Ein kleiner Schrein oder Tempel gehört zu jeder Station, und das Emblem der Gottheit ziert Tor, Meilenstein und Stempel. Die Reihenfolge folgt nicht dem Kalender, sondern dem Charakter des Ortes: Travia empfängt die Reisenden in Nattersquell, Rahja verabschiedet sie in Rabicum.</p>
+      <p>Alle Schreine, Kapellen und Tempel mit ihren Bräuchen und Stempeln stehen im <a href="#/tempel">Tempelverzeichnis</a>.</p>
 
       <h2>Papiere</h2>
       <h3>Der Geleitbrief</h3>
