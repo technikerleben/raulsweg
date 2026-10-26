@@ -107,7 +107,7 @@ RW.kapitel = {
 
       <div class="meister">
         <p class="meister-titel">Meisterinformationen: Reisetempo als Spannungsmittel</p>
-        <p>Wenn die Helden mit einem Tross reisen, legt die Gruppe etwa eine Station pro Tag zurück, das Tempo der Tōkaidō. Das gibt jedem Ort Raum. Wird es eilig, können die Helden den Tross verlassen und mit Wechselpferden vorausreiten. Dann zählen die Relais, die Geleitbriefe und die Gunst der Beilunker Reiter.</p>
+        <p>Wenn die Helden mit einem Tross reisen, legt die Gruppe etwa eine Station pro Tag zurück. Das gibt jedem Ort Raum. Wird es eilig, können die Helden den Tross verlassen und mit Wechselpferden vorausreiten. Dann zählen die Relais, die Geleitbriefe und die Gunst der Beilunker Reiter.</p>
       </div>
     `
   },
@@ -144,7 +144,6 @@ RW.kapitel = {
         <li><a href="https://de.wiki-aventurica.de/wiki/Perricum" target="_blank" rel="noopener">Wiki Aventurica: Perricum</a></li>
         <li><a href="https://avesmaps.de/?strasse=Reichsstra%C3%9Fe_3" target="_blank" rel="noopener">avesmaps.de: Reichsstraße 3</a></li>
       </ul>
-      <p>Vorbild für Aufbau und Stimmung ist die japanische Tōkaidō, die Straße von Edo nach Kyōto mit ihren 53 Stationen, und Hiroshiges Holzschnittserie über sie.</p>
     `
   }
 };

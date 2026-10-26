@@ -163,7 +163,7 @@ RW.stationen = [
     ],
     konflikt: "Die Flussträger leben vom Provisorium. Jede Woche, die die Brücke später fertig wird, bringt ihnen Lohn. Gleichzeitig werden hier, beim Warten auf sinkendes Wasser, Menschen jeden Standes auf engstem Raum zusammengezwungen.",
     meister: {
-      hintergrund: "Die Natterbrücke ist das aventurische Gegenstück zum Ōi-Fluss der Tōkaidō, an dem Reisende oft tagelang festsaßen. Das Hochwasser eignet sich hervorragend, um Figuren zusammenzubringen, die sich sonst nie begegnen würden."
+      hintergrund: "Die Natterbrücke ist das Nadelöhr des Raulswegs: Bei Hochwasser sitzen Reisende hier oft tagelang fest. Das Hochwasser eignet sich hervorragend, um Figuren zusammenzubringen, die sich sonst nie begegnen würden."
     },
     figuren: [], gebaeude: []
   },
