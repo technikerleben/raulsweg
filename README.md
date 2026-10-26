@@ -16,6 +16,7 @@ data/maechte.js     Mächte am Weg
 data/figuren.js     Figuren (Stufe 2)
 data/tempel.js      Die zwölf Tempel
 data/chronik.js     Chronik der gespielten Geschichten
+data/karten.js      Karten und Pläne (Zeichnungen: tools/karten.py)
 img/titel.webp      Titelbild (optional)
 img/stationen/      Stationsbilder
 img/ui/             Ornamente, Karte (später)
@@ -49,6 +50,10 @@ Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 ## Figurenporträts
 
 Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B. `answald-kreutzer.webp`, `travine-holler.webp`. Hochformat 4:5, etwa 800 × 1000 Pixel. Fehlt ein Porträt, erscheint ein Monogramm.
+
+## Karten und Pläne
+
+`python3 tools/karten.py` zeichnet die schwarz-weißen Karten und Grundrisse neu nach `img/karten/*.svg` (Schriften liegen in `tools/fonts/`, SIL Open Font License). Texte und Legenden stehen in `data/karten.js`; die Nummern in den Plänen müssen zur Legende passen. Die EPUB-Fassung zeichnet die Pläne mit größeren Nummern und dreht sie hochkant.
 
 ## Chronik
 

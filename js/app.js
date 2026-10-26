@@ -8,6 +8,7 @@
      #/ort/<id>             Gareth, Perricum
      #/maechte[/<id>]       Mächte am Weg
      #/chronik[/<id>]       Chronik der gespielten Geschichten
+     #/karten               Karten und Pläne  #/karte/<id>
      #/bauplan              Ausbaustufen
    ========================================================== */
 (function () {
@@ -129,6 +130,8 @@
      Chronik: gespielte Geschichten und was sie festgelegt haben
      ========================================================== */
   const chronik = RW.chronik || [];
+  const karten = RW.karten || [];
+  const kartenAn = id => karten.filter(c => c.station === id);
   const haltSchluessel = id => (orte.some(o => o.id === id) ? "ort:" : "station:") + id;
   const chronikZiele = c => new Set([
     ...(c.orte || []).map(haltSchluessel),
@@ -274,6 +277,7 @@
         <li><a href="#/maechte" data-route="maechte">Mächte am Weg</a></li>
         <li><a href="#/figuren" data-route="figuren">Figuren</a></li>
         <li><a href="#/tempel" data-route="tempel">Die zwölf Tempel</a></li>
+        <li><a href="#/karten" data-route="karten">Karten und Pläne</a></li>
         <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
       <p class="nav-gruppe">Für die Runde</p>
@@ -298,6 +302,8 @@
     });
   });
 
+  karten.forEach(c => suchindex.push({ titel: c.titel, art: c.art, href: `#/karte/${c.id}`,
+    text: [c.titel, c.art, c.kurz, ...(c.legende || []).map(l => l[1] + " " + l[2])].join(" ").toLowerCase() }));
   chronik.forEach(c => suchindex.push({ titel: c.titel, art: "Chronik", href: `#/chronik/${c.id}`,
     text: [c.titel, c.spielleitung, ...(c.zusammenfassung || []), ...(c.enthuellt || []).map(x => x.text), ...(c.veraenderungen || []).map(x => x.text), ...(c.neu || []), ...(c.offen || [])].join(" ").toLowerCase() }));
 
@@ -487,6 +493,7 @@
         <a href="#/maechte"><strong>Mächte am Weg</strong><span>Wer am Raulsweg verdienen will</span></a>
         <a href="#/reisen"><strong>Reisen</strong><span>Reisezeiten, Wetter und Etikette</span></a>
         <a href="#/spielleitung"><strong>Für Spielleitungen</strong><span>Eigene Geschichten am Raulsweg leiten</span></a>
+        <a href="#/karten"><strong>Karten und Pläne</strong><span>Streckenkarte, Musterstation, Schauplätze</span></a>
         <a href="#/chronik"><strong>Chronik</strong><span>Was die Runde am Raulsweg erlebt hat</span></a>
         <a href="#/anhang"><strong>Glossar</strong><span>Begriffe, Kennzeichnung, Quellen</span></a>
       </div>`,
@@ -554,6 +561,9 @@
           <p>${esc(s.konflikt)}</p>
           ${s.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(s.meister.hintergrund)}</p></div>` : ""}
           ${chronikBezug("station:" + s.id)}
+          ${kartenAn(s.id).map(c => `<section class="karte-verweis"><h2>Plan: ${esc(c.titel)}</h2>
+            <a href="#/karte/${c.id}"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}" loading="lazy"></a>
+            <p><a href="#/karte/${c.id}">${esc(c.art)} mit Legende</a></p></section>`).join("")}
           ${tempelAn(s.id) ? tempelKasten(tempelAn(s.id)) : ""}
           ${figurenAn(s.id).length ? `<h2>Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
         </div>
@@ -797,6 +807,45 @@
     };
   }
 
+  function kartenLink(c) {
+    const st = RW.stationen.find(s => s.id === c.station);
+    return st ? `${c.art}, <a href="#/station/${st.id}">${st.nr} ${esc(st.name)}</a>` : esc(c.art);
+  }
+
+  function seiteKarten() {
+    return {
+      html: `<h1>Karten und Pläne</h1>
+      <p class="einleitung initiale">Die Strecke im Überblick, eine Station nach dem Edikt und die Orte, an denen es am ehesten zu Ärger kommt.</p>
+      <p>Alle Pläne sind schwarz-weiß gezeichnet und lassen sich drucken. Die Zahlen in den Plänen erklärt die Legende auf der jeweiligen Seite. Ein Klick auf das Bild öffnet es in voller Größe.</p>
+      <ul class="karten-raster">${karten.map(c => `
+        <li><a class="karte-karte" href="#/karte/${c.id}"><img src="${c.datei}" alt="" loading="lazy"><strong>${esc(c.titel)}</strong></a>
+        <span>${kartenLink(c)}</span></li>`).join("")}</ul>`,
+      eigene: []
+    };
+  }
+
+  function seiteKarte(id) {
+    const i = karten.findIndex(c => c.id === id);
+    if (i < 0) return seiteFehlt();
+    const c = karten[i];
+    const vor = karten[(i - 1 + karten.length) % karten.length], nach = karten[(i + 1) % karten.length];
+    const legende = (c.legende || []).length ? `<h2>Legende</h2><ol class="legende">${c.legende.map(([n, name, text]) =>
+      `<li><span class="legende-nr">${n}</span><div><strong>${esc(name)}</strong>${text ? `. ${esc(text)}` : ""}</div></li>`).join("")}</ol>` : "";
+    return {
+      html: `<h1>${esc(c.titel)}</h1>
+      <p class="station-unterzeile">${kartenLink(c)}</p>
+      <figure class="karte-gross"><a href="${c.datei}" target="_blank" rel="noopener" title="In voller Größe öffnen"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}"></a>
+        <figcaption>${esc(c.massstab || "")} · <a href="${c.datei}" target="_blank" rel="noopener">in voller Größe öffnen</a></figcaption></figure>
+      <p class="einleitung">${esc(c.kurz)}</p>
+      ${legende}
+      <nav class="blaettern" aria-label="Weitere Karten">
+        <a href="#/karte/${vor.id}">← ${esc(vor.titel)}</a>
+        <a href="#/karte/${nach.id}">${esc(nach.titel)} →</a>
+      </nav>`,
+      eigene: []
+    };
+  }
+
   function seiteBauplan() {
     const liste = RW.ausbaustufen.map(a => `
       <li class="${a.erledigt ? "erledigt" : ""}">
@@ -822,7 +871,7 @@
   function zeigen() {
     const route = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
     const [teil, id] = route.split("/");
-    const mitAnker = id && !["station", "ort", "figur"].includes(teil);
+    const mitAnker = id && !["station", "ort", "figur", "karte"].includes(teil);
     const seitenSchluessel = mitAnker ? teil : route;
 
     if (seitenSchluessel !== letzteSeite) {
@@ -837,6 +886,8 @@
       else if (teil === "figur") seite = seiteFigur(id);
       else if (teil === "tempel") seite = seiteTempel();
       else if (teil === "chronik") seite = seiteChronik();
+      else if (teil === "karten") seite = seiteKarten();
+      else if (teil === "karte") seite = seiteKarte(id);
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;

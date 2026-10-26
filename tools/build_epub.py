@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIEL = os.path.join(WURZEL, "export", "der-raulsweg.epub")
-DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik"]
+DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten"]
 
 # ---------------------------------------------------------------- Daten laden
 def daten_laden():
@@ -89,6 +89,46 @@ def bild_hinzufuegen(quelle, name, breite, hoehe=None):
     pfad = f"images/{name}.jpg"
     BILDER[pfad] = puffer.getvalue()
     return pfad
+
+def karte_hinzufuegen(karte, breite=1300):
+    """Plan mit größeren Nummern neu zeichnen, mit Chromium rastern, hochkant drehen, als Graustufen-PNG ablegen."""
+    import sys as _sys
+    from playwright.sync_api import sync_playwright
+    _sys.path.insert(0, os.path.join(WURZEL, "tools"))
+    import karten as _karten
+    import karten_lib as _lib
+    _lib.SKALA = 1.7
+    svg = _karten.KARTEN[karte["id"]]().svg()
+    _lib.SKALA = 1.0
+    import re as _re
+    w, h = map(int, _re.search(r'viewBox="0 0 (\d+) (\d+)"', svg).groups())
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch()
+        seite_ = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=breite / w)
+        seite_.set_content(f'<html><body style="margin:0">{svg}</body></html>')
+        seite_.wait_for_timeout(200)
+        png = seite_.screenshot(clip={"x": 0, "y": 0, "width": w, "height": h})
+        browser.close()
+    img = Image.open(io.BytesIO(png)).convert("L")
+    if img.width > img.height:
+        img = img.rotate(90, expand=True)
+    img = img.quantize(16).convert("L")
+    puffer = io.BytesIO()
+    img.save(puffer, "PNG", optimize=True)
+    pfad = f"images/karte-{karte['id']}.png"
+    BILDER[pfad] = puffer.getvalue()
+    return pfad
+
+def karte_html(karte, ueberschrift="h2"):
+    pfad = karte_hinzufuegen(karte)
+    teile = [f"<{ueberschrift}>{e(karte['titel'])}</{ueberschrift}>",
+             f'<div class="bild"><img src="{pfad}" alt="{e(karte["titel"])}" style="width:100%"/></div>',
+             f"<p class=\"leise\">{e(karte['art'])} · {e(karte.get('massstab', ''))}</p>",
+             f"<p>{e(karte['kurz'])}</p>"]
+    if karte.get("legende"):
+        teile.append("".join(f"<p><b>{n}</b> {e(name)}{('. ' + e(text)) if text else ''}</p>" for n, name, text in karte["legende"]))
+    teile.append("<p class=\"leise\">Der Plan ist zum Lesen gedreht.</p>")
+    return "".join(teile)
 
 def titelbild_erzeugen():
     """Hochkant-Cover 600 × 800: Ausschnitt des Titelbilds oben, Titel unten."""
@@ -246,6 +286,8 @@ def baue_seiten():
         teile.append(f"<h2>Was hier brodelt</h2><p>{e(s['konflikt'])}</p>")
         if s.get("meister"):
             teile.append(meister("Meisterinformation", f"<p>{e(s['meister']['hintergrund'])}</p>"))
+        for karte in [c for c in RW.get("karten", []) if c.get("station") == s["id"]]:
+            teile.append(karte_html(dict(karte, titel="Plan: " + karte["titel"])))
         if s["id"] in TEMPEL:
             teile.append(tempel_html(TEMPEL[s["id"]]))
         hier = [f for f in FIGUREN if f["station"] == s["id"]]
@@ -280,6 +322,10 @@ def baue_seiten():
     seite("figuren.xhtml", "Figuren", "".join(figuren))
 
     seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
+    allgemein = [c for c in RW.get("karten", []) if not c.get("station")]
+    if allgemein:
+        seite("karten.xhtml", "Karten und Pläne", "<h1>Karten und Pläne</h1><p class=\"einleitung\">Die Strecke im Überblick und eine Station nach dem Edikt. Die Pläne der Schauplätze stehen bei den Stationen.</p>"
+              + "".join(karte_html(c) for c in allgemein))
     seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])
@@ -342,7 +388,7 @@ def bauen():
                 '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>']
     for i, pfad in enumerate(BILDER):
         eigenschaft = ' properties="cover-image"' if pfad == "images/cover.jpg" else ""
-        manifest.append(f'<item id="img{i}" href="{pfad}" media-type="image/jpeg"{eigenschaft}/>')
+        manifest.append(f'<item id="img{i}" href="{pfad}" media-type="{'image/png' if pfad.endswith('.png') else 'image/jpeg'}"{eigenschaft}/>')
     spine = ['<itemref idref="cover"/>']
     for i, (datei, _, _) in enumerate(SEITEN):
         manifest.append(f'<item id="s{i}" href="{datei}" media-type="application/xhtml+xml"/>')

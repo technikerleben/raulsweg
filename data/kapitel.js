@@ -34,6 +34,7 @@ RW.kapitel = {
       <h2>Der Verlauf</h2>
       <p>Von Gareth führt der Raulsweg nach Osten über Nattersquell und Hartsteen durch das fruchtbare Herz Garetiens. Hinter der Kreuzung nach Rommilys zwängt er sich an der Feste Hohenstein durch eine Enge und folgt dann als Darpatweg dem Fluss: über die Natter, durch Wald und Sumpf, bis er bei Gaulsfurt den Darpat erreicht. Die letzten Meilen führen durch Weinberge nach Perricum.</p>
       <div id="streckenband-platz"></div>
+      <p>Wie die Strecke durch das Land läuft, zeigt die <a href="#/karte/strecke">Karte des Raulswegs</a>.</p>
       <div id="entfernungen-platz"></div>
       <p class="leise">Die Entfernungen zwischen Gaulsfurt, Rabicum und Perricum sowie von Gareth nach Nattersquell stammen aus offiziellen Quellen. Die übrigen sind aus den Kartenkoordinaten geschätzt und sollten bei Bedarf auf avesmaps.de nachgemessen werden.</p>
 
@@ -50,7 +51,7 @@ RW.kapitel = {
       <p class="einleitung">Eine Station ist mehr als eine Herberge. Sie ist ein kleines Stück Kaiserreich am Straßenrand.</p>
 
       <h2>Aufbau einer Station</h2>
-      <p>Nach dem Edikt besteht jede vollständige Station aus drei Teilen:</p>
+      <p>Nach dem Edikt besteht jede vollständige Station aus drei Teilen. Wie das aussieht, zeigt der Grundriss der <a href="#/karte/musterstation">Musterstation</a>.</p>
       <h3>Die Kaiserpfalz</h3>
       <p>Das größte Gebäude der Station ist dem Hof, den Reichsbeamten und hohen Gästen vorbehalten. Gewöhnliche Reisende werden hier nicht aufgenommen, ganz gleich, wie viel sie zahlen könnten. Ist der Hof nicht anwesend, verwaltet ein Pfalzvogt das Haus. Reisen zwei hohe Gesellschaften gleichzeitig, erhält die ranghöhere die Pfalz, die andere muss mit dem Gästeflügel vorliebnehmen. Das sorgt für viel Ärger und noch mehr Stoff für Gerüchte.</p>
       <h3>Das Relais</h3>
@@ -198,8 +199,8 @@ RW.glossar = [
 RW.ausbaustufen = [
   { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar, automatische Querverweise mit Vorschau, Rückverweise, Suche, Tag- und Nachtansicht.", erledigt: true },
   { nr: 2, titel: "Figuren", text: "Zwei Figuren pro Station und vier Reisende auf der ganzen Strecke, mit Rolle, Erscheinung, Auftreten, Motiv, Zitat und drei möglichen Geheimnissen; Porträts; Übersicht aller Figuren. Offen: Spielwerte.", erledigt: true },
-  { nr: 3, titel: "Gebäude und Orte", text: "Kaiserpfalz, Relais, Herbergen und Tempel je Station; einfache Grundrisse für wichtige Schauplätze." },
-  { nr: 4, titel: "Karte und Strecke", text: "Interaktives Streckenband im Stil einer Bildrolle, Reisezeitrechner, Wegpunkte zwischen den Stationen." },
+  { nr: 3, titel: "Gebäude und Orte", text: "Grundriss der Musterstation und Pläne der Schauplätze Sonnenfeld, Rommilyser Kreuz, Feste Hohenstein, Natterbrücke und Kanzlei Mardramund (vorhanden). Offen: Pläne der übrigen Stationen.", erledigt: true },
+  { nr: 4, titel: "Karte und Strecke", text: "Schematische Karte der ganzen Strecke (vorhanden). Offen: Reisezeitrechner, Wegpunkte zwischen den Stationen." },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
   { nr: 7, titel: "Handouts", text: "Geleitbrief, Leumundsbrief, Stationsstempel-Heft zum Sammeln, Botenbriefe." },

@@ -466,3 +466,21 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .gilt-marke { display: block; font-size: .85rem; font-style: italic; margin-top: .15rem; }
 .nav-zahl { font-size: .8rem; color: var(--tinte-weich); }
 @media print { .vorlage-kopf button { display: none; } }
+
+/* ---------- Karten und Pläne ---------- */
+.karte-gross { margin: 1rem 0 1.4rem; }
+.karte-gross img, .karte-verweis img, .karte-karte img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--linie); }
+.karte-gross figcaption { font-size: .92rem; color: var(--tinte-weich); margin-top: .4rem; font-style: italic; }
+.karte-verweis { max-width: var(--mass); margin-top: 1.6rem; }
+.karte-verweis img { max-width: 100%; }
+.karten-raster { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1.4rem; }
+.karte-karte { display: block; text-decoration: none; color: var(--tinte); }
+.karte-karte strong { display: block; font-family: var(--schrift-kapit); font-size: 1.08rem; margin-top: .45rem; color: var(--verweis); }
+.karten-raster li > span { display: block; font-size: .92rem; color: var(--tinte-weich); }
+.legende { list-style: none; padding: 0; max-width: var(--mass); }
+.legende li { display: flex; gap: .7rem; align-items: flex-start; margin-bottom: .45rem; }
+.legende-nr { flex: 0 0 1.7rem; height: 1.7rem; border: 1.5px solid var(--tinte); border-radius: 50%; display: grid; place-items: center; font-size: .9rem; margin-top: .15rem; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .karte-gross img, :root:not([data-theme="light"]) .karte-verweis img, :root:not([data-theme="light"]) .karte-karte img { filter: invert(.88); }
+}
+:root[data-theme="dark"] .karte-gross img, :root[data-theme="dark"] .karte-verweis img, :root[data-theme="dark"] .karte-karte img { filter: invert(.88); }
