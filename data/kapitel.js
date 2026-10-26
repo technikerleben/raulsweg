@@ -130,17 +130,7 @@ RW.kapitel = {
       </ul>
 
       <h2>Glossar</h2>
-      <dl class="glossar">
-        <dt><strong>Darpatweg</strong></dt><dd>Volkstümlicher Name des Abschnitts der Reichsstraße 3 von der Feste Hohenstein nach Perricum.</dd>
-        <dt><strong>Geleitbrief</strong></dt><dd>Schreiben der Kanzlei, das Zugang zu den Kaiserpfalzen und Wechselpferden gewährt.</dd>
-        <dt><strong>Kaiserpfalz</strong></dt><dd>Hauptgebäude einer Station, dem Hof und hohen Gästen vorbehalten.</dd>
-        <dt><strong>Leumundsbrief</strong></dt><dd>Bescheinigung über untadeligen Ruf und geordnete Geschäfte. Pflicht für Lieferanten und Pächter.</dd>
-        <dt><strong>Pfalzvogt</strong></dt><dd>Verwalter einer Kaiserpfalz in Abwesenheit des Hofes.</dd>
-        <dt><strong>Relais</strong></dt><dd>Pferdewechsel und Poststelle einer Station.</dd>
-        <dt><strong>Rohajas Rennbahn</strong></dt><dd>Spottname für den Raulsweg, aus Rommilys.</dd>
-        <dt><strong>Stationsedikt</strong></dt><dd>Erlass der Kaiserin, mit dem der Ausbau des Raulswegs beschlossen wurde.</dd>
-        <dt><strong>Wegemeister</strong></dt><dd>Kaiserlicher Beamter, der für den Bau der Strecke verantwortlich ist.</dd>
-      </dl>
+      <div id="glossar-platz"></div>
 
       <h2>Quellen</h2>
       <ul>
@@ -155,9 +145,24 @@ RW.kapitel = {
   }
 };
 
+/* Glossar – Begriffe werden im ganzen Band automatisch verlinkt.
+   begriffe: weitere Schreibweisen, die ebenfalls verlinkt werden */
+RW.glossar = [
+  { id: "darpatweg", name: "Darpatweg", begriffe: [], text: "Volkstümlicher Name des Abschnitts der Reichsstraße 3 von der Feste Hohenstein nach Perricum." },
+  { id: "geleitbrief", name: "Geleitbrief", begriffe: ["Geleitbriefe", "Geleitbriefs"], text: "Schreiben der Kanzlei, das Zugang zu den Kaiserpfalzen und Wechselpferden gewährt." },
+  { id: "kaiserpfalz", name: "Kaiserpfalz", begriffe: ["Kaiserpfalzen"], text: "Hauptgebäude einer Station, dem Hof und hohen Gästen vorbehalten." },
+  { id: "leumundsbrief", name: "Leumundsbrief", begriffe: ["Leumundsbriefe"], text: "Bescheinigung über untadeligen Ruf und geordnete Geschäfte. Pflicht für Lieferanten und Pächter, ausgestellt in Mardramund." },
+  { id: "pfalzvogt", name: "Pfalzvogt", begriffe: ["Pfalzvögte", "Pfalzvogts"], text: "Verwalter einer Kaiserpfalz in Abwesenheit des Hofes." },
+  { id: "relais", name: "Relais", begriffe: [], text: "Pferdewechsel und Poststelle einer Station." },
+  { id: "rohajas-rennbahn", name: "Rohajas Rennbahn", begriffe: [], text: "Spottname für den Raulsweg, aus Rommilys." },
+  { id: "stationsedikt", name: "Stationsedikt", begriffe: ["Edikt", "Edikts"], text: "Erlass der Kaiserin, mit dem der Ausbau des Raulswegs beschlossen wurde." },
+  { id: "stationsstempel", name: "Stationsstempel", begriffe: [], text: "Stempel mit dem Emblem der Stationsgottheit, den sich Reisende in ein Büchlein drücken lassen." },
+  { id: "wegemeister", name: "Wegemeister", begriffe: [], text: "Kaiserlicher Beamter, der für den Bau der Strecke verantwortlich ist." }
+];
+
 /* Ausbaustufen des Bandes – erscheinen auf der Seite „Bauplan“ */
 RW.ausbaustufen = [
-  { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar.", erledigt: true },
+  { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar, automatische Querverweise mit Vorschau, Rückverweise, Suche, Tag- und Nachtansicht.", erledigt: true },
   { nr: 2, titel: "Figuren", text: "Zwei bis drei Figuren pro Station und durchreisende Personen; Figurenkarten mit Porträt, Rolle, Motiv und Spielwerten; Übersicht aller Figuren." },
   { nr: 3, titel: "Gebäude und Orte", text: "Kaiserpfalz, Relais, Herbergen und Tempel je Station; einfache Grundrisse für wichtige Schauplätze." },
   { nr: 4, titel: "Karte und Strecke", text: "Interaktives Streckenband im Stil einer Bildrolle, Reisezeitrechner, Wegpunkte zwischen den Stationen." },

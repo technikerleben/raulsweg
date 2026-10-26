@@ -120,7 +120,7 @@ RW.stationen = [
     figuren: [], gebaeude: []
   },
   {
-    id: "feste-hohenstein", nr: 5, name: "Feste Hohenstein", typ: "station",
+    id: "feste-hohenstein", nr: 5, name: "Feste Hohenstein", typ: "station", begriffe: ["Hohenstein"],
     gottheit: "Rondra", emblem: "Löwe",
     meile: 75, etappe: 10, schaetzung: true,
     status: "erweiterung", kanon: true, bild: "05-feste-hohenstein", jahreszeit: "Klarer Morgen",

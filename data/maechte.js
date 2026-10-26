@@ -9,7 +9,7 @@ window.RW = window.RW || {};
 
 RW.maechte = [
   {
-    id: "kanzlei", name: "Die Kanzlei und der Wegemeister", sitz: "Gareth, Mardramund, alle Stationen", kanon: false,
+    id: "kanzlei", begriffe: ["Kanzlei"], name: "Die Kanzlei und der Wegemeister", sitz: "Gareth, Mardramund, alle Stationen", kanon: false,
     beschreibung: [
       "Die kaiserliche Kanzlei verwaltet den Raulsweg im Namen Rohajas. Sie vergibt Pachten, stellt Papiere aus, prüft Abrechnungen und ernennt die Pfalzvögte. Für den Bau selbst ist der kaiserliche Wegemeister verantwortlich, ein Mann, der an Zeitplänen gemessen wird, die er nicht selbst gemacht hat."
     ],
@@ -18,7 +18,7 @@ RW.maechte = [
     meister: "Die Kanzlei ist kein einheitlicher Block. Zwischen Gareth und Mardramund, zwischen Bauleuten und Schreibern gibt es eigene Interessen, und nicht jeder Beamte ist der Kaiserin treuer als seinem Beutel."
   },
   {
-    id: "rabenmund", name: "Haus Rabenmund", sitz: "Rommilys", kanon: true,
+    id: "rabenmund", begriffe: ["Haus Rabenmund","Rabenmunds","Rabenmund"], name: "Haus Rabenmund", sitz: "Rommilys", kanon: true,
     beschreibung: [
       "Das alte Adelshaus beherrscht zusammen mit Haus Bregelsaum die Rommilyser Mark. Dass der Raulsweg an Rommilys vorbeiführt, empfinden die Rabenmunds als bewusste Zurücksetzung, und sie zeigen das offen."
     ],
@@ -27,7 +27,7 @@ RW.maechte = [
     meister: "Die meisten Rabenmunds kämpfen mit Worten und Paragrafen. Ein Heißsporn der Familie mag weiter gehen, und gerade das macht den Verdacht gegen das ganze Haus so überzeugend."
   },
   {
-    id: "beilunker", name: "Die Beilunker Reiter", sitz: "Haupthaus in Gareth, Gründungshaus in Perricum", kanon: true,
+    id: "beilunker", begriffe: ["Beilunker Reiter","Beilunker"], name: "Die Beilunker Reiter", sitz: "Haupthaus in Gareth, Gründungshaus in Perricum", kanon: true,
     beschreibung: [
       "Der berühmte Botendienst verbindet Gareth und Perricum seit langem. Die neuen Relais der Stationen sind für die Reiter Segen und Bedrohung zugleich: Die Strecke wird schneller, aber die Kanzlei richtet eigene Kuriere ein."
     ],
@@ -36,7 +36,7 @@ RW.maechte = [
     meister: "Wer die Post befördert, weiß viel. Die Beilunker sind eine ideale Quelle, ein idealer Verbündeter, oder eine undichte Stelle."
   },
   {
-    id: "traeger", name: "Die Flussträger an der Natter", sitz: "Natterbrücke", kanon: false,
+    id: "traeger", begriffe: ["Flussträgern","Flussträger","Trägergilde"], name: "Die Flussträger an der Natter", sitz: "Natterbrücke", kanon: false,
     beschreibung: [
       "Eine kleine, eingeschworene Gilde, die Reisende über die Natter trägt, seit die alte Brücke abgerissen wurde. Kräftig, stolz und auf ihre Weise ehrlich."
     ],
@@ -45,7 +45,7 @@ RW.maechte = [
     meister: "Die Träger haben wenig Macht, aber viel zu verlieren. Ein Angebot, sie nach der Fertigstellung an der Brücke oder in der Station zu beschäftigen, könnte viel verändern."
   },
   {
-    id: "adel", name: "Der Adel am Weg", sitz: "Baronien und Grafschaften entlang der Strecke", kanon: false,
+    id: "adel", begriffe: [], name: "Der Adel am Weg", sitz: "Baronien und Grafschaften entlang der Strecke", kanon: false,
     beschreibung: [
       "Wo eine Station entsteht, steigen die Bodenpreise. Barone und Grafen entlang der Straße wollen mitverdienen: mit Wegezöllen, mit dem Verkauf von Land, mit dem Recht, Herbergen zu stellen oder Stein zu liefern."
     ],
@@ -54,7 +54,7 @@ RW.maechte = [
     meister: "Kein großer Plan, viele kleine Begehrlichkeiten. Der Adel macht den Raulsweg vor allem langsamer und teurer."
   },
   {
-    id: "kirchen", name: "Die Kirchen der Zwölfgötter", sitz: "Schreine und Tempel der zwölf Stationen", kanon: false,
+    id: "kirchen", begriffe: [], name: "Die Kirchen der Zwölfgötter", sitz: "Schreine und Tempel der zwölf Stationen", kanon: false,
     beschreibung: [
       "Jede Station ist einer Gottheit geweiht, und jede Kirche betrachtet ihre Station mit Stolz und Sorge. Manche Geweihte begrüßen den Raulsweg als Werk der Ordnung, andere fürchten, dass Kommerz und Eile den Glauben verdrängen."
     ],
@@ -63,7 +63,7 @@ RW.maechte = [
     meister: "Geweihte sind oft die unbestechlichsten Zeugen am Weg und können Helden Rückhalt geben, wenn weltliche Autoritäten versagen."
   },
   {
-    id: "mada-basari", name: "Die Mada Basari", sitz: "Mondsilberkontor in Gaulsfurt, Kontor in Perricum", kanon: true,
+    id: "mada-basari", begriffe: ["Mada Basari","Mondsilberkontor"], name: "Die Mada Basari", sitz: "Mondsilberkontor in Gaulsfurt, Kontor in Perricum", kanon: true,
     beschreibung: [
       "Das tulamidische Handelshaus unterhält in Gaulsfurt sein Mondsilberkontor. An der Kreuzung mit der Kronstraße nach Zorgan laufen Waren und Wechsel aus dem Osten und Süden zusammen."
     ],
@@ -72,7 +72,7 @@ RW.maechte = [
     meister: "Die Mada Basari sind weder Freund noch Feind der Helden. Sie wissen viel über Geldflüsse und sind bereit, Wissen gegen Gegenleistung zu teilen."
   },
   {
-    id: "perricum", name: "Perricum und die Paligan", sitz: "Perricum", kanon: true,
+    id: "perricum", begriffe: ["Paligan"], name: "Perricum und die Paligan", sitz: "Perricum", kanon: true,
     beschreibung: [
       "Perricum ist Ziel und Nutznießer des Raulswegs. Der Markgraf, ein Paligan und Gemahl der Kaiserin, hat ein großes Interesse an einer schnellen Verbindung zur Hauptstadt und an den Zöllen am Ende der Straße."
     ],
@@ -81,7 +81,7 @@ RW.maechte = [
     meister: "Die Nähe zwischen Perricum und dem Hof macht jede Untersuchung am Ende der Strecke politisch heikel. Was hier ans Licht kommt, betrifft die Familie der Kaiserin."
   },
   {
-    id: "neue-kontore", name: "Die neuen Kontore", sitz: "unbekannt, Niederlassungen an mehreren Stationen", kanon: false,
+    id: "neue-kontore", begriffe: ["neuen Kontore","neue Kontore"], name: "Die neuen Kontore", sitz: "unbekannt, Niederlassungen an mehreren Stationen", kanon: false,
     beschreibung: [
       "Seit der Raulsweg gebaut wird, tauchen Handelskontore auf, von denen vor einem Jahr noch niemand gehört hat. Sie bieten auf Pachten, kaufen Schuldscheine von Baufirmen und finanzieren Feste. Ihre Vertreter sind höflich, zahlungskräftig und auffallend schweigsam, wenn man nach ihren Geldgebern fragt."
     ],

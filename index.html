@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Grenze+Gotisch:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script>try{var t=localStorage.getItem("raulsweg-ansicht");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -24,7 +25,8 @@
       <span class="umschalter-bahn" aria-hidden="true"></span>
       <span>Meisterinformationen</span>
     </label>
-    <button class="menue-knopf" id="menue-knopf" aria-expanded="false" aria-controls="navigation">Inhalt</button>
+    <button class="knopf" id="ansicht-knopf" type="button">Ansicht: Auto</button>
+    <button class="knopf menue-knopf" id="menue-knopf" type="button" aria-expanded="false" aria-controls="navigation">Inhalt</button>
   </div>
 </header>
 
