@@ -144,6 +144,7 @@ RW.kapitel = {
         <li><a href="https://de.wiki-aventurica.de/wiki/Perricum" target="_blank" rel="noopener">Wiki Aventurica: Perricum</a></li>
         <li><a href="https://avesmaps.de/?strasse=Reichsstra%C3%9Fe_3" target="_blank" rel="noopener">avesmaps.de: Reichsstraße 3</a></li>
       </ul>
+      <p>Vorbild für Aufbau und Stimmung ist die japanische Tōkaidō, die Straße von Edo nach Kyōto mit ihren 53 Stationen, und Hiroshiges Holzschnittserie über sie.</p>
     `
   }
 };
