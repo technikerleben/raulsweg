@@ -10,8 +10,8 @@ RW.titel = {
   untertitel: "Ein Quellenband zur neuen Kaiserstraße von Gareth nach Perricum",
   einleitung: `
     <p class="einleitung">Zwölf Stationen liegen zwischen der Kaiserstadt und dem Perlenmeer. Manche sind fertig und geweiht, andere stehen noch auf Gerüsten, und an mindestens einer wird um jeden Stein gestritten. Kaiserin Rohaja nennt die Straße ein Werk der Ordnung. In Gareth heißt sie der Raulsweg. In Rommilys heißt sie Rohajas Rennbahn.</p>
-    <p>Dieser Band beschreibt die Strecke so, wie Reisende sie erleben: die Orte, ihre Herbergen und Tempel, die Gerüchte am Herdfeuer und die Spannungen, die unter der frischen Pflasterung liegen. Er enthält noch keine Handlung. Er ist eine Bühne, auf der eigene Abenteuer stattfinden können, und die Grundlage für die Kampagne <em>Auf dem Raulsweg</em>.</p>
-    <p class="leise">Mit dem Schalter oben rechts lassen sich Meisterinformationen einblenden. Sie verraten, was hinter den Gerüchten steckt, ohne eine bestimmte Handlung vorzugeben.</p>
+    <p>Dieser Band beschreibt die Strecke so, wie Reisende sie erleben: die Orte, ihre Herbergen und Tempel, die Gerüchte am Herdfeuer und die Spannungen, die unter der frischen Pflasterung liegen. Er enthält keine Handlung. Er ist eine gemeinsame Bühne: Wer aus der Runde Lust hat, leitet hier eine eigene kleine Geschichte, und jede gespielte Geschichte macht den Raulsweg reicher.</p>
+    <p class="leise">Mit dem Schalter oben rechts lassen sich Meisterinformationen einblenden. Sie bieten mehrere Möglichkeiten, was hinter den Gerüchten stecken könnte, und legen sich bewusst nicht fest. Wie das gemeint ist, steht unter <a href="#/spielleitung">Für Spielleitungen</a>.</p>
   `
 };
 
@@ -112,6 +112,36 @@ RW.kapitel = {
     `
   },
 
+  spielleitung: {
+    titel: "Für Spielleitungen",
+    html: `
+      <p class="einleitung">Der Raulsweg gehört nicht einer Spielleitung, sondern der ganzen Runde. Jede und jeder kann hier eine eigene Geschichte leiten, an einer Station oder über mehrere hinweg.</p>
+
+      <h2>Eine offene Welt</h2>
+      <p>Der Band beschreibt Orte, Figuren, Mächte und Spannungen, aber keine Handlung. Was an einer Station geschieht, entscheidet die Spielleitung, die dort eine Geschichte erzählt. Wer am nächsten Abend leitet, baut auf dem auf, was die Runde erlebt hat.</p>
+
+      <h2>Möglichkeiten statt Geheimnisse</h2>
+      <p>Weil alle in der Runde die Meisterinformationen lesen können, legt der Band keine festen Wahrheiten fest. Jede Figur hat drei <strong>mögliche Geheimnisse</strong>, manche Tempel haben mehrere <strong>mögliche Wahrheiten</strong>. Für die eigene Geschichte gilt:</p>
+      <ul>
+        <li>Wähle eine Möglichkeit, verbinde zwei oder erfinde eine eigene.</li>
+        <li>Was du nicht brauchst, bleibt offen. Eine Figur, deren Geheimnis in deiner Geschichte keine Rolle spielt, hat für die nächste Spielleitung noch alle Möglichkeiten.</li>
+        <li>Was am Tisch einmal enthüllt wurde, gilt. Die nächste Spielleitung baut darauf auf, statt es umzuschreiben.</li>
+      </ul>
+      <p>So weiß auch eine Spielerin, die den Band kennt, nie sicher, was hinter einer Figur steckt.</p>
+
+      <h2>Was offen bleibt</h2>
+      <p>Einige Fragen hält der Band über alle Geschichten hinweg offen. Spielleitungen dürfen Spuren legen und Andeutungen machen, aber keine Geschichte beantwortet sie endgültig:</p>
+      <ul>
+        <li>Wer hinter den neuen Kontoren steht.</li>
+        <li>Wer über Albrin Korst steht, falls jemand über ihm steht.</li>
+        <li>Ob die vielen Schwierigkeiten am Raulsweg zusammenhängen oder nur zufällig gleichzeitig auftreten.</li>
+      </ul>
+
+      <h2>Was festgehalten wird</h2>
+      <p>Nach jeder Geschichte lohnt es sich, kurz festzuhalten, was sich verändert hat: welche Geheimnisse enthüllt wurden, wer gestorben, verschwunden oder neu aufgetaucht ist und wie die Stationen jetzt dastehen. Daraus entsteht mit der Zeit die Chronik des Raulswegs.</p>
+    `
+  },
+
   anhang: {
     titel: "Anhang",
     html: `
@@ -167,12 +197,12 @@ RW.glossar = [
 /* Ausbaustufen des Bandes – erscheinen auf der Seite „Bauplan“ */
 RW.ausbaustufen = [
   { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar, automatische Querverweise mit Vorschau, Rückverweise, Suche, Tag- und Nachtansicht.", erledigt: true },
-  { nr: 2, titel: "Figuren", text: "Zwei Figuren pro Station und vier Reisende auf der ganzen Strecke, mit Rolle, Erscheinung, Auftreten, Motiv, Zitat und Geheimnis; Übersicht aller Figuren. Offen: Porträts und Spielwerte.", erledigt: true },
+  { nr: 2, titel: "Figuren", text: "Zwei Figuren pro Station und vier Reisende auf der ganzen Strecke, mit Rolle, Erscheinung, Auftreten, Motiv, Zitat und drei möglichen Geheimnissen; Porträts; Übersicht aller Figuren. Offen: Spielwerte.", erledigt: true },
   { nr: 3, titel: "Gebäude und Orte", text: "Kaiserpfalz, Relais, Herbergen und Tempel je Station; einfache Grundrisse für wichtige Schauplätze." },
   { nr: 4, titel: "Karte und Strecke", text: "Interaktives Streckenband im Stil einer Bildrolle, Reisezeitrechner, Wegpunkte zwischen den Stationen." },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
   { nr: 7, titel: "Handouts", text: "Geleitbrief, Leumundsbrief, Stationsstempel-Heft zum Sammeln, Botenbriefe." },
-  { nr: 8, titel: "Abenteuer", text: "Die vier Abenteuer der Kampagne Auf dem Raulsweg als eigener Meisterbereich, verknüpft mit Stationen und Figuren." },
+  { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten (wer geleitet hat, was enthüllt wurde, was sich verändert hat) und eine Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }
 ];

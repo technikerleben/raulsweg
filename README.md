@@ -1,6 +1,6 @@
 # Der Raulsweg
 
-Fan-Quellenband zum Raulsweg, der neuen Kaiserstraße von Gareth nach Perricum (Das Schwarze Auge). Grundlage für die Kampagne *Auf dem Raulsweg*.
+Fan-Quellenband zum Raulsweg, der neuen Kaiserstraße von Gareth nach Perricum (Das Schwarze Auge). Gedacht als offene Welt: Jede und jeder aus der Runde kann hier eigene Geschichten leiten. Meisterinformationen bieten deshalb mehrere Möglichkeiten statt fester Wahrheiten (Figuren: `geheimnisse`, Tempel: `moeglichkeiten`).
 
 Statische Website ohne Build-Schritt: `index.html` öffnen oder das Repo auf Vercel als statisches Projekt deployen (Framework: „Other“, kein Build-Befehl, Ausgabeverzeichnis = Wurzel).
 
@@ -67,7 +67,7 @@ Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B.
 5. Mächte und Beziehungsnetz
 6. Spielhilfen (Begegnungen, Gerüchtetabellen, Wetter, Namen)
 7. Handouts (Geleitbrief, Leumundsbrief, Stempelheft)
-8. Abenteuer der Kampagne
+8. Geschichten am Raulsweg (Chronik, Szenario-Vorlage)
 9. Export (Druck, PDF, EPUB)
 
 ---

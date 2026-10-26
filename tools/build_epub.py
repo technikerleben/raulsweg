@@ -155,6 +155,9 @@ SEITEN = []   # (dateiname, titel, xhtml-body)
 def seite(datei, titel, body):
     SEITEN.append((datei, titel, body))
 
+def varianten(liste):
+    return "".join(f"<p><b>{chr(65 + i)}</b> {e(v)}</p>" for i, v in enumerate(liste))
+
 def figur_kurz(f):
     return f"<li><b>{e(f['name'])}</b>, {e(f['rolle'])}. {e(f['kurz'])}</li>"
 
@@ -167,7 +170,8 @@ def tempel_html(t):
             f"<p><b>Dienste:</b> {e(t['dienste'])}</p>"
             f"<p><b>Gehütet von:</b> {e(t['geweihte'])}</p>"
             f"<p><b>Was schwelt:</b> {e(t['spannung'])}</p>"
-            + meister("Meisterinformation", f"<p>{e(t['meister'])}</p>"))
+            + meister("Meisterinformation", f"<p>{e(t['meister'])}</p>"
+                       + (f"<p><b>Mögliche Wahrheiten</b></p>{varianten(t['moeglichkeiten'])}" if t.get("moeglichkeiten") else "")))
 
 def baue_seiten():
     k = RW["kapitel"]
@@ -216,7 +220,7 @@ def baue_seiten():
                        + meister("Meisterinformation", f"<p>{e(m['meister'])}</p>"))
     seite("maechte.xhtml", "Mächte am Weg", "".join(maechte))
 
-    figuren = ["<h1>Figuren</h1><p class=\"einleitung\">Die Menschen, denen Reisende auf dem Raulsweg begegnen. Jede Figur hat ein Motiv und ein Geheimnis.</p>"]
+    figuren = ["<h1>Figuren</h1><p class=\"einleitung\">Die Menschen, denen Reisende auf dem Raulsweg begegnen. Jede Figur hat ein Motiv und drei mögliche Geheimnisse.</p>"]
     for f in FIGUREN:
         st = next((x for x in RW["stationen"] if x["id"] == f["station"]), None)
         ort = f"{st['nr']} {st['name']}" if st and st["typ"] == "station" else (st["name"] if st else "unterwegs auf der ganzen Strecke")
@@ -227,9 +231,10 @@ def baue_seiten():
         figuren.append(f"<p class=\"leise\">{e(f['rolle'])} · {e(ort)}</p><p class=\"einleitung\">{e(f['kurz'])}</p>"
                        f"<p><b>Erscheinung:</b> {e(f['aussehen'])}</p><p><b>Auftreten:</b> {e(f['auftreten'])}</p>"
                        f"<p><b>Antrieb:</b> {e(f['motiv'])}</p><p class=\"zitat\"><i>»{e(f['zitat'])}«</i></p>"
-                       + meister("Geheimnis", f"<p>{e(f['geheimnis'])}</p>"))
+                       + meister("Mögliche Geheimnisse", varianten(f["geheimnisse"]) + "<p><i>Wähle eines, verbinde sie oder erfinde ein eigenes.</i></p>"))
     seite("figuren.xhtml", "Figuren", "".join(figuren))
 
+    seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])
     seite("bauplan.xhtml", "Bauplan des Bandes", f"<h1>Bauplan des Bandes</h1><ul>{stufen}</ul>")

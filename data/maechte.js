@@ -87,6 +87,6 @@ RW.maechte = [
     ],
     will: "Nicht die Straße besitzen, sondern alles, was an ihr Geld verdient: Herbergen, Relais, Lieferungen.",
     konflikt: "Die Leumundsbriefe der Kanzlei sollen genau solche Bieter prüfen. Ob die Prüfung in Mardramund gründlich genug ist, bezweifeln viele.",
-    meister: "Wer hinter den neuen Kontoren steht, bleibt in diesem Band bewusst offen. Sie sind ein Platzhalter für eine Macht, die der Spielleitung passt, und können später mit der eigenen Kampagne verknüpft werden."
+    meister: "Wer hinter den neuen Kontoren steht, bleibt bewusst offen, auch über einzelne Geschichten hinweg. Jede Spielleitung darf Vertreter auftreten lassen und Spuren legen, aber keine Geschichte beantwortet die Frage endgültig."
   }
 ];

@@ -9,7 +9,8 @@
    kurz, beschreibung [Absätze], brauch (was Reisende hier tun),
    stempel (wie der Stationsstempel aussieht und wie man ihn erhält),
    dienste (was der Tempel Reisenden bietet), geweihte (wer ihn hütet),
-   spannung (angedeuteter Konflikt), meister (Meisterinformation)
+   spannung (angedeuteter Konflikt), meister (Meisterinformation),
+   moeglichkeiten (optional: mögliche Wahrheiten, aus denen jede Spielleitung wählt)
    ========================================================== */
 
 window.RW = window.RW || {};
@@ -45,7 +46,12 @@ RW.tempel = [
     dienste: "Segen für Werkzeug und Wagenachsen, Weihe von Grundsteinen, Prüfung von Gewichten und Maßen.",
     geweihte: "Der Ingerimm-Geweihte Arbogast Esser, ein wortkarger alter Mann mit Brandnarben an den Unterarmen.",
     spannung: "Die Gilde betrachtet den Tempel als ihr Eigentum, der Geweihte betrachtet die Gilde als seine Gemeinde. Seit dem Bau der Pfalz ist nicht mehr klar, wer wem Rechenschaft schuldet.",
-    meister: "Arbogast prüft die Gewichte der Gilde. Er hat bemerkt, dass die Quader für die Pfalz leichter sind, als die Abrechnungen behaupten, weil weniger Stein verbaut wurde. Er schweigt aus Loyalität zur Gilde, aber sein Gewissen nagt."
+    meister: "Arbogast prüft die Gewichte der Gilde und hat bemerkt, dass etwas nicht stimmt. Er schweigt aus Loyalität zur Gilde, aber sein Gewissen nagt.",
+    moeglichkeiten: [
+      "Die Quader für die Pfalz sind leichter, als die Abrechnungen behaupten, weil weniger Stein verbaut wurde.",
+      "Nicht die Steine sind falsch, sondern die Gewichte: Jemand hat die geweihten Eichgewichte der Esse ausgetauscht, und Arbogast fürchtet, man werde ihn verdächtigen.",
+      "Arbogast irrt: Der Stein aus einem neuen Bruch ist einfach leichter. Bremst ihn niemand, wird er zum Ankläger in einer Sache, die es nicht gibt."
+    ]
   },
   {
     id: "sonnenhalle-sonnenfeld", station: "sonnenfeld", gottheit: "Praios",
@@ -61,7 +67,12 @@ RW.tempel = [
     dienste: "Eidesleistung, Beglaubigung von Urkunden, künftig Gerichtstage der Kaiserin.",
     geweihte: "Der Praios-Geweihte Lumian von Feldbach, jung, ehrgeizig und von seiner Aufgabe überzeugt.",
     spannung: "Die vorgeschriebene Ausrichtung zur Sonne hat die Pfalz an die feuchteste Stelle des Baugrunds gerückt. Die Kirche will davon nichts wissen, die Bauleute fluchen leise.",
-    meister: "Hier liegt der eigentliche Grund für den Planungsfehler des Wegemeisters: Er hat der Kirche nachgegeben, statt der Baumeisterin. Lumian weiß das nicht. Erfährt er es, steht er vor der Wahl zwischen der Ehre seiner Kirche und der Wahrheit."
+    meister: "Die Ausrichtung der Sonnenhalle hat beim Bau der Pfalz eine Rolle gespielt.",
+    moeglichkeiten: [
+      "Hier liegt der eigentliche Grund für den Planungsfehler des Wegemeisters: Er hat der Kirche nachgegeben statt der Baumeisterin. Lumian weiß das nicht. Erfährt er es, muss er zwischen der Ehre seiner Kirche und der Wahrheit wählen.",
+      "Lumian selbst hat auf der Ausrichtung bestanden und kennt die Folgen. Er betet um Vergebung und hofft, dass niemand fragt.",
+      "Die Ausrichtung hat mit den Problemen der Baustelle nichts zu tun. Lumian wird trotzdem bald verdächtigt, weil ein Spottvers am Kreuz es behauptet."
+    ]
   },
   {
     id: "fuchsschrein-kreuz", station: "rommilyser-kreuz", gottheit: "Phex",
@@ -77,7 +88,12 @@ RW.tempel = [
     dienste: "Segen für Geschäfte, Rat in Handelsfragen, Verwahrung von Briefen bis zur Abholung, ohne Fragen.",
     geweihte: "Die Schreinhüterin Ysilda Graumann.",
     spannung: "Der Schrein steht der Station im Weg, im wörtlichen und im übertragenen Sinn. Die Kanzlei hält ihn für ein Hindernis, die Händler für einen Grund, an der Kreuzung zu halten.",
-    meister: "Die Briefe, die im Schrein verwahrt werden, sind ein stiller Umschlagplatz für Nachrichten, die nicht über die Relais laufen sollen. Ysilda liest sie nicht, aber sie weiß, wer sie bringt und wer sie holt."
+    meister: "Im Schrein werden Briefe verwahrt, und Ysilda weiß, wer sie bringt und wer sie holt.",
+    moeglichkeiten: [
+      "Die Briefe sind ein stiller Umschlagplatz für Nachrichten, die nicht über die Relais laufen sollen. Ysilda liest sie nicht.",
+      "Im Schrein liegen vor allem Wettscheine: Am Kreuz wird heimlich auf die Fertigstellung der Stationen gewettet, und manche Wettende helfen dem Ergebnis nach.",
+      "Ysilda liest die Briefe doch, aber nur, um die besten Geschichten in Verse zu verwandeln. Wer sich in einem Spottvers wiedererkennt, wird bald fragen, woher sie das weiß."
+    ]
   },
   {
     id: "loewenkapelle-hohenstein", station: "feste-hohenstein", gottheit: "Rondra",
@@ -125,7 +141,12 @@ RW.tempel = [
     dienste: "Eidesabnahme, Beglaubigung von Abschriften, Lesen und Schreiben für Reisende, die es nicht können.",
     geweihte: "Die Hesinde-Geweihte Ilmenia Sterz, Archivarin der Kanzlei, kurzsichtig, genau und unbeirrbar.",
     spannung: "Wem gehört das Archiv: der Kanzlei, die es bezahlt, oder der Kirche, die es hütet? Ilmenia und der Kanzleivorsteher führen darüber einen höflichen, aber erbitterten Kleinkrieg.",
-    meister: "Ilmenia hat bemerkt, dass manche Leumundsbriefe ohne Eid an ihrem Pult ausgestellt wurden. Für sie ist das ein Frevel. Wer ihr das beweisen hilft, gewinnt Zugang zum Archiv, den sonst niemand bekommt."
+    meister: "Wer Ilmenia hilft, ihre Sorge aufzuklären, gewinnt Zugang zum Archiv, den sonst niemand bekommt.",
+    moeglichkeiten: [
+      "Ilmenia hat bemerkt, dass manche Leumundsbriefe ohne Eid an ihrem Pult ausgestellt wurden. Für sie ist das ein Frevel.",
+      "Ilmenia hat selbst einmal einen Eid erlassen, für einen Freund in Not, und fürchtet nun jede Prüfung des Archivs.",
+      "Die Eidbücher sind vollständig, aber eine Seite wurde herausgeschnitten. Ilmenia sucht den Täter unter den Schreibern."
+    ]
   },
   {
     id: "jaegerschrein-wandleth", station: "wandlether-hof", gottheit: "Firun",
@@ -157,7 +178,12 @@ RW.tempel = [
     dienste: "Segen für Neubeginn, Namensgebung, Feste, Zuflucht für alle, die neu anfangen müssen.",
     geweihte: "Die Tsa-Geweihte Mutter Iselind.",
     spannung: "Das Weihefest soll ein Fest der Erneuerung sein. Wer es bezahlt hat und warum, weiß kaum jemand.",
-    meister: "Die Spende stammt von einem der neuen Kontore. Iselind sucht einen Weg, sie zurückzugeben, ohne das Fest abzusagen. Helden, die ihr eine andere Geldquelle verschaffen oder die Herkunft der Spende offenlegen, gewinnen eine dankbare Verbündete."
+    meister: "Für das Fest ist eine große Spende eingegangen, und ihre Herkunft ist heikel.",
+    moeglichkeiten: [
+      "Die Spende stammt von einem der neuen Kontore. Iselind sucht einen Weg, sie zurückzugeben, ohne das Fest abzusagen. Helden, die eine andere Geldquelle finden oder die Herkunft offenlegen, gewinnen eine dankbare Verbündete.",
+      "Die Spende stammt aus Rommilys. Haus Rabenmund will zeigen, dass es großzügiger ist als die Kanzlei, und plant, das beim Fest öffentlich zu machen.",
+      "Die Spende ist ehrlich gemeint und anonym. Gerade weil niemand weiß, woher sie kommt, wuchern Gerüchte, die das Fest zu sprengen drohen."
+    ]
   },
   {
     id: "storchenhaus-gnitzenkuhl", station: "gnitzenkuhl", gottheit: "Peraine",
@@ -205,6 +231,11 @@ RW.tempel = [
     dienste: "Segen für Paare, Weinweihe, Feste, Trost für Kummer aller Art.",
     geweihte: "Die Rahja-Geweihte Liebwin Rosenhag, die das Rosenhaus gemeinsam mit der Stationswirtin Rahjalind Weinhold betreibt.",
     spannung: "Der Keller unter dem Tempel ist an einen Fremden verpachtet, der dort niemanden hineinlässt. Die Geweihte findet, ein Rahja-Keller sei für Freude da, nicht für Geheimnisse.",
-    meister: "Die Wirtin hat den Keller ohne Rücksprache mit der Geweihten verpachtet. Liebwin ahnt das und wartet auf einen Anlass, den Pachtvertrag anzufechten. Helden mit einem guten Grund könnten ihr diesen Anlass liefern und damit Zugang zum Keller erhalten."
+    meister: "Um den gepachteten Weinkeller gibt es Streit, und Liebwin wartet auf einen Anlass, sich einzumischen. Wer ihr diesen Anlass liefert, erhält Zugang zum Keller.",
+    moeglichkeiten: [
+      "Die Wirtin hat den Keller ohne Rücksprache mit der Geweihten verpachtet. Liebwin will den Vertrag anfechten.",
+      "Liebwin hat dem Pächter den Keller selbst vermittelt, weil er großzügig für den Tempel gespendet hat. Jetzt bereut sie es.",
+      "Der Pachtvertrag ist sauber, aber im Keller steht ein alter Rahja-Schrein, der nie entweiht wurde. Liebwin will ihn zurück, egal wer der Pächter ist."
+    ]
   }
 ];

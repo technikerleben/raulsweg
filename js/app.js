@@ -19,7 +19,7 @@
   const orte = RW.stationen.filter(s => s.typ === "stadt");
   const gesamtMeilen = RW.stationen[RW.stationen.length - 1].meile;
   const BILD_ENDUNGEN = ["webp", "jpg", "jpeg", "png"];
-  const KAPITEL = ["ueberblick", "stationswesen", "reisen", "anhang"];
+  const KAPITEL = ["ueberblick", "stationswesen", "reisen", "spielleitung", "anhang"];
 
   /* ---------- Hilfsfunktionen ---------- */
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -243,6 +243,7 @@
       </ul>
       <p class="nav-gruppe">Anhang</p>
       <ul>
+        <li><a href="#/spielleitung" data-route="spielleitung">Für Spielleitungen</a></li>
         <li><a href="#/anhang" data-route="anhang">Glossar und Quellen</a></li>
         <li><a href="#/bauplan" data-route="bauplan">Bauplan des Bandes</a></li>
       </ul>`;
@@ -379,6 +380,10 @@
   }
 
   const initialen = name => name.split(/\s+/).filter(w => /^\p{Lu}/u.test(w)).map(w => w[0]).slice(0, 2).join("");
+  function moeglichkeitenListe(liste) {
+    return `<ol class="moeglichkeiten">${(liste || []).map(m => `<li>${esc(m)}</li>`).join("")}</ol>`;
+  }
+
   function portraet(f, klein) {
     return `<span class="portraet${klein ? " klein" : ""}"><img data-basis="img/figuren/${f.bild || f.id}" data-versuch="0" data-monogramm="${esc(initialen(f.name))}"
         src="img/figuren/${f.bild || f.id}.${BILD_ENDUNGEN[0]}" alt="Porträt: ${esc(f.name)}" loading="lazy"></span>`;
@@ -435,6 +440,7 @@
         <a href="#/ort/gareth"><strong>Die Reise beginnen</strong><span>Von Gareth Station für Station bis Perricum</span></a>
         <a href="#/maechte"><strong>Mächte am Weg</strong><span>Wer am Raulsweg verdienen will</span></a>
         <a href="#/reisen"><strong>Reisen</strong><span>Reisezeiten, Wetter und Etikette</span></a>
+        <a href="#/spielleitung"><strong>Für Spielleitungen</strong><span>Eigene Geschichten am Raulsweg leiten</span></a>
         <a href="#/anhang"><strong>Glossar</strong><span>Begriffe, Kennzeichnung, Quellen</span></a>
       </div>`,
       eigene: []
@@ -622,7 +628,7 @@
           <h3>Auftreten</h3><p>${esc(f.auftreten)}</p>
           <h3>Antrieb</h3><p>${esc(f.motiv)}</p>
           <blockquote class="zitat"><p>»${esc(f.zitat)}«</p></blockquote>
-          <div class="meister"><p class="meister-titel">Meisterinformationen: Geheimnis</p><p>${esc(f.geheimnis)}</p></div>
+          <div class="meister"><p class="meister-titel">Meisterinformationen: Mögliche Geheimnisse</p>${moeglichkeitenListe(f.geheimnisse)}<p class="moeglich-hinweis">Wähle eines, verbinde sie oder erfinde ein eigenes.</p></div>
         </div>
         <aside class="seitenleiste">
           <section>
@@ -664,7 +670,7 @@
           <dt>Gehütet von</dt><dd>${esc(t.geweihte)}</dd>
           <dt>Was schwelt</dt><dd>${esc(t.spannung)}</dd>
         </dl>
-        <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(t.meister)}</p></div>
+        <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(t.meister)}</p>${t.moeglichkeiten ? `<p class="moeglich-titel">Mögliche Wahrheiten</p>${moeglichkeitenListe(t.moeglichkeiten)}` : ""}</div>
       </section>`;
     }).join("");
     return {

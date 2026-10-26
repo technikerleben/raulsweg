@@ -271,6 +271,11 @@ a.qv, .verbindungen a, .glossar a { hyphens: manual; }
 .meister a, .meister a.qv { color: var(--meister-akzent); }
 .meister-titel { font-family: var(--schrift-kapit); color: var(--meister-akzent); margin: 0 0 .35rem; font-size: 1rem; }
 .meister p:last-child { margin-bottom: 0; }
+.moeglichkeiten { list-style: none; counter-reset: moeglich; padding: 0; margin: .3rem 0 .6rem; }
+.moeglichkeiten li { counter-increment: moeglich; position: relative; padding-left: 1.9rem; margin: 0 0 .5rem; }
+.moeglichkeiten li::before { content: counter(moeglich, upper-alpha); position: absolute; left: 0; top: .05rem; width: 1.35rem; height: 1.35rem; border-radius: 50%; border: 1px solid var(--meister-akzent); color: var(--meister-akzent); font-family: var(--schrift-kapit); font-size: .85rem; line-height: 1.25rem; text-align: center; }
+.moeglich-titel { font-family: var(--schrift-kapit); color: var(--meister-akzent); margin: .6rem 0 .2rem; }
+.moeglich-hinweis { font-style: italic; font-size: .92rem; opacity: .85; }
 body.meister-an .meister { display: block; }
 
 .geruechte { list-style: none; padding: 0; }

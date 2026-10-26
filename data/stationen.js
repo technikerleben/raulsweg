@@ -91,7 +91,7 @@ RW.stationen = [
     ],
     konflikt: "Sonnenfeld soll ein Prunkstück werden, aber Geld, Material und Zeit reichen nicht. Jeder Fehler wird hier sichtbar, und der kaiserliche Wegemeister braucht dringend einen Schuldigen.",
     meister: {
-      hintergrund: "Die Baustelle ist ein guter Ort, um zu zeigen, dass auf dem Raulsweg viel gleichzeitig schiefläuft: echte Sabotage, gewöhnlicher Diebstahl und Fehlplanung, die sich als Sabotage tarnt. Nicht alles hat dieselbe Ursache."
+      hintergrund: "Die Baustelle ist ein guter Ort, um zu zeigen, dass auf dem Raulsweg viel gleichzeitig schiefläuft. Was davon Sabotage ist, was Diebstahl und was Fehlplanung, entscheidet jede Spielleitung für ihre Geschichte. Die Figuren vor Ort bieten dafür mehrere Möglichkeiten, und nicht alles muss dieselbe Ursache haben."
     },
     figuren: [], gebaeude: []
   },
