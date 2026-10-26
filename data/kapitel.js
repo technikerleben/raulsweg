@@ -138,7 +138,7 @@ RW.kapitel = {
       </ul>
 
       <h2>Was festgehalten wird</h2>
-      <p>Nach jeder Geschichte lohnt es sich, kurz festzuhalten, was sich verändert hat: welche Geheimnisse enthüllt wurden, wer gestorben, verschwunden oder neu aufgetaucht ist und wie die Stationen jetzt dastehen. Daraus entsteht mit der Zeit die Chronik des Raulswegs.</p>
+      <p>Nach jeder Geschichte lohnt es sich, kurz festzuhalten, was sich verändert hat: welche Geheimnisse enthüllt wurden, wer gestorben, verschwunden oder neu aufgetaucht ist und wie die Stationen jetzt dastehen. Daraus entsteht mit der Zeit die <a href="#/chronik">Chronik des Raulswegs</a>. Dort steht auch eine Vorlage für den Eintrag.</p>
     `
   },
 
@@ -203,6 +203,6 @@ RW.ausbaustufen = [
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
   { nr: 7, titel: "Handouts", text: "Geleitbrief, Leumundsbrief, Stationsstempel-Heft zum Sammeln, Botenbriefe." },
-  { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten (wer geleitet hat, was enthüllt wurde, was sich verändert hat) und eine Vorlage für eigene Szenarien." },
+  { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten mit Eintragsvorlage, Verweisen von Stationen, Figuren, Tempeln und Mächten und Markierung der geltenden Möglichkeiten (vorhanden). Offen: Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }
 ];

@@ -7,6 +7,7 @@
      #/stationen            Übersicht        #/station/<id>
      #/ort/<id>             Gareth, Perricum
      #/maechte[/<id>]       Mächte am Weg
+     #/chronik[/<id>]       Chronik der gespielten Geschichten
      #/bauplan              Ausbaustufen
    ========================================================== */
 (function () {
@@ -125,9 +126,43 @@
   const verweisLink = e => `<a href="${e.href}">${esc(e.name)}</a>`;
 
   /* ==========================================================
+     Chronik: gespielte Geschichten und was sie festgelegt haben
+     ========================================================== */
+  const chronik = RW.chronik || [];
+  const haltSchluessel = id => (orte.some(o => o.id === id) ? "ort:" : "station:") + id;
+  const chronikZiele = c => new Set([
+    ...(c.orte || []).map(haltSchluessel),
+    ...(c.figuren || []).map(id => "figur:" + id),
+    ...(c.enthuellt || []).map(x => x.ziel),
+    ...(c.veraenderungen || []).map(x => x.ziel)
+  ]);
+  const chronikZu = schluessel => chronik.filter(c => chronikZiele(c).has(schluessel)).reverse();
+  const chronikZeile = c => [c.spielleitung && `geleitet von ${esc(c.spielleitung)}`, c.gespielt && `gespielt am ${esc(c.gespielt)}`, c.aventurisch && esc(c.aventurisch)].filter(Boolean).join(" · ");
+  const zielLink = ziel => { const e = register.get(ziel); return e ? verweisLink(e) : esc(ziel); };
+
+  // Welche Variante gilt laut Chronik? → { "A": eintrag, … }
+  function geltendeVarianten(schluessel) {
+    const gilt = {};
+    chronik.forEach(c => (c.enthuellt || []).forEach(x => { if (x.ziel === schluessel && x.variante) gilt[x.variante.toUpperCase()] = c; }));
+    return gilt;
+  }
+
+  function chronikBezug(schluessel) {
+    const eintraege = chronikZu(schluessel);
+    if (!eintraege.length) return "";
+    return `<section class="chronik-bezug"><h2>In der Chronik</h2><ul>${eintraege.map(c => {
+      const enth = (c.enthuellt || []).filter(x => x.ziel === schluessel);
+      const ver = (c.veraenderungen || []).filter(x => x.ziel === schluessel);
+      return `<li><a class="chronik-titel" href="#/chronik/${esc(c.id)}">${esc(c.titel)}</a><span class="chronik-zeile">${chronikZeile(c)}</span>
+        ${enth.map(x => `<p><strong>Enthüllt:</strong> ${esc(x.text)}</p>`).join("")}
+        ${ver.map(x => `<p><strong>Seitdem:</strong> ${esc(x.text)}</p>`).join("")}</li>`;
+    }).join("")}</ul></section>`;
+  }
+
+  /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -241,9 +276,13 @@
         <li><a href="#/tempel" data-route="tempel">Die zwölf Tempel</a></li>
         <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
-      <p class="nav-gruppe">Anhang</p>
+      <p class="nav-gruppe">Für die Runde</p>
       <ul>
         <li><a href="#/spielleitung" data-route="spielleitung">Für Spielleitungen</a></li>
+        <li><a href="#/chronik" data-route="chronik">Chronik${chronik.length ? ` <span class="nav-zahl">${chronik.length}</span>` : ""}</a></li>
+      </ul>
+      <p class="nav-gruppe">Anhang</p>
+      <ul>
         <li><a href="#/anhang" data-route="anhang">Glossar und Quellen</a></li>
         <li><a href="#/bauplan" data-route="bauplan">Bauplan des Bandes</a></li>
       </ul>`;
@@ -258,6 +297,9 @@
       suchindex.push({ titel, art: RW.kapitel[k].titel, href: `#/${k}/${slug(titel)}`, text: (titel + " " + ohneTags(t)).toLowerCase() });
     });
   });
+
+  chronik.forEach(c => suchindex.push({ titel: c.titel, art: "Chronik", href: `#/chronik/${c.id}`,
+    text: [c.titel, c.spielleitung, ...(c.zusammenfassung || []), ...(c.enthuellt || []).map(x => x.text), ...(c.veraenderungen || []).map(x => x.text), ...(c.neu || []), ...(c.offen || [])].join(" ").toLowerCase() }));
 
   function sucheEinrichten() {
     const feld = document.getElementById("suchfeld");
@@ -380,8 +422,12 @@
   }
 
   const initialen = name => name.split(/\s+/).filter(w => /^\p{Lu}/u.test(w)).map(w => w[0]).slice(0, 2).join("");
-  function moeglichkeitenListe(liste) {
-    return `<ol class="moeglichkeiten">${(liste || []).map(m => `<li>${esc(m)}</li>`).join("")}</ol>`;
+  function moeglichkeitenListe(liste, schluessel) {
+    const gilt = schluessel ? geltendeVarianten(schluessel) : {};
+    return `<ol class="moeglichkeiten">${(liste || []).map((m, i) => {
+      const c = gilt[String.fromCharCode(65 + i)];
+      return c ? `<li class="gilt">${esc(m)}<span class="gilt-marke">Gilt laut Chronik: <a href="#/chronik/${esc(c.id)}">${esc(c.titel)}</a></span></li>` : `<li>${esc(m)}</li>`;
+    }).join("")}</ol>`;
   }
 
   function portraet(f, klein) {
@@ -441,6 +487,7 @@
         <a href="#/maechte"><strong>Mächte am Weg</strong><span>Wer am Raulsweg verdienen will</span></a>
         <a href="#/reisen"><strong>Reisen</strong><span>Reisezeiten, Wetter und Etikette</span></a>
         <a href="#/spielleitung"><strong>Für Spielleitungen</strong><span>Eigene Geschichten am Raulsweg leiten</span></a>
+        <a href="#/chronik"><strong>Chronik</strong><span>Was die Runde am Raulsweg erlebt hat</span></a>
         <a href="#/anhang"><strong>Glossar</strong><span>Begriffe, Kennzeichnung, Quellen</span></a>
       </div>`,
       eigene: []
@@ -506,6 +553,7 @@
           <h2>Was hier brodelt</h2>
           <p>${esc(s.konflikt)}</p>
           ${s.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(s.meister.hintergrund)}</p></div>` : ""}
+          ${chronikBezug("station:" + s.id)}
           ${tempelAn(s.id) ? tempelKasten(tempelAn(s.id)) : ""}
           ${figurenAn(s.id).length ? `<h2>Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
         </div>
@@ -551,6 +599,7 @@
           <p class="einleitung initiale">${esc(o.kurz)}</p>
           ${absaetze(o.beschreibung)}
           <p class="leise">Die Stadt selbst ist in offiziellen Regionalbänden ausführlich beschrieben. Dieser Band betrachtet sie nur als Anfang und Ende der Straße.</p>
+          ${chronikBezug("ort:" + o.id)}
         </div>
         <aside class="seitenleiste">
           <section><h3>${erste ? "Erster" : "Letzter"} Halt</h3><p><a href="#/station/${nachbar.id}">${nachbar.nr} ${esc(nachbar.name)}</a>, ${erste ? nachbar.etappe : o.etappe} Meilen</p></section>
@@ -579,6 +628,7 @@
         <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(m.meister)}</p></div>
         ${figurenVon(m.id).length ? `<p class="leise">Figuren:</p><ul class="verbindungen">${figurenVon(m.id).map(f => `<li><a href="#/figur/${f.id}">${esc(f.name)}</a></li>`).join("")}</ul>` : ""}
         ${rv.length ? `<p class="leise">Taucht auf bei:</p><ul class="verbindungen">${rv.map(e => `<li>${verweisLink(e)}</li>`).join("")}</ul>` : ""}
+        ${chronikBezug("macht:" + m.id)}
       </section>`;
     }).join("");
     const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>${RW.maechte.map(m => `<li><a href="#/maechte/${m.id}">${esc(m.name)}</a></li>`).join("")}</ul></nav>`;
@@ -599,7 +649,7 @@
     return {
       html: `<h1>Figuren</h1>
       <p class="einleitung initiale">Wirte und Wachen, Bauleute und Botinnen, Geweihte und Geschäftemacher: die Menschen, denen Reisende auf dem Raulsweg begegnen.</p>
-      <p>Jede Figur hat ein Motiv und ein Geheimnis. Die Geheimnisse stehen in den Meisterinformationen. Spielwerte folgen in einer späteren Stufe.</p>
+      <p>Jede Figur hat ein Motiv und drei mögliche Geheimnisse. Die Geheimnisse stehen in den Meisterinformationen; was in einer Geschichte enthüllt wurde, hält die <a href="#/chronik">Chronik</a> fest. Spielwerte folgen in einer späteren Stufe.</p>
       ${toc}
       ${gruppen.map(g => `<section id="${g.id}"><h2>${g.href ? `<a href="${g.href}">${esc(g.titel)}</a>` : esc(g.titel)}</h2>${figurKarten(g.liste)}</section>`).join("")}`,
       eigene: []
@@ -628,7 +678,8 @@
           <h3>Auftreten</h3><p>${esc(f.auftreten)}</p>
           <h3>Antrieb</h3><p>${esc(f.motiv)}</p>
           <blockquote class="zitat"><p>»${esc(f.zitat)}«</p></blockquote>
-          <div class="meister"><p class="meister-titel">Meisterinformationen: Mögliche Geheimnisse</p>${moeglichkeitenListe(f.geheimnisse)}<p class="moeglich-hinweis">Wähle eines, verbinde sie oder erfinde ein eigenes.</p></div>
+          <div class="meister"><p class="meister-titel">Meisterinformationen: Mögliche Geheimnisse</p>${moeglichkeitenListe(f.geheimnisse, "figur:" + f.id)}<p class="moeglich-hinweis">Wähle eines, verbinde sie oder erfinde ein eigenes.</p></div>
+          ${chronikBezug("figur:" + f.id)}
         </div>
         <aside class="seitenleiste">
           <section>
@@ -670,7 +721,8 @@
           <dt>Gehütet von</dt><dd>${esc(t.geweihte)}</dd>
           <dt>Was schwelt</dt><dd>${esc(t.spannung)}</dd>
         </dl>
-        <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(t.meister)}</p>${t.moeglichkeiten ? `<p class="moeglich-titel">Mögliche Wahrheiten</p>${moeglichkeitenListe(t.moeglichkeiten)}` : ""}</div>
+        <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(t.meister)}</p>${t.moeglichkeiten ? `<p class="moeglich-titel">Mögliche Wahrheiten</p>${moeglichkeitenListe(t.moeglichkeiten, "tempel:" + t.id)}` : ""}</div>
+        ${chronikBezug("tempel:" + t.id)}
       </section>`;
     }).join("");
     return {
@@ -681,6 +733,66 @@
         <thead><tr><th class="zahl">Nr.</th><th>Station</th><th>Gottheit</th><th>Weihestätte</th><th>Art</th><th>Zustand</th></tr></thead>
         <tbody>${zeilen}</tbody></table></div>
       ${eintraege}`,
+      eigene: []
+    };
+  }
+
+  const CHRONIK_VORLAGE = `{
+  id: "kurzer-name-der-geschichte",
+  titel: "Name der Geschichte",
+  spielleitung: "Wer geleitet hat",
+  gespielt: "TT.MM.JJJJ",
+  aventurisch: "",
+  orte: ["natterbruecke"],
+  figuren: ["bruna-lehmkuhl", "gesa-natterer"],
+  zusammenfassung: [
+    "Was die Helden erlebt haben, in ein paar Sätzen."
+  ],
+  enthuellt: [
+    { ziel: "figur:bruna-lehmkuhl", variante: "B", text: "Was am Tisch aufgedeckt wurde." }
+  ],
+  veraenderungen: [
+    { ziel: "station:natterbruecke", text: "Was jetzt anders ist." }
+  ],
+  neu: ["Neue Figur oder neuer Ort, kurz beschrieben"],
+  offen: ["Loser Faden für spätere Geschichten"],
+  meister: ""
+},`;
+
+  function seiteChronik() {
+    const liste = chronik.slice().reverse().map(c => {
+      const orteL = (c.orte || []).map(id => zielLink(haltSchluessel(id)));
+      const figurenL = (c.figuren || []).map(id => zielLink("figur:" + id));
+      return `
+      <section class="chronik-eintrag" id="${esc(c.id)}">
+        <h2>${esc(c.titel)}</h2>
+        <p class="chronik-zeile">${chronikZeile(c)}</p>
+        ${orteL.length || figurenL.length ? `<dl class="tempel-daten">
+          ${orteL.length ? `<dt>Wo</dt><dd>${orteL.join(", ")}</dd>` : ""}
+          ${figurenL.length ? `<dt>Wer</dt><dd>${figurenL.join(", ")}</dd>` : ""}
+        </dl>` : ""}
+        ${absaetze(c.zusammenfassung)}
+        ${(c.enthuellt || []).length ? `<h3>Enthüllt</h3><ul>${c.enthuellt.map(x => `<li><strong>${zielLink(x.ziel)}${x.variante ? ` (Möglichkeit ${esc(x.variante.toUpperCase())})` : ""}:</strong> ${esc(x.text)}</li>`).join("")}</ul>` : ""}
+        ${(c.veraenderungen || []).length ? `<h3>Was sich verändert hat</h3><ul>${c.veraenderungen.map(x => `<li><strong>${zielLink(x.ziel)}:</strong> ${esc(x.text)}</li>`).join("")}</ul>` : ""}
+        ${(c.neu || []).length ? `<h3>Neu am Weg</h3><ul>${c.neu.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+        ${(c.offen || []).length ? `<h3>Lose Fäden</h3><ul>${c.offen.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+        ${c.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(c.meister)}</p></div>` : ""}
+      </section>`;
+    }).join("");
+    const toc = chronik.length > 2 ? `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Geschichten</p><ul>${chronik.slice().reverse().map(c => `<li><a href="#/chronik/${esc(c.id)}">${esc(c.titel)}</a></li>`).join("")}</ul></nav>` : "";
+    return {
+      html: `<h1>Chronik des Raulswegs</h1>
+      <p class="einleitung initiale">Was die Runde am Raulsweg erlebt hat. Jede gespielte Geschichte hinterlässt Spuren, und was hier steht, gilt für alle, die danach leiten.</p>
+      <p>Die neueste Geschichte steht oben. Stationen, Figuren, Tempel und Mächte verweisen auf die Geschichten, in denen sie vorkamen. Wurde ein Geheimnis enthüllt, ist die geltende Möglichkeit in den Meisterinformationen markiert.</p>
+      ${toc}
+      ${liste || `<p class="chronik-leer">Noch ist keine Geschichte eingetragen. Die erste schreibt ihr.</p>`}
+      <section class="chronik-vorlage" id="vorlage">
+        <h2>Eine Geschichte eintragen</h2>
+        <p>Nach dem Spielabend die Vorlage ausfüllen und an die Person schicken, die den Band pflegt. Sie landet in <code>data/chronik.js</code>. Die Kennungen für Orte und Figuren stehen in der Adresszeile ihrer Seiten, etwa <code>#/figur/<strong>bruna-lehmkuhl</strong></code>.</p>
+        <p>Was nicht zutrifft, einfach leer lassen. <em>Enthüllt</em> ist nur, was am Tisch wirklich aufgedeckt wurde; was die Spielleitung bloß für sich entschieden hat, gehört unter <em>meister</em>.</p>
+        <div class="vorlage-kopf"><span>Vorlage</span><button class="knopf" type="button" id="vorlage-kopieren">Kopieren</button></div>
+        <pre class="vorlage"><code>${esc(CHRONIK_VORLAGE)}</code></pre>
+      </section>`,
       eigene: []
     };
   }
@@ -724,15 +836,23 @@
       else if (teil === "figuren") seite = seiteFiguren();
       else if (teil === "figur") seite = seiteFigur(id);
       else if (teil === "tempel") seite = seiteTempel();
+      else if (teil === "chronik") seite = seiteChronik();
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;
-      if (teil === "maechte" || teil === "tempel") {
+      if (teil === "maechte" || teil === "tempel" || teil === "chronik") {
         // Jeder Eintrag verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
         if (teil === "maechte") main.querySelectorAll(".macht").forEach(sek => verlinken(sek, ["macht:" + sek.id]));
-        else main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
+        else if (teil === "tempel") main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
+        else main.querySelectorAll(".chronik-eintrag").forEach(sek => verlinken(sek, []));
       } else verlinken(main, seite.eigene);
       bilderAbsichern();
+      const kopieren = document.getElementById("vorlage-kopieren");
+      if (kopieren) kopieren.addEventListener("click", () => {
+        const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };
+        try { navigator.clipboard.writeText(CHRONIK_VORLAGE).then(() => fertig("Kopiert"), () => fertig("Bitte markieren")); }
+        catch (e) { fertig("Bitte markieren"); }
+      });
       letzteSeite = seitenSchluessel;
       document.title = teil ? `${main.querySelector("h1")?.textContent} – Der Raulsweg` : "Der Raulsweg – Quellenband";
     }

@@ -446,3 +446,23 @@ section[id] > h2 a:hover { color: var(--rubrik); }
   body::before { display: none; }
   main { box-shadow: none; background: #fff; }
 }
+
+/* ---------- Chronik ---------- */
+.chronik-eintrag { max-width: var(--mass); padding-bottom: 1rem; border-bottom: 1px solid var(--linie); }
+.chronik-eintrag h3 { margin-top: 1.1rem; }
+.chronik-zeile { display: block; color: var(--tinte-weich); font-style: italic; font-size: .95rem; margin: 0 0 .6rem; }
+.chronik-leer { max-width: var(--mass); padding: 1rem 1.2rem; border: 1px dashed var(--linie); color: var(--tinte-weich); font-style: italic; }
+.chronik-bezug { max-width: var(--mass); margin-top: 1.6rem; }
+.chronik-bezug ul { list-style: none; padding: 0; }
+.chronik-bezug li { border-left: 3px solid var(--rubrik); padding: .2rem 0 .2rem .9rem; margin-bottom: .9rem; }
+.chronik-bezug .chronik-titel { font-family: var(--schrift-kapit); font-size: 1.08rem; }
+.chronik-bezug .chronik-zeile { margin: .1rem 0 .3rem; }
+.chronik-bezug p { margin: .2rem 0; }
+.chronik-vorlage { max-width: var(--mass); margin-top: 2.2rem; }
+.vorlage-kopf { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-family: var(--schrift-kapit); color: var(--rubrik); }
+pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(--linie); padding: .8rem 1rem; font-size: .85rem; line-height: 1.45; margin-top: .4rem; }
+.moeglichkeiten li.gilt { font-weight: 500; }
+.moeglichkeiten li.gilt::before { background: var(--meister-akzent); color: var(--meister-grund, #2a2a33); }
+.gilt-marke { display: block; font-size: .85rem; font-style: italic; margin-top: .15rem; }
+.nav-zahl { font-size: .8rem; color: var(--tinte-weich); }
+@media print { .vorlage-kopf button { display: none; } }

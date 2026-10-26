@@ -14,6 +14,8 @@ data/stationen.js   12 Stationen, Gareth, Perricum, Reisezeiten
 data/kapitel.js     Überblick, Stationswesen, Reisen, Anhang, Ausbaustufen
 data/maechte.js     Mächte am Weg
 data/figuren.js     Figuren (Stufe 2)
+data/tempel.js      Die zwölf Tempel
+data/chronik.js     Chronik der gespielten Geschichten
 img/titel.webp      Titelbild (optional)
 img/stationen/      Stationsbilder
 img/ui/             Ornamente, Karte (später)
@@ -47,6 +49,10 @@ Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 ## Figurenporträts
 
 Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B. `answald-kreutzer.webp`, `travine-holler.webp`. Hochformat 4:5, etwa 800 × 1000 Pixel. Fehlt ein Porträt, erscheint ein Monogramm.
+
+## Chronik
+
+Nach jeder gespielten Geschichte einen Eintrag in `data/chronik.js` ergänzen (Vorlage auf der Seite `#/chronik` und im Kopf der Datei). Stationen, Figuren, Tempel und Mächte zeigen dann „In der Chronik“; eine mit `variante` enthüllte Möglichkeit wird in den Meisterinformationen als geltend markiert.
 
 ## EPUB-Fassung
 

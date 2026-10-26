@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIEL = os.path.join(WURZEL, "export", "der-raulsweg.epub")
-DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel"]
+DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik"]
 
 # ---------------------------------------------------------------- Daten laden
 def daten_laden():
@@ -155,8 +155,53 @@ SEITEN = []   # (dateiname, titel, xhtml-body)
 def seite(datei, titel, body):
     SEITEN.append((datei, titel, body))
 
-def varianten(liste):
-    return "".join(f"<p><b>{chr(65 + i)}</b> {e(v)}</p>" for i, v in enumerate(liste))
+CHRONIK = RW.get("chronik", [])
+
+def geltend(schluessel):
+    gilt = {}
+    for c in CHRONIK:
+        for x in c.get("enthuellt") or []:
+            if x.get("ziel") == schluessel and x.get("variante"):
+                gilt[x["variante"].upper()] = c
+    return gilt
+
+def varianten(liste, schluessel=None):
+    gilt = geltend(schluessel) if schluessel else {}
+    teile = []
+    for i, v in enumerate(liste):
+        b = chr(65 + i)
+        zusatz = f" <i>(gilt laut Chronik: {e(gilt[b]['titel'])})</i>" if b in gilt else ""
+        teile.append(f"<p><b>{b}</b> {e(v)}{zusatz}</p>")
+    return "".join(teile)
+
+def ziel_name(ziel):
+    art, _, i = ziel.partition(":")
+    quellen = {"figur": FIGUREN, "tempel": RW.get("tempel", []), "macht": RW["maechte"], "station": RW["stationen"], "ort": RW["stationen"]}
+    treffer = next((x for x in quellen.get(art, []) if x["id"] == i), None)
+    return treffer["name"] if treffer else ziel
+
+def chronik_html():
+    teile = ["<h1>Chronik des Raulswegs</h1><p class=\"einleitung\">Was die Runde am Raulsweg erlebt hat. Was hier steht, gilt für alle, die danach leiten.</p>"]
+    if not CHRONIK:
+        teile.append("<p><i>Noch ist keine Geschichte eingetragen.</i></p>")
+    for c in reversed(CHRONIK):
+        zeile = " · ".join(x for x in [c.get("spielleitung") and f"geleitet von {e(c['spielleitung'])}", c.get("gespielt") and f"gespielt am {e(c['gespielt'])}", c.get("aventurisch") and e(c["aventurisch"])] if x)
+        teile.append(f"<h2>{e(c['titel'])}</h2><p class=\"leise\">{zeile}</p>")
+        if c.get("orte"):
+            teile.append(f"<p><b>Wo:</b> {e(', '.join(ziel_name('station:' + i) for i in c['orte']))}</p>")
+        if c.get("figuren"):
+            teile.append(f"<p><b>Wer:</b> {e(', '.join(ziel_name('figur:' + i) for i in c['figuren']))}</p>")
+        teile.append(absaetze(c.get("zusammenfassung")))
+        for titel, feld in (("Enthüllt", "enthuellt"), ("Was sich verändert hat", "veraenderungen")):
+            if c.get(feld):
+                teile.append(f"<h3>{titel}</h3><ul>" + "".join(
+                    f"<li><b>{e(ziel_name(x['ziel']))}{(' (Möglichkeit ' + x['variante'].upper() + ')') if x.get('variante') else ''}:</b> {e(x['text'])}</li>" for x in c[feld]) + "</ul>")
+        for titel, feld in (("Neu am Weg", "neu"), ("Lose Fäden", "offen")):
+            if c.get(feld):
+                teile.append(f"<h3>{titel}</h3><ul>" + "".join(f"<li>{e(x)}</li>" for x in c[feld]) + "</ul>")
+        if c.get("meister"):
+            teile.append(meister("Meisterinformation", f"<p>{e(c['meister'])}</p>"))
+    return "".join(teile)
 
 def figur_kurz(f):
     return f"<li><b>{e(f['name'])}</b>, {e(f['rolle'])}. {e(f['kurz'])}</li>"
@@ -171,7 +216,7 @@ def tempel_html(t):
             f"<p><b>Gehütet von:</b> {e(t['geweihte'])}</p>"
             f"<p><b>Was schwelt:</b> {e(t['spannung'])}</p>"
             + meister("Meisterinformation", f"<p>{e(t['meister'])}</p>"
-                       + (f"<p><b>Mögliche Wahrheiten</b></p>{varianten(t['moeglichkeiten'])}" if t.get("moeglichkeiten") else "")))
+                       + (f"<p><b>Mögliche Wahrheiten</b></p>{varianten(t['moeglichkeiten'], 'tempel:' + t['id'])}" if t.get("moeglichkeiten") else "")))
 
 def baue_seiten():
     k = RW["kapitel"]
@@ -231,10 +276,11 @@ def baue_seiten():
         figuren.append(f"<p class=\"leise\">{e(f['rolle'])} · {e(ort)}</p><p class=\"einleitung\">{e(f['kurz'])}</p>"
                        f"<p><b>Erscheinung:</b> {e(f['aussehen'])}</p><p><b>Auftreten:</b> {e(f['auftreten'])}</p>"
                        f"<p><b>Antrieb:</b> {e(f['motiv'])}</p><p class=\"zitat\"><i>»{e(f['zitat'])}«</i></p>"
-                       + meister("Mögliche Geheimnisse", varianten(f["geheimnisse"]) + "<p><i>Wähle eines, verbinde sie oder erfinde ein eigenes.</i></p>"))
+                       + meister("Mögliche Geheimnisse", varianten(f["geheimnisse"], "figur:" + f["id"]) + "<p><i>Wähle eines, verbinde sie oder erfinde ein eigenes.</i></p>"))
     seite("figuren.xhtml", "Figuren", "".join(figuren))
 
     seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
+    seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])
     seite("bauplan.xhtml", "Bauplan des Bandes", f"<h1>Bauplan des Bandes</h1><ul>{stufen}</ul>")
