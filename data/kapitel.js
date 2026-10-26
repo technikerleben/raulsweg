@@ -133,6 +133,9 @@ RW.kapitel = {
       <h2>Glossar</h2>
       <div id="glossar-platz"></div>
 
+      <h2>Zum Mitnehmen</h2>
+      <p>Den ganzen Band gibt es auch als <a href="export/der-raulsweg.epub" download>EPUB für E-Reader</a>, mit Meisterinformationen in umrandeten Kästen und Bildern in Graustufen.</p>
+
       <h2>Quellen</h2>
       <ul>
         <li><a href="https://de.wiki-aventurica.de/wiki/Reichsstra%C3%9Fe_3" target="_blank" rel="noopener">Wiki Aventurica: Reichsstraße 3</a></li>

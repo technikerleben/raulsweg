@@ -48,6 +48,10 @@ Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 
 Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B. `answald-kreutzer.webp`, `travine-holler.webp`. Hochformat 4:5, etwa 800 × 1000 Pixel. Fehlt ein Porträt, erscheint ein Monogramm.
 
+## EPUB-Fassung
+
+`python3 tools/build_epub.py` erzeugt `export/der-raulsweg.epub` aus den aktuellen Daten (benötigt node und Pillow). Optimiert für den Xteink X4 Pro: Graustufenbilder, keine Tabellen, Meisterinformationen in Kästen. Nach Änderungen an den Daten neu erzeugen und mitcommitten.
+
 ## Kennzeichnung
 
 - **Kanon**: Ort aus offiziellen Quellen (Beschreibungen sind trotzdem Interpretation).
