@@ -163,7 +163,7 @@ RW.glossar = [
 /* Ausbaustufen des Bandes – erscheinen auf der Seite „Bauplan“ */
 RW.ausbaustufen = [
   { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar, automatische Querverweise mit Vorschau, Rückverweise, Suche, Tag- und Nachtansicht.", erledigt: true },
-  { nr: 2, titel: "Figuren", text: "Zwei bis drei Figuren pro Station und durchreisende Personen; Figurenkarten mit Porträt, Rolle, Motiv und Spielwerten; Übersicht aller Figuren." },
+  { nr: 2, titel: "Figuren", text: "Zwei Figuren pro Station und vier Reisende auf der ganzen Strecke, mit Rolle, Erscheinung, Auftreten, Motiv, Zitat und Geheimnis; Übersicht aller Figuren. Offen: Porträts und Spielwerte.", erledigt: true },
   { nr: 3, titel: "Gebäude und Orte", text: "Kaiserpfalz, Relais, Herbergen und Tempel je Station; einfache Grundrisse für wichtige Schauplätze." },
   { nr: 4, titel: "Karte und Strecke", text: "Interaktives Streckenband im Stil einer Bildrolle, Reisezeitrechner, Wegpunkte zwischen den Stationen." },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },

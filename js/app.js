@@ -29,6 +29,7 @@
   const slug = t => String(t).toLowerCase()
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const ohneMeister = html => String(html).replace(/<div class="meister">[\s\S]*?<\/div>/g, " ");
   const statusText = { fertig: "fertig", erweiterung: "Erweiterung", rohbau: "Rohbau" };
 
   const meileGeschaetzt = h => RW.stationen.some(s => s.nr > 0 && s.nr <= h.nr && s.schaetzung);
@@ -48,7 +49,7 @@
   stationen.forEach(s => eintragen({
     schluessel: "station:" + s.id, art: `Station ${s.nr}, geweiht ${s.gottheit}`, name: s.name,
     begriffe: [s.name, ...(s.begriffe || [])], href: `#/station/${s.id}`, kurz: s.kurz,
-    text: [s.kurz, ...(s.beschreibung || []), ...(s.vorlesetext || []), ...(s.geruechte || []), s.konflikt, s.meister?.hintergrund].join(" ")
+    text: [s.kurz, ...(s.beschreibung || []), ...(s.vorlesetext || []), ...(s.geruechte || []), s.konflikt].join(" ")
   }));
   orte.forEach(o => eintragen({
     schluessel: "ort:" + o.id, art: "Endpunkt des Raulswegs", name: o.name,
@@ -58,7 +59,13 @@
   RW.maechte.forEach(m => eintragen({
     schluessel: "macht:" + m.id, art: "Macht am Weg", name: m.name,
     begriffe: m.begriffe || [], href: `#/maechte/${m.id}`, kurz: kuerzen((m.beschreibung || [])[0] || ""),
-    text: [...(m.beschreibung || []), m.will, m.konflikt, m.meister].join(" ")
+    text: [...(m.beschreibung || []), m.will, m.konflikt].join(" ")
+  }));
+  const figuren = RW.figuren || [];
+  figuren.forEach(f => eintragen({
+    schluessel: "figur:" + f.id, art: f.rolle, name: f.name,
+    begriffe: [f.name, ...(f.begriffe || [])], href: `#/figur/${f.id}`, kurz: f.kurz,
+    text: [f.kurz, f.aussehen, f.auftreten, f.motiv, f.zitat].join(" ")
   }));
   RW.glossar.forEach(g => eintragen({
     schluessel: "glossar:" + g.id, art: "Begriff", name: g.name,
@@ -66,7 +73,7 @@
   }));
   KAPITEL.forEach(k => eintragen({
     schluessel: "kapitel:" + k, art: "Kapitel", name: RW.kapitel[k].titel, begriffe: [],
-    href: `#/${k}`, kurz: "", text: ohneTags(RW.kapitel[k].html)
+    href: `#/${k}`, kurz: "", text: ohneTags(ohneMeister(RW.kapitel[k].html))
   }));
 
   // Begriffe → Schlüssel, längste zuerst, damit „Feste Hohenstein“ vor „Hohenstein“ greift
@@ -96,7 +103,7 @@
     });
   });
 
-  const reihenfolge = { ort: 0, station: 1, macht: 2, kapitel: 3, glossar: 4 };
+  const reihenfolge = { ort: 0, station: 1, figur: 2, macht: 3, kapitel: 4, glossar: 5 };
   const nrVon = e => (RW.stationen.find(s => e.schluessel.endsWith(":" + s.id)) || {}).nr;
   function sortiert(menge) {
     return [...(menge || [])].map(k => register.get(k)).filter(Boolean).sort((a, b) => {
@@ -111,7 +118,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -221,6 +228,7 @@
       <p class="nav-gruppe">Hintergrund</p>
       <ul>
         <li><a href="#/maechte" data-route="maechte">Mächte am Weg</a></li>
+        <li><a href="#/figuren" data-route="figuren">Figuren</a></li>
         <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
       <p class="nav-gruppe">Anhang</p>
@@ -264,7 +272,7 @@
 
   function navMarkieren(route) {
     const teile = route.split("/");
-    const basis = ["station", "ort"].includes(teile[0]) ? teile.slice(0, 2).join("/") : teile[0];
+    const basis = teile[0] === "figur" ? "figuren" : ["station", "ort"].includes(teile[0]) ? teile.slice(0, 2).join("/") : teile[0];
     nav.querySelectorAll("a[data-route]").forEach(a => {
       if (a.dataset.route === basis) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
@@ -346,16 +354,38 @@
         if (n < BILD_ENDUNGEN.length) { img.dataset.versuch = n; img.src = `${img.dataset.basis}.${BILD_ENDUNGEN[n]}`; }
         else {
           const platz = document.createElement("div");
-          platz.className = "bild-platzhalter";
-          platz.innerHTML = `<div><strong>${esc(img.alt.split(":")[0])}</strong>Bild folgt: ${esc(img.dataset.basis)}.webp</div>`;
+          if (img.dataset.monogramm) {
+            platz.className = "monogramm";
+            platz.setAttribute("aria-hidden", "true");
+            platz.textContent = img.dataset.monogramm;
+          } else {
+            platz.className = "bild-platzhalter";
+            platz.innerHTML = `<div><strong>${esc(img.alt.split(":")[0])}</strong>Bild folgt: ${esc(img.dataset.basis)}.webp</div>`;
+          }
           img.replaceWith(platz);
         }
       });
     });
   }
 
+  const initialen = name => name.split(/\s+/).filter(w => /^\p{Lu}/u.test(w)).map(w => w[0]).slice(0, 2).join("");
+  function portraet(f, klein) {
+    return `<span class="portraet${klein ? " klein" : ""}"><img data-basis="img/figuren/${f.bild || f.id}" data-versuch="0" data-monogramm="${esc(initialen(f.name))}"
+        src="img/figuren/${f.bild || f.id}.${BILD_ENDUNGEN[0]}" alt="Porträt: ${esc(f.name)}" loading="lazy"></span>`;
+  }
+  function figurKarten(liste) {
+    if (!liste.length) return "";
+    return `<ul class="figuren-raster">${liste.map(f => `
+      <li class="figur-karte">
+        ${portraet(f, true)}
+        <div><a class="figur-name" href="#/figur/${f.id}">${esc(f.name)}</a><span class="figur-rolle">${esc(f.rolle)}</span><p>${esc(f.kurz)}</p></div>
+      </li>`).join("")}</ul>`;
+  }
+  const figurenAn = id => figuren.filter(f => f.station === id);
+  const figurenVon = mid => figuren.filter(f => (f.maechte || []).includes(mid));
+
   function verbindungsBlock(schluessel) {
-    const vor = sortiert(erwaehnt.get(schluessel)).filter(e => /^(station|ort|macht):/.test(e.schluessel));
+    const vor = sortiert(erwaehnt.get(schluessel)).filter(e => /^(station|ort|macht|figur):/.test(e.schluessel));
     const rueck = sortiert(rueckverweise.get(schluessel)).filter(e => !e.schluessel.startsWith("glossar:"));
     let html = "";
     if (vor.length) html += `<section><h3>Verbunden mit</h3><ul class="verbindungen">${vor.map(e => `<li>${verweisLink(e)}<br><small>${esc(e.art)}</small></li>`).join("")}</ul></section>`;
@@ -446,6 +476,7 @@
           <h2>Was hier brodelt</h2>
           <p>${esc(s.konflikt)}</p>
           ${s.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(s.meister.hintergrund)}</p></div>` : ""}
+          ${figurenAn(s.id).length ? `<h2>Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
         </div>
         <aside class="seitenleiste">
           <section>
@@ -514,6 +545,7 @@
         <p><strong>Was sie wollen:</strong> ${esc(m.will)}</p>
         <p><strong>Wo es reibt:</strong> ${esc(m.konflikt)}</p>
         <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(m.meister)}</p></div>
+        ${figurenVon(m.id).length ? `<p class="leise">Figuren:</p><ul class="verbindungen">${figurenVon(m.id).map(f => `<li><a href="#/figur/${f.id}">${esc(f.name)}</a></li>`).join("")}</ul>` : ""}
         ${rv.length ? `<p class="leise">Taucht auf bei:</p><ul class="verbindungen">${rv.map(e => `<li>${verweisLink(e)}</li>`).join("")}</ul>` : ""}
       </section>`;
     }).join("");
@@ -524,6 +556,66 @@
       <p>Keine dieser Parteien ist einfach gut oder böse, und keine handelt allein. Unter jeder Macht steht, an welchen Stationen sie auftaucht. Ausführliche Profile, Figuren und ein Beziehungsnetz folgen in einer späteren Ausbaustufe.</p>
       ${toc}${liste}`,
       eigene: []
+    };
+  }
+
+  function seiteFiguren() {
+    const gruppen = [{ titel: "Unterwegs auf der ganzen Strecke", id: "unterwegs", liste: figurenAn("unterwegs") }]
+      .concat(stationen.map(s => ({ titel: `${s.nr} ${s.name}`, id: s.id, href: `#/station/${s.id}`, liste: figurenAn(s.id) })))
+      .filter(g => g.liste.length);
+    const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>${gruppen.map(g => `<li><a href="#/figuren/${g.id}">${esc(g.titel)}</a></li>`).join("")}</ul></nav>`;
+    return {
+      html: `<h1>Figuren</h1>
+      <p class="einleitung initiale">Wirte und Wachen, Bauleute und Botinnen, Geweihte und Geschäftemacher: die Menschen, denen Reisende auf dem Raulsweg begegnen.</p>
+      <p>Jede Figur hat ein Motiv und ein Geheimnis. Die Geheimnisse stehen in den Meisterinformationen. Spielwerte folgen in einer späteren Stufe.</p>
+      ${toc}
+      ${gruppen.map(g => `<section id="${g.id}"><h2>${g.href ? `<a href="${g.href}">${esc(g.titel)}</a>` : esc(g.titel)}</h2>${figurKarten(g.liste)}</section>`).join("")}`,
+      eigene: []
+    };
+  }
+
+  function seiteFigur(id) {
+    const i = figuren.findIndex(f => f.id === id);
+    if (i < 0) return seiteFehlt();
+    const f = figuren[i];
+    const vor = figuren[(i - 1 + figuren.length) % figuren.length], nach = figuren[(i + 1) % figuren.length];
+    const st = RW.stationen.find(s => s.id === f.station);
+    const ortHtml = st ? `<a href="${linkZu(st)}">${st.typ === "stadt" ? "" : st.nr + " "}${esc(st.name)}</a>` : "unterwegs auf der ganzen Strecke";
+    const maechte = (f.maechte || []).map(mid => RW.maechte.find(m => m.id === mid)).filter(Boolean);
+    const andere = figurenAn(f.station).filter(x => x.id !== f.id);
+    return {
+      html: `
+      <div class="figur-kopf">
+        ${portraet(f)}
+        <div><h1>${esc(f.name)}</h1><p class="station-unterzeile">${esc(f.rolle)}</p></div>
+      </div>
+      <div class="station-raster">
+        <div>
+          <p class="einleitung">${esc(f.kurz)}</p>
+          <h3>Erscheinung</h3><p>${esc(f.aussehen)}</p>
+          <h3>Auftreten</h3><p>${esc(f.auftreten)}</p>
+          <h3>Antrieb</h3><p>${esc(f.motiv)}</p>
+          <blockquote class="zitat"><p>»${esc(f.zitat)}«</p></blockquote>
+          <div class="meister"><p class="meister-titel">Meisterinformationen: Geheimnis</p><p>${esc(f.geheimnis)}</p></div>
+        </div>
+        <aside class="seitenleiste">
+          <section>
+            <h3>Steckbrief</h3>
+            <dl>
+              <dt>Rolle</dt><dd>${esc(f.rolle)}</dd>
+              <dt>Anzutreffen</dt><dd>${ortHtml}</dd>
+              ${maechte.length ? `<dt>Gehört zu</dt><dd>${maechte.map(m => `<a href="#/maechte/${m.id}">${esc(m.name)}</a>`).join("<br>")}</dd>` : ""}
+            </dl>
+          </section>
+          ${andere.length ? `<section><h3>Ebenfalls hier</h3><ul class="verbindungen">${andere.map(x => `<li><a href="#/figur/${x.id}">${esc(x.name)}</a><br><small>${esc(x.rolle)}</small></li>`).join("")}</ul></section>` : ""}
+          ${verbindungsBlock("figur:" + f.id)}
+        </aside>
+      </div>
+      <nav class="blaettern" aria-label="Weitere Figuren">
+        <a href="#/figur/${vor.id}">← ${esc(vor.name)}</a>
+        <a href="#/figur/${nach.id}">${esc(nach.name)} →</a>
+      </nav>`,
+      eigene: ["figur:" + f.id]
     };
   }
 
@@ -552,7 +644,7 @@
   function zeigen() {
     const route = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
     const [teil, id] = route.split("/");
-    const mitAnker = id && !["station", "ort"].includes(teil);
+    const mitAnker = id && !["station", "ort", "figur"].includes(teil);
     const seitenSchluessel = mitAnker ? teil : route;
 
     if (seitenSchluessel !== letzteSeite) {
@@ -563,6 +655,8 @@
       else if (teil === "station") seite = seiteStation(id);
       else if (teil === "ort") seite = seiteOrt(id);
       else if (teil === "maechte") seite = seiteMaechte();
+      else if (teil === "figuren") seite = seiteFiguren();
+      else if (teil === "figur") seite = seiteFigur(id);
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;

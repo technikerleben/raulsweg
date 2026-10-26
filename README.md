@@ -13,6 +13,7 @@ js/app.js           Navigation (Hash-Routen), Meister-Umschalter, Streckenband
 data/stationen.js   12 Stationen, Gareth, Perricum, Reisezeiten
 data/kapitel.js     Überblick, Stationswesen, Reisen, Anhang, Ausbaustufen
 data/maechte.js     Mächte am Weg
+data/figuren.js     Figuren (Stufe 2)
 img/titel.webp      Titelbild (optional)
 img/stationen/      Stationsbilder
 img/ui/             Ornamente, Karte (später)
@@ -43,6 +44,10 @@ Endung `.webp`, `.jpg`, `.jpeg` oder `.png`; die Seite probiert sie in dieser Re
 
 Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 
+## Figurenporträts
+
+Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B. `answald-kreutzer.webp`, `travine-holler.webp`. Hochformat 4:5, etwa 800 × 1000 Pixel. Fehlt ein Porträt, erscheint ein Monogramm.
+
 ## Kennzeichnung
 
 - **Kanon**: Ort aus offiziellen Quellen (Beschreibungen sind trotzdem Interpretation).
@@ -52,7 +57,7 @@ Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 ## Ausbaustufen
 
 1. Grundgerüst (vorhanden)
-2. Figuren – Feld `figuren: []` in jeder Station
+2. Figuren (vorhanden; Porträts und Spielwerte offen)
 3. Gebäude und Orte – Feld `gebaeude: []`
 4. Karte und Strecke, Reisezeitrechner
 5. Mächte und Beziehungsnetz
