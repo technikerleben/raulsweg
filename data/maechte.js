@@ -13,7 +13,7 @@ RW.maechte = [
     beschreibung: [
       "Die kaiserliche Kanzlei verwaltet den Raulsweg im Namen Rohajas. Sie vergibt Pachten, stellt Papiere aus, prüft Abrechnungen und ernennt die Pfalzvögte. Für den Bau selbst ist der kaiserliche Wegemeister verantwortlich, ein Mann, der an Zeitplänen gemessen wird, die er nicht selbst gemacht hat."
     ],
-    will: "Eine fertige, ordentliche Straße, die das Ansehen der Kaiserin mehrt, und keine Skandale mehr nach dem Fall Stoerrebrandts.",
+    will: "Eine fertige, ordentliche Straße, die das Ansehen der Kaiserin mehrt, und keine Skandale, die auf den Hof zurückfallen.",
     konflikt: "Die Kanzlei vermutet hinter den Problemen am Bau Haus Rabenmund. Der Verdacht ist bequem, weil er von eigenen Fehlern ablenkt.",
     meister: "Die Kanzlei ist kein einheitlicher Block. Zwischen Gareth und Mardramund, zwischen Bauleuten und Schreibern gibt es eigene Interessen, und nicht jeder Beamte ist der Kaiserin treuer als seinem Beutel."
   },
@@ -68,7 +68,7 @@ RW.maechte = [
       "Das tulamidische Handelshaus unterhält in Gaulsfurt sein Mondsilberkontor. An der Kreuzung mit der Kronstraße nach Zorgan laufen Waren und Wechsel aus dem Osten und Süden zusammen."
     ],
     will: "Gute Geschäfte, stabile Zölle und einen Raulsweg, der den Osthandel beschleunigt.",
-    konflikt: "Seit dem Fall Stoerrebrandts sind viele Wechsel und Schuldbriefe herrenlos. Wer sie hält, wer sie einlösen darf und wer sie aufkauft, ist eine heikle Frage.",
+    konflikt: "Neue Kontore drängen an die Kreuzung, mit Wechseln von Häusern, die niemand kennt. Wer dahintersteht, interessiert die Mada Basari sehr.",
     meister: "Die Mada Basari sind weder Freund noch Feind der Helden. Sie wissen viel über Geldflüsse und sind bereit, Wissen gegen Gegenleistung zu teilen."
   },
   {
@@ -81,12 +81,12 @@ RW.maechte = [
     meister: "Die Nähe zwischen Perricum und dem Hof macht jede Untersuchung am Ende der Strecke politisch heikel. Was hier ans Licht kommt, betrifft die Familie der Kaiserin."
   },
   {
-    id: "stoerrebrandt", name: "Das Erbe Stoerrebrandts", sitz: "unbekannt", kanon: false,
+    id: "neue-kontore", name: "Die neuen Kontore", sitz: "unbekannt, Niederlassungen an mehreren Stationen", kanon: false,
     beschreibung: [
-      "Das Handelshaus Stoerrebrandt ist zusammengebrochen. Seine Kontore stehen leer oder haben neue Besitzer, seine Schreiber und Faktoren sind über das Reich verstreut, und seine Schuldbriefe sind herrenlos. Der Hof hat sich öffentlich und gründlich von dem Haus distanziert."
+      "Seit der Raulsweg gebaut wird, tauchen Handelskontore auf, von denen vor einem Jahr noch niemand gehört hat. Sie bieten auf Pachten, kaufen Schuldscheine von Baufirmen und finanzieren Feste. Ihre Vertreter sind höflich, zahlungskräftig und auffallend schweigsam, wenn man nach ihren Geldgebern fragt."
     ],
-    will: "Das weiß niemand genau. Gerüchte sprechen von neuen Kontoren unter neuen Namen, die alte Verbindungen nutzen.",
-    konflikt: "Die Leumundsbriefe und die Kontrollen an der Feste Hohenstein sind eine direkte Reaktion auf den Fall des Hauses. Wer heute am Raulsweg Geld verdient, muss beweisen, dass es kein Stoerrebrandt-Geld ist.",
-    meister: "Die Reste des Hauses sind gespalten: Manche wollen nur einen ehrlichen Neuanfang, andere wollen Einfluss zurückgewinnen. Das verschwundene Hauptschuldbuch des Hauses, mit den Schulden halb Garetiens darin, ist der Schatz, um den sich vieles drehen kann."
+    will: "Nicht die Straße besitzen, sondern alles, was an ihr Geld verdient: Herbergen, Relais, Lieferungen.",
+    konflikt: "Die Leumundsbriefe der Kanzlei sollen genau solche Bieter prüfen. Ob die Prüfung in Mardramund gründlich genug ist, bezweifeln viele.",
+    meister: "Wer hinter den neuen Kontoren steht, bleibt in diesem Band bewusst offen. Sie sind ein Platzhalter für eine Macht, die der Spielleitung passt, und können später mit der eigenen Kampagne verknüpft werden."
   }
 ];

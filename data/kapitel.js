@@ -39,7 +39,7 @@ RW.kapitel = {
 
       <div class="meister">
         <p class="meister-titel">Meisterinformationen: Wann spielt der Band?</p>
-        <p>Der Band legt sich bewusst nicht auf ein Jahr fest. Er setzt voraus, dass Rohaja regiert, das Handelshaus Stoerrebrandt kürzlich zusammengebrochen ist und der Ausbau des Raulswegs seit ein bis zwei Jahren läuft. So lässt er sich an die eigene Kampagnenchronologie anpassen.</p>
+        <p>Der Band legt sich bewusst nicht auf ein Jahr fest. Er setzt voraus, dass Rohaja regiert und der Ausbau des Raulswegs seit ein bis zwei Jahren läuft. So lässt er sich an die eigene Kampagnenchronologie anpassen.</p>
       </div>
     `
   },
@@ -65,12 +65,12 @@ RW.kapitel = {
       <h3>Der Geleitbrief</h3>
       <p>Wer im Auftrag oder auf Einladung des Hofes reist, erhält von der Kanzlei einen Geleitbrief. Er öffnet die Türen der Kaiserpfalzen, gewährt Wechselpferde und beschleunigt die Kontrollen.</p>
       <h3>Der Leumundsbrief</h3>
-      <p>Seit dem Zusammenbruch des Handelshauses Stoerrebrandt verlangt die Kanzlei von allen, die Stationen beliefern oder Pachten übernehmen wollen, einen Leumundsbrief. Er bescheinigt, dass der Inhaber in keinerlei Verbindung zu dem gefallenen Haus steht. Ausgestellt wird er in Mardramund. Wie gründlich dort geprüft wird, ist umstritten.</p>
+      <p>Weil schon in den ersten Monaten des Baus Gelder versickert sind, verlangt die Kanzlei von allen, die Stationen beliefern oder Pachten übernehmen wollen, einen Leumundsbrief. Er bescheinigt einen untadeligen Ruf, geordnete Geschäfte und keine offenen Schulden gegenüber dem Reich. Ausgestellt wird er in Mardramund. Wie gründlich dort geprüft wird, ist umstritten.</p>
       <h3>Der Stationsstempel</h3>
       <p>Viele Reisende lassen sich an jeder Station einen Stempel mit dem Emblem der Gottheit in ein Büchlein drücken. Was als Nachweis für Boten begann, ist inzwischen eine Mode geworden. Wer alle zwölf Stempel besitzt, gilt als jemand, der den Raulsweg wirklich bereist hat.</p>
 
       <h2>Kontrollposten</h2>
-      <p>Der wichtigste Kontrollposten ist die Feste Hohenstein. Daneben gibt es Zollstellen an Brücken und Kreuzungen. Die Wachen prüfen Papiere und Gepäck und suchen seit dem Fall Stoerrebrandts gezielt nach beschlagnahmten Gütern, Schuldbriefen und Waren unter altem Siegel.</p>
+      <p>Der wichtigste Kontrollposten ist die Feste Hohenstein. Daneben gibt es Zollstellen an Brücken und Kreuzungen. Die Wachen prüfen Papiere und Gepäck und suchen gezielt nach Schmuggelware, gefälschten Geleitbriefen und Baumaterial, das von den Baustellen verschwunden ist.</p>
 
       <div class="meister">
         <p class="meister-titel">Meisterinformationen: Wer verdient am Stationswesen?</p>
@@ -134,7 +134,7 @@ RW.kapitel = {
         <dt><strong>Darpatweg</strong></dt><dd>Volkstümlicher Name des Abschnitts der Reichsstraße 3 von der Feste Hohenstein nach Perricum.</dd>
         <dt><strong>Geleitbrief</strong></dt><dd>Schreiben der Kanzlei, das Zugang zu den Kaiserpfalzen und Wechselpferden gewährt.</dd>
         <dt><strong>Kaiserpfalz</strong></dt><dd>Hauptgebäude einer Station, dem Hof und hohen Gästen vorbehalten.</dd>
-        <dt><strong>Leumundsbrief</strong></dt><dd>Bescheinigung, keine Verbindung zum Handelshaus Stoerrebrandt zu haben. Pflicht für Lieferanten und Pächter.</dd>
+        <dt><strong>Leumundsbrief</strong></dt><dd>Bescheinigung über untadeligen Ruf und geordnete Geschäfte. Pflicht für Lieferanten und Pächter.</dd>
         <dt><strong>Pfalzvogt</strong></dt><dd>Verwalter einer Kaiserpfalz in Abwesenheit des Hofes.</dd>
         <dt><strong>Relais</strong></dt><dd>Pferdewechsel und Poststelle einer Station.</dd>
         <dt><strong>Rohajas Rennbahn</strong></dt><dd>Spottname für den Raulsweg, aus Rommilys.</dd>
@@ -161,7 +161,7 @@ RW.ausbaustufen = [
   { nr: 2, titel: "Figuren", text: "Zwei bis drei Figuren pro Station und durchreisende Personen; Figurenkarten mit Porträt, Rolle, Motiv und Spielwerten; Übersicht aller Figuren." },
   { nr: 3, titel: "Gebäude und Orte", text: "Kaiserpfalz, Relais, Herbergen und Tempel je Station; einfache Grundrisse für wichtige Schauplätze." },
   { nr: 4, titel: "Karte und Strecke", text: "Interaktives Streckenband im Stil einer Bildrolle, Reisezeitrechner, Wegpunkte zwischen den Stationen." },
-  { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zum verschwundenen Schuldbuch." },
+  { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
   { nr: 7, titel: "Handouts", text: "Geleitbrief, Leumundsbrief, Stationsstempel-Heft zum Sammeln, Botenbriefe." },
   { nr: 8, titel: "Abenteuer", text: "Die vier Abenteuer der Kampagne Auf dem Raulsweg als eigener Meisterbereich, verknüpft mit Stationen und Figuren." },

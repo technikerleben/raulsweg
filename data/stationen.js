@@ -19,7 +19,7 @@ RW.stationen = [
     meile: 0, etappe: null, schaetzung: false, kanon: true,
     kurz: "Kaiserstadt, Ausgangspunkt des Raulswegs. Hier beginnt die Straße am Osttor, wo seit dem Edikt ein neuer Meilenstein mit der Null steht.",
     beschreibung: [
-      "Die größte Stadt Aventuriens ist Sitz der Kaiserin, des Haupthauses der Beilunker Reiter und bis vor Kurzem auch des Handelshauses Stoerrebrandt. Wer den Raulsweg bereist, bricht hier auf, meist mit einem Geleitbrief der Kanzlei in der Tasche.",
+      "Die größte Stadt Aventuriens ist Sitz der Kaiserin, des Haupthauses der Beilunker Reiter und zahlloser Handelshäuser. Wer den Raulsweg bereist, bricht hier auf, meist mit einem Geleitbrief der Kanzlei in der Tasche.",
       "In Gareth spricht man stolz vom Raulsweg, benannt nach dem Reichsgründer Raul. Dass die Straße die Hauptstadt enger mit dem Perlenmeer verbindet, gilt hier als Zeichen einer neuen, tatkräftigen Zeit."
     ]
   },
@@ -127,7 +127,7 @@ RW.stationen = [
     kurz: "Die alte Festung am Beginn des Darpatwegs, jetzt Kontrollposten des Raulswegs. Wer hier durchwill, braucht Papiere und Geduld.",
     beschreibung: [
       "An der Feste Hohenstein beginnt der Abschnitt, den man im Volksmund den Darpatweg nennt. Die alte Festung bewacht eine Enge, durch die sich die Straße zwängt, und war schon immer ein Ort, an dem man Reisende im Blick behielt.",
-      "Mit dem Edikt wurde Hohenstein zum wichtigsten Kontrollposten der Strecke ausgebaut. Seit dem Zusammenbruch des Handelshauses Stoerrebrandt suchen die Wachen besonders nach beschlagnahmten Gütern, versteckten Schuldbriefen und Waren mit verdächtigen Siegeln. Vor dem Tor bilden sich lange Schlangen, und wer keinen gültigen Geleitbrief oder Leumundsbrief vorweisen kann, wartet länger."
+      "Mit dem Edikt wurde Hohenstein zum wichtigsten Kontrollposten der Strecke ausgebaut. Die Wachen suchen besonders nach Schmuggelware, gefälschten Papieren und Baumaterial, das von den Baustellen verschwunden ist. Vor dem Tor bilden sich lange Schlangen, und wer keinen gültigen Geleitbrief oder Leumundsbrief vorweisen kann, wartet länger."
     ],
     vorlesetext: [
       "Die Straße wird enger, die Hänge rücken heran, und dann steht sie vor euch: die Feste Hohenstein, grau und breit, mit einem Löwen über dem Tor, der aussieht, als hätte er seit Jahrhunderten nicht geblinzelt. Vor dem Tor wartet eine lange Schlange aus Karren, Pilgern, Händlern und einem Viehtreiber, dessen Schafe sich an niemandes Ordnung halten. Gardisten in Rot und Gold öffnen Truhen, rollen Stoffballen auf und halten Briefe gegen das Licht. An einem Tisch im Torbogen sitzt ein Schreiber, taucht seine Feder ein, stempelt, schreibt, stempelt, und hebt nicht ein einziges Mal den Blick."
@@ -135,11 +135,11 @@ RW.stationen = [
     geruechte: [
       "Die Gardisten suchen nach einem bestimmten Buch. Keiner sagt, welches, aber sie blättern in allem, was gebunden ist.",
       "Für einen Silbertaler im Hut des richtigen Wachmanns geht es schneller. Für zwei geht es gar nicht.",
-      "Ein Händler wurde letzte Woche festgehalten, weil auf seinen Kisten noch ein altes Stoerrebrandt-Siegel klebte. Die Kisten waren leer."
+      "Ein Händler wurde letzte Woche festgehalten, weil auf seinen Kisten das Siegel eines Handelshauses klebte, das niemand kannte. Die Kisten waren leer."
     ],
     konflikt: "Die strengen Kontrollen sollen den Raulsweg sauber halten, bremsen aber jeden Handel. Händler murren, Wachen werden bestechlich, und wer etwas verbergen will, sucht nach Wegen um die Feste herum.",
     meister: {
-      hintergrund: "Hohenstein ist der Ort, an dem der Zusammenbruch von Stoerrebrandt für alle Reisenden spürbar wird. Was genau gesucht wird und warum, wissen die meisten Wachen selbst nicht. Ihre Anweisungen kommen direkt aus der Kanzlei."
+      hintergrund: "Hohenstein ist der Ort, an dem die Nervosität der Kanzlei für alle Reisenden spürbar wird. Was genau gesucht wird und warum, wissen die meisten Wachen selbst nicht. Ihre Anweisungen kommen direkt aus der Kanzlei."
     },
     figuren: [], gebaeude: []
   },
@@ -235,7 +235,7 @@ RW.stationen = [
     ],
     konflikt: "Das Fest ist eine Bühne, auf der um Einfluss gefeilscht wird. Wer die Herbergen an den Stationen pachtet, verdient an jedem Reisenden. Neues Geld drängt in den Raulsweg, und nicht jeder fragt, woher es kommt.",
     meister: {
-      hintergrund: "Wasserburg ist der Ort, an dem die Nachfolger des Handelshauses Stoerrebrandt, unter welchem Namen auch immer, zum ersten Mal sichtbar auftreten könnten. Die Feststimmung bildet einen guten Kontrast zu den ernsten Geschäften, die nebenher geschlossen werden."
+      hintergrund: "Wasserburg ist der Ort, an dem neues Geld unklarer Herkunft zum ersten Mal sichtbar auftritt: Kontore, die es vor einem Jahr noch nicht gab, und Bieter, die niemand kennt. Die Feststimmung bildet einen guten Kontrast zu den ernsten Geschäften, die nebenher geschlossen werden."
     },
     figuren: [], gebaeude: []
   },
