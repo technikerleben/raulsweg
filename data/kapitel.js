@@ -70,6 +70,9 @@ RW.kapitel = {
       <p>Weil schon in den ersten Monaten des Baus Gelder versickert sind, verlangt die Kanzlei von allen, die Stationen beliefern oder Pachten übernehmen wollen, einen Leumundsbrief. Er bescheinigt einen untadeligen Ruf, geordnete Geschäfte und keine offenen Schulden gegenüber dem Reich. Ausgestellt wird er in Mardramund. Wie gründlich dort geprüft wird, ist umstritten.</p>
       <h3>Der Stationsstempel</h3>
       <p>Viele Reisende lassen sich an jeder Station einen Stempel mit dem Emblem der Gottheit in ein Büchlein drücken. Was als Nachweis für Boten begann, ist inzwischen eine Mode geworden. Wer alle zwölf Stempel besitzt, gilt als jemand, der den Raulsweg wirklich bereist hat.</p>
+      <p>Die Kanzlei gibt dafür kleine Hefte in rotem Leder aus. Innen haben sie eine einzige Doppelseite mit zwölf Feldern, sechs links, sechs rechts, und daneben Platz für das Datum. Was danach noch hineingedrückt wird, etwa die Bärentatze aus Blitztann, findet irgendwo am Rand Platz.</p>
+      <figure class="station-bild"><img src="img/stempelheft.webp" alt="Ein aufgeschlagenes Stempelheft mit zwölf Stempeln und einer Bärentatze" loading="lazy"><figcaption>Ein Stempelheft am Ende der Reise: alle zwölf Stempel und die Bärentatze aus Blitztann.</figcaption></figure>
+      <p class="leise">Ein Stempelheft zum Ausdrucken gibt es im <a href="#/anhang">Anhang</a>.</p>
 
       <h2>Kontrollposten</h2>
       <p>Der wichtigste Kontrollposten ist die Feste Hohenstein. Daneben gibt es Zollstellen an Brücken und Kreuzungen. Die Wachen prüfen Papiere und Gepäck und suchen gezielt nach Schmuggelware, gefälschten Geleitbriefen und Baumaterial, das von den Baustellen verschwunden ist.</p>
@@ -167,7 +170,7 @@ RW.kapitel = {
 
       <h2>Zum Mitnehmen</h2>
       <p>Den ganzen Band gibt es auch als <a href="export/der-raulsweg.epub" download>EPUB für E-Reader</a>, mit Meisterinformationen in umrandeten Kästen und Bildern in Graustufen.</p>
-      <p>Für den Spieltisch gibt es das <a href="export/stempelheft.pdf" download>Stempelheft des Raulswegs</a> als PDF (A5, 16 Seiten) und als <a href="export/stempelheft-a4-bogen.pdf" download>Druckbogen für A4</a>: beidseitig über die kurze Kante drucken, falten, ineinanderlegen, heften.</p>
+      <p>Für den Spieltisch gibt es das <a href="export/stempelheft.pdf" download>Stempelheft des Raulswegs</a> als PDF (vier Seiten A5) und als <a href="export/stempelheft-a4-bogen.pdf" download>Druckbogen für A4</a>: ein Blatt beidseitig über die kurze Kante drucken und in der Mitte falten.</p>
 
       <h2>Quellen</h2>
       <ul>

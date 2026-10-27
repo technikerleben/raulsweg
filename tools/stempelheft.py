@@ -3,9 +3,8 @@
     python3 tools/stempelheft.py
 
 Erzeugt
-  export/stempelheft.pdf          16 Seiten A5, zum Lesen oder für den Druckdialog „Broschüre“
-  export/stempelheft-a4-bogen.pdf 8 Seiten A4 quer, ausgeschossen: beidseitig (kurze Kante) drucken,
-                                   Bögen in der Mitte falten, ineinanderlegen und heften.
+  export/stempelheft.pdf          4 Seiten A5: Umschlag, Doppelseite mit zwölf Stempelfeldern, Rückseite
+  export/stempelheft-a4-bogen.pdf 1 Blatt A4 quer, ausgeschossen: beidseitig (kurze Kante) drucken und falten.
 """
 import base64
 import io
@@ -103,6 +102,11 @@ def seite(inhalt, klasse=""):
     return f'<section class="seite {klasse}">{inhalt}</section>'
 
 
+def feld(s, klein=False):
+    return (f'<div class="feld-stempel"><p class="feld-kopf"><b>{s["nr"]}</b> {s["name"]}</p>'
+            f'{emblem_svg(EMBLEM[s["id"]], "38mm")}<div class="datum"></div></div>')
+
+
 def baue_html():
     stationen = [s for s in RW["stationen"] if s["typ"] == "station"]
     seiten = []
@@ -114,56 +118,26 @@ def baue_html():
         <h1>Stempelheft</h1>
         <p class="unter">des Raulswegs</p>
         <p class="strecke">Gareth · zwölf Stationen · Perricum</p>
-        <div class="feld"><span>Gehört</span></div>
-        <div class="feld"><span>Aufgebrochen am</span></div>
+        <div class="zeile"><span>Gehört</span></div>
+        <div class="zeile"><span>Aufgebrochen am</span></div>
         <div class="siegelplatz">Siegel der Kanzlei</div>
       </div>""", "umschlag"))
-    # 2 Innenumschlag
-    liste = "".join(f"<li><span>{s['nr']}</span>{s['name']}<em>{s['gottheit']}</em></li>" for s in stationen)
+    # 2 und 3: die Doppelseite
+    seiten.append(seite('<p class="seitenkopf">Gareth – Mardramund</p><div class="raster">'
+                        + "".join(feld(s) for s in stationen[:6]) + "</div>", "doppel links"))
+    seiten.append(seite('<p class="seitenkopf">Mardramund – Perricum</p><div class="raster">'
+                        + "".join(feld(s) for s in stationen[6:]) + "</div>"
+                        + f'<div class="tatze">{emblem_svg(TATZE, "15mm")}</div>', "doppel rechts"))
+    # 4 Rückseite
+    braeuche = "".join(f"<li><b>{s['nr']}</b> {s['name']}: <i>{BRAUCH[s['id']]}</i></li>" for s in stationen)
     seiten.append(seite(f"""
       <h2>Vom Stempelheft</h2>
-      <p>Jede Station des Raulswegs ist einer der Zwölfgötter geweiht, und an jeder Station gibt es einen Stempel mit ihrem Emblem.
-      Er wird nicht einfach ausgegeben, sondern verdient: Jede Station hat ihren eigenen Brauch.</p>
-      <p>Wer alle zwölf Stempel besitzt, hat den Raulsweg wirklich bereist. Die Kanzlei rät, das Heft trocken zu halten, nicht zu verleihen
-      und Siegel der Kanzlei nicht mit Stempeln zu verwechseln.</p>
-      <ol class="inhalt">{liste}</ol>
-      <p class="klein">Ausgegeben im Auftrag der Kanzlei zu Mardramund. Verlust bitte melden; Ersatz nur gegen Gebühr.</p>
-    """, "innen"))
-    # 3–14 Stationen
-    for s in stationen:
-        zusatz = '<div class="schreiblinien"><i></i><i></i><i></i></div>' if s["id"] == "mardramund" else ""
-        seiten.append(seite(f"""
-          <p class="kopf">Station {s['nr']} · Meile {('~' if s.get('schaetzung') else '') + str(s['meile'])}</p>
-          <h2 class="station">{s['name']}</h2>
-          <p class="weihe">geweiht {GENITIV.get(s['gottheit'], s['gottheit'])} · {s['emblem']}</p>
-          <div class="stempelfeld">{emblem_svg(EMBLEM[s['id']])}</div>
-          <p class="brauch">{BRAUCH[s['id']]}</p>
-          {zusatz}
-          <div class="zeilen"><div class="feld"><span>Tag</span></div><div class="feld"><span>Vermerk</span></div></div>
-          <p class="fuss">{s['nr']}</p>
-        """, "station-seite"))
-    # 15 Sonderstempel
-    seiten.append(seite(f"""
-      <p class="kopf">Besondere Stempel</p>
-      <h2 class="station">Der Bärenstempel</h2>
-      <p class="weihe">aus Blitztann, für den Firunsgang</p>
-      <div class="stempelfeld klein">{emblem_svg(TATZE, "42mm")}</div>
-      <p class="brauch">Allein, zu Fuß und ohne Feuer von Gräfenweiche nach Blitztann. Nur für Einzelreisende.</p>
-      <div class="drei">
-        <div class="leerfeld"></div><div class="leerfeld"></div>
-      </div>
-      <p class="klein mitte">Raum für weitere Stempel, Siegel und Andenken</p>
-      <p class="fuss">15</p>
-    """, "station-seite"))
-    # 16 Rückseite
-    seiten.append(seite("""
-      <h2>Vermerke der Kanzlei</h2>
-      <div class="linien">""" + "<i></i>" * 11 + """</div>
-      <div class="rueck-fuss">
-        <svg class="krone klein" viewBox="0 0 24 24">""" + KRONE + """</svg>
-        <p>Der Raulsweg · Gareth – Perricum</p>
-      </div>
-    """, "innen"))
+      <p>Jede Station des Raulswegs ist einer der Zwölfgötter geweiht. Ihr Stempel wird nicht ausgegeben, sondern verdient:</p>
+      <ol class="braeuche">{braeuche}</ol>
+      <p class="klein">Wer allein den Firunsgang von Gräfenweiche nach Blitztann geht, erhält dort die Bärentatze.</p>
+      <div class="zeile"><span>Vermerk der Kanzlei</span></div>
+      <div class="rueck-fuss"><svg class="krone klein" viewBox="0 0 24 24">{KRONE}</svg><p>Der Raulsweg · Gareth – Perricum</p></div>
+    """, "rueck"))
     css = (schrift("Grenze Gotisch", "grenze-gotisch-latin-700-normal.woff2", gewicht=700)
            + schrift("Alegreya SC", "alegreya-sc-latin-500-normal.woff2", gewicht=500)
            + schrift("Alegreya", "alegreya-latin-400-normal.woff2")
@@ -171,52 +145,46 @@ def baue_html():
 @page { size: 148mm 210mm; margin: 0; }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { font-family: 'Alegreya', Georgia, serif; color: #1c1712; font-size: 10.5pt; line-height: 1.4; }
-.seite { width: 148mm; height: 210mm; padding: 13mm 14mm 12mm; position: relative; page-break-after: always; overflow: hidden; }
+body { font-family: 'Alegreya', Georgia, serif; color: #1c1712; font-size: 10pt; line-height: 1.35; }
+.seite { width: 148mm; height: 210mm; padding: 12mm 13mm; position: relative; page-break-after: always; overflow: hidden; }
 .seite:last-child { page-break-after: auto; }
 h1, h2 { font-family: 'Grenze Gotisch', serif; font-weight: 700; margin: 0; }
-h2 { font-size: 22pt; color: #7a2418; margin-bottom: 4mm; }
-p { margin: 0 0 3mm; }
+h2 { font-size: 20pt; color: #7a2418; margin-bottom: 3mm; }
+p { margin: 0 0 2.5mm; }
 .klein { font-size: 8.5pt; color: #5a4e40; }
-.mitte { text-align: center; }
-/* Umschlag */
 .umschlag .rahmen { border: 1.6pt solid #1c1712; outline: .5pt solid #1c1712; outline-offset: -2.2mm; height: 100%; padding: 14mm 10mm; text-align: center; }
 .krone { width: 22mm; height: 22mm; fill: #7a2418; display: block; margin: 0 auto 5mm; }
-.krone.klein { width: 9mm; height: 9mm; margin-bottom: 2mm; }
+.krone.klein { width: 8mm; height: 8mm; margin-bottom: 1.5mm; }
 .vor { font-family: 'Alegreya SC', serif; letter-spacing: .6pt; font-size: 9.5pt; }
 h1 { font-size: 46pt; line-height: 1; margin: 4mm 0 1mm; }
 .unter { font-family: 'Grenze Gotisch', serif; font-size: 22pt; margin-bottom: 6mm; }
 .strecke { font-family: 'Alegreya SC', serif; font-size: 10pt; letter-spacing: .8pt; margin-bottom: 14mm; }
-.feld { display: flex; align-items: flex-end; gap: 3mm; border-bottom: .6pt solid #1c1712; height: 9mm; margin-bottom: 4mm; text-align: left; }
-.feld span { font-family: 'Alegreya SC', serif; font-size: 9pt; white-space: nowrap; padding-bottom: .8mm; }
+.zeile { display: flex; align-items: flex-end; border-bottom: .6pt solid #1c1712; height: 9mm; margin-bottom: 4mm; text-align: left; }
+.zeile span { font-family: 'Alegreya SC', serif; font-size: 9pt; white-space: nowrap; padding-bottom: .8mm; }
 .siegelplatz { width: 30mm; height: 30mm; border: .6pt dashed #1c1712; border-radius: 50%; margin: 10mm auto 0; display: grid; place-items: center;
   font-family: 'Alegreya SC', serif; font-size: 8pt; color: #5a4e40; padding: 4mm; }
-/* Innen */
-.inhalt { list-style: none; padding: 0; margin: 4mm 0; columns: 2; column-gap: 6mm; font-size: 10pt; }
-.inhalt li { break-inside: avoid; padding: .6mm 0; border-bottom: .3pt dotted #8a7a66; }
-.inhalt span { display: inline-block; width: 6mm; font-family: 'Alegreya SC', serif; color: #7a2418; }
-.inhalt em { float: right; color: #5a4e40; font-size: 9pt; }
-/* Stationsseiten */
-.kopf { font-family: 'Alegreya SC', serif; font-size: 9pt; letter-spacing: .6pt; color: #5a4e40; text-align: center; margin-bottom: 1mm; }
-h2.station { text-align: center; font-size: 26pt; margin-bottom: 1mm; color: #1c1712; }
-.weihe { text-align: center; font-style: italic; color: #5a4e40; margin-bottom: 5mm; }
-.stempelfeld { display: grid; place-items: center; margin: 2mm 0 5mm; }
-.vorzeichnung .ring { fill: none; stroke: #1c1712; stroke-width: .9; }
-.vorzeichnung .linie { fill: none; stroke: #b9b0a3; stroke-width: 1.3; stroke-dasharray: 2.4 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.brauch { text-align: center; font-style: italic; font-size: 10.5pt; margin: 0 6mm 5mm; }
-.schreiblinien i, .linien i { display: block; border-bottom: .5pt solid #8a7a66; height: 7.5mm; }
-.schreiblinien { margin: -2mm 0 4mm; }
-.zeilen { position: absolute; left: 14mm; right: 14mm; bottom: 16mm; }
-.fuss { position: absolute; bottom: 7mm; left: 0; right: 0; text-align: center; font-family: 'Alegreya SC', serif; font-size: 9pt; color: #5a4e40; margin: 0; }
-.drei { display: flex; gap: 6mm; justify-content: center; margin: 2mm 0 2mm; }
-.leerfeld { width: 36mm; height: 36mm; border: .6pt dashed #1c1712; border-radius: 3mm; }
-.rueck-fuss { position: absolute; bottom: 12mm; left: 0; right: 0; text-align: center; font-family: 'Alegreya SC', serif; font-size: 9pt; color: #5a4e40; }
+.seitenkopf { font-family: 'Alegreya SC', serif; font-size: 9pt; letter-spacing: .8pt; color: #5a4e40; text-align: center; margin-bottom: 3mm; }
+.doppel.links { padding-right: 9mm; }
+.doppel.rechts { padding-left: 9mm; }
+.raster { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); gap: 3mm 4mm; height: 176mm; }
+.feld-stempel { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+.feld-kopf { font-family: 'Alegreya SC', serif; font-size: 9.5pt; margin: 0 0 1.5mm; }
+.feld-kopf b { color: #7a2418; font-weight: 500; margin-right: 1mm; }
+.vorzeichnung .ring { fill: none; stroke: #1c1712; stroke-width: 1; }
+.vorzeichnung .linie { fill: none; stroke: #b9b0a3; stroke-width: 1.4; stroke-dasharray: 2.4 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.datum { width: 34mm; border-bottom: .5pt solid #8a7a66; height: 6mm; margin-top: 1mm; }
+.tatze { position: absolute; right: 9mm; bottom: 7mm; opacity: .9; }
+.tatze .ring { stroke-dasharray: 2 2; }
+.braeuche { list-style: none; padding: 0; margin: 1mm 0 4mm; font-size: 9.5pt; }
+.braeuche li { padding: .9mm 0; border-bottom: .3pt dotted #8a7a66; }
+.braeuche b { display: inline-block; width: 6mm; font-family: 'Alegreya SC', serif; color: #7a2418; font-weight: 500; }
+.rueck-fuss { position: absolute; bottom: 10mm; left: 0; right: 0; text-align: center; font-family: 'Alegreya SC', serif; font-size: 9pt; color: #5a4e40; }
 """)
     return f'<!doctype html><html lang="de"><head><meta charset="utf-8"><style>{css}</style></head><body>{"".join(seiten)}</body></html>'
 
 
 def ausschiessen(a5_pdf):
-    """16 A5-Seiten auf 8 A4-Querseiten für Rückstichheftung."""
+    """A5-Seiten auf A4-Querseiten für Rückstichheftung ausschießen."""
     leser = PdfReader(io.BytesIO(a5_pdf))
     n = len(leser.pages)
     assert n % 4 == 0

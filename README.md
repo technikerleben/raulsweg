@@ -58,7 +58,7 @@ Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B.
 
 ## Stempelheft
 
-`python3 tools/stempelheft.py` erzeugt `export/stempelheft.pdf` (16 Seiten A5) und `export/stempelheft-a4-bogen.pdf` (ausgeschossen für Rückstichheftung: A4 quer, beidseitig über die kurze Kante drucken). Benötigt node, Playwright für Python und pypdf.
+`python3 tools/stempelheft.py` erzeugt `export/stempelheft.pdf` (vier Seiten A5: Umschlag, Doppelseite mit zwölf Stempelfeldern, Rückseite) und `export/stempelheft-a4-bogen.pdf` (ein A4-Blatt quer, beidseitig über die kurze Kante drucken und falten). Bild: `img/stempelheft.webp`. Benötigt node, Playwright für Python und pypdf.
 
 ## Chronik
 

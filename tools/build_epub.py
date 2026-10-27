@@ -164,6 +164,10 @@ def kapitel_aufbereiten(roh):
     t = t.replace('<div id="entfernungen-platz"></div>', entfernungsliste())
     t = t.replace('<div id="reisezeiten-platz"></div>', reisezeitenliste())
     t = t.replace('<div id="glossar-platz"></div>', glossarliste())
+    def abbildung(m):
+        pfad = bild_hinzufuegen(m.group(1), "kapitel-" + os.path.basename(m.group(1)), 760)
+        return (f'<div class="bild"><img src="{pfad}" alt="{m.group(2)}" style="width:100%"/></div><p class="leise">{m.group(3)}</p>' if pfad else "")
+    t = re.sub(r'<figure[^>]*>\s*<img src="(img/[^"]+?)\.\w+" alt="([^"]*)"[^>]*>\s*<figcaption>(.*?)</figcaption>\s*</figure>', abbildung, t, flags=re.S)
     t = re.sub(r"<a [^>]*>(.*?)</a>", r"\1", t, flags=re.S)                   # interne Links entfernen
     t = re.sub(r'<span class="(marke-kanon|marke-eigen|bau[^"]*)">(.*?)</span>', r"[\2]", t)
     t = re.sub(r"<span[^>]*>(.*?)</span>", r"\1", t, flags=re.S)
