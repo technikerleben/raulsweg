@@ -90,6 +90,7 @@ RW.kapitel = {
       <div id="reisezeiten-platz"></div>
       <p class="leise">Schätzwerte für die gesamte Strecke von etwa 326 Meilen auf ausgebauter Straße, keine Regelwerte. Hochwasser an der Natter, Kontrollen an der Feste Hohenstein und Festtage können jede Reise erheblich verlängern.</p>
       <p>Der Unterschied zwischen dem Tempo eines Adelstrosses und dem eines Beilunker Reiters ist gewaltig. Eine Nachricht aus Gareth kann einen langsam reisenden Hof noch auf halber Strecke einholen, und ein Bericht, der in Mardramund abgeschickt wird, ist in Perricum, lange bevor sein Absender dort ankommt.</p>
+      <p>Was zwischen zwei Stationen am Weg liegt, Dörfer, Brücken, Schenken und kleine Begegnungen, steht unter <a href="#/unterwegs">Zwischen den Stationen</a>.</p>
 
       <h2>Wetter und Jahreszeiten</h2>
       <ul>
@@ -200,7 +201,7 @@ RW.ausbaustufen = [
   { nr: 1, titel: "Grundgerüst", text: "Kapitel, zwölf Stationen mit Bildern, Streckenband, Entfernungen, Reisezeiten, Meisterinformationen ein- und ausblendbar, automatische Querverweise mit Vorschau, Rückverweise, Suche, Tag- und Nachtansicht.", erledigt: true },
   { nr: 2, titel: "Figuren", text: "Zwei Figuren pro Station und vier Reisende auf der ganzen Strecke, mit Rolle, Erscheinung, Auftreten, Motiv, Zitat und drei möglichen Geheimnissen; Porträts; Übersicht aller Figuren. Offen: Spielwerte.", erledigt: true },
   { nr: 3, titel: "Gebäude und Orte", text: "Grundriss der Musterstation und ein Plan für jede der zwölf Stationen, mit Legende (vorhanden). Offen: Obergeschosse und Innenstädte von Gareth und Perricum.", erledigt: true },
-  { nr: 4, titel: "Karte und Strecke", text: "Schematische Karte der ganzen Strecke (vorhanden). Offen: Reisezeitrechner, Wegpunkte zwischen den Stationen." },
+  { nr: 4, titel: "Karte und Strecke", text: "Karte der ganzen Strecke nach avesmaps.de, Entfernungen nach der Routenplanung, Wegpunkte mit Szenen zwischen den Stationen (vorhanden). Offen: Reisezeitrechner.", erledigt: true },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
   { nr: 7, titel: "Handouts", text: "Geleitbrief, Leumundsbrief, Stationsstempel-Heft zum Sammeln, Botenbriefe." },

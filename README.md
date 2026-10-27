@@ -17,6 +17,7 @@ data/figuren.js     Figuren (Stufe 2)
 data/tempel.js      Die zwölf Tempel
 data/chronik.js     Chronik der gespielten Geschichten
 data/karten.js      Karten und Pläne (Zeichnungen: tools/karten.py)
+data/wegpunkte.js   Orte und Szenen zwischen den Stationen
 img/titel.webp      Titelbild (optional)
 img/stationen/      Stationsbilder
 img/ui/             Ornamente, Karte (später)
@@ -74,7 +75,7 @@ Nach jeder gespielten Geschichte einen Eintrag in `data/chronik.js` ergänzen (V
 1. Grundgerüst (vorhanden)
 2. Figuren (vorhanden; Porträts und Spielwerte offen)
 3. Gebäude und Orte – Feld `gebaeude: []`
-4. Karte und Strecke, Reisezeitrechner
+4. Karte und Strecke, Wegpunkte (vorhanden); Reisezeitrechner offen
 5. Mächte und Beziehungsnetz
 6. Spielhilfen (Begegnungen, Gerüchtetabellen, Wetter, Namen)
 7. Handouts (Geleitbrief, Leumundsbrief, Stempelheft)

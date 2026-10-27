@@ -484,3 +484,20 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
   :root:not([data-theme="light"]) .karte-gross img, :root:not([data-theme="light"]) .karte-verweis img, :root:not([data-theme="light"]) .karte-karte img { filter: invert(.88); }
 }
 :root[data-theme="dark"] .karte-gross img, :root[data-theme="dark"] .karte-verweis img, :root[data-theme="dark"] .karte-karte img { filter: invert(.88); }
+
+/* ---------- Zwischen den Stationen ---------- */
+.weg-nach { max-width: var(--mass); margin-top: 1.8rem; }
+.weg-liste { list-style: none; padding: 0; margin: .4rem 0 0; border-left: 2px dashed var(--linie); }
+.weg-liste li { display: flex; gap: .9rem; padding: .3rem 0 .5rem .9rem; position: relative; }
+.weg-liste li::before { content: ""; position: absolute; left: -.42rem; top: .75rem; width: .7rem; height: .7rem; border-radius: 50%; background: var(--blatt); border: 2px solid var(--rubrik); }
+.weg-meile { flex: 0 0 5.2rem; font-size: .9rem; color: var(--tinte-weich); padding-top: .2rem; }
+.weg-name { font-family: var(--schrift-kapit); font-size: 1.05rem; }
+.weg-art { display: block; font-size: .9rem; color: var(--tinte-weich); font-style: italic; }
+.weg-liste p { margin: .2rem 0 0; }
+.etappe { max-width: var(--mass); padding-bottom: .6rem; border-bottom: 1px solid var(--linie); }
+.etappe h2 a { text-decoration: none; color: inherit; }
+.etappe-zeile { color: var(--tinte-weich); font-style: italic; margin-top: -.4rem; }
+.wegpunkt { margin: 1rem 0 0 .2rem; padding-left: .9rem; border-left: 3px solid var(--linie); }
+.wegpunkt h3 { margin: 0; }
+.weg-szene { font-size: .98rem; }
+@media (max-width: 780px) { .weg-liste li { flex-direction: column; gap: 0; } .weg-meile { flex: none; } }

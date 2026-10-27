@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIEL = os.path.join(WURZEL, "export", "der-raulsweg.epub")
-DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten"]
+DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte"]
 
 # ---------------------------------------------------------------- Daten laden
 def daten_laden():
@@ -244,6 +244,19 @@ def chronik_html():
 def figur_kurz(f):
     return f"<li><b>{e(f['name'])}</b>, {e(f['rolle'])}. {e(f['kurz'])}</li>"
 
+def weg_html(h):
+    """Wegpunkte der Etappe, die an diesem Halt beginnt."""
+    nach = next((x for x in RW["stationen"] if x["nr"] == h["nr"] + 1), None)
+    if not nach:
+        return ""
+    liste = sorted((w for w in RW.get("wegpunkte", []) if w["nach"] == nach["id"]), key=lambda w: w["meile"])
+    teile = [f"<h2>Auf dem Weg nach {e(nach['name'])}</h2><p class=\"leise\">{etappe_text(nach)} Meilen bis zur nächsten Station.</p>"]
+    for w in liste:
+        teile.append(f"<h3>{e(w['name'])}</h3><p class=\"leise\">{e(w['art'])}, Meile {w['meile']}</p><p>{e(w['kurz'])}</p><p><b>Am Weg:</b> {e(w['szene'])}</p>")
+    if not liste:
+        teile.append("<p>Auf dieser kurzen Etappe gibt es keinen eigenen Halt.</p>")
+    return "".join(teile)
+
 def tempel_html(t):
     return (f"<h2>{e(t['name'])}</h2>"
             f"<p class=\"leise\">{e(t['art'])} {e(GENITIV.get(t['gottheit'], t['gottheit']))} [{STATUS.get(t['zustand'], t['zustand'])}]</p>"
@@ -269,7 +282,7 @@ def baue_seiten():
         seite(f"{schluessel}.xhtml", k[schluessel]["titel"], f"<h1>{e(k[schluessel]['titel'])}</h1>" + kapitel_aufbereiten(k[schluessel]["html"]))
 
     gareth = ORTE["gareth"]
-    seite("gareth.xhtml", "Gareth", f"<h1>Gareth</h1><p class=\"leise\">Ausgangspunkt des Raulswegs, Meile 0</p><p class=\"einleitung\">{e(gareth['kurz'])}</p>{absaetze(gareth.get('beschreibung'))}")
+    seite("gareth.xhtml", "Gareth", f"<h1>Gareth</h1><p class=\"leise\">Ausgangspunkt des Raulswegs, Meile 0</p><p class=\"einleitung\">{e(gareth['kurz'])}</p>{absaetze(gareth.get('beschreibung'))}" + weg_html(gareth))
 
     for s in STATIONEN:
         teile = [f"<h1>{s['nr']} · {e(s['name'])}</h1>",
@@ -291,6 +304,7 @@ def baue_seiten():
         hier = [f for f in FIGUREN if f["station"] == s["id"]]
         if hier:
             teile.append("<h2>Wer hier anzutreffen ist</h2><ul>" + "".join(figur_kurz(f) for f in hier) + "</ul><p class=\"leise\">Ausführlich im Kapitel Figuren.</p>")
+        teile.append(weg_html(s))
         seite(f"station-{s['nr']:02d}.xhtml", f"{s['nr']} {s['name']}", "".join(teile))
 
     perricum = ORTE["perricum"]

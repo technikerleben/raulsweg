@@ -73,6 +73,13 @@
   const GENITIV = { Praios: "des Praios", Rondra: "der Rondra", Efferd: "des Efferd", Travia: "der Travia", Boron: "des Boron", Hesinde: "der Hesinde",
     Firun: "des Firun", Tsa: "der Tsa", Phex: "des Phex", Peraine: "der Peraine", Ingerimm: "des Ingerimm", Rahja: "der Rahja" };
   const tempelArt = t => `${t.art} ${GENITIV[t.gottheit] || t.gottheit}`;
+  const wegpunkte = RW.wegpunkte || [];
+  const haltName = id => (RW.stationen.find(s => s.id === id) || {}).name || id;
+  wegpunkte.forEach(w => eintragen({
+    schluessel: "wegpunkt:" + w.id, art: `${w.art} auf dem Weg nach ${haltName(w.nach)}`, name: w.name,
+    begriffe: [w.name, ...(w.begriffe || []), ...(w.name.includes("„") ? [w.name.replace(/^.*„|“.*$/g, "")] : [])],
+    href: `#/unterwegs/${w.id}`, kurz: w.kurz, text: [w.kurz, w.szene].join(" ")
+  }));
   tempel.forEach(t => eintragen({
     schluessel: "tempel:" + t.id, art: tempelArt(t), name: t.name,
     begriffe: [t.name, ...(t.begriffe || [])], href: `#/tempel/${t.id}`, kurz: t.kurz,
@@ -114,7 +121,7 @@
     });
   });
 
-  const reihenfolge = { ort: 0, station: 1, tempel: 2, figur: 3, macht: 4, kapitel: 5, glossar: 6 };
+  const reihenfolge = { ort: 0, station: 1, wegpunkt: 2, tempel: 3, figur: 4, macht: 5, kapitel: 6, glossar: 7 };
   const nrVon = e => (RW.stationen.find(s => e.schluessel.endsWith(":" + s.id)) || {}).nr;
   function sortiert(menge) {
     return [...(menge || [])].map(k => register.get(k)).filter(Boolean).sort((a, b) => {
@@ -166,7 +173,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .weg-meile, .weg-art, .weg-name, .etappe-zeile";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -272,6 +279,7 @@
         ${stationLinks}
         <li><a href="#/ort/perricum" data-route="ort/perricum"><span class="nav-nr">P</span><span>Perricum</span></a></li>
         <li><a href="#/stationen" data-route="stationen">Alle Stationen im Überblick</a></li>
+        <li><a href="#/unterwegs" data-route="unterwegs">Zwischen den Stationen</a></li>
       </ul>
       <p class="nav-gruppe">Hintergrund</p>
       <ul>
@@ -352,16 +360,16 @@
   const linkZu = h => `${h.typ === "stadt" ? "#/ort/" : "#/station/"}${h.id}`;
 
   // Positionen im Streckenband: nach Meilen, aber mit Mindestabstand, damit nahe Halte nicht übereinanderliegen
-  const bandPos = (() => {
-    const abstand = 4.5;
+  const bandPositionen = abstand => {
     const pos = RW.stationen.map(h => (h.meile / gesamtMeilen) * 100);
     for (let i = 1; i < pos.length; i++) pos[i] = Math.max(pos[i], pos[i - 1] + abstand);
     pos[pos.length - 1] = Math.min(pos[pos.length - 1], 100);
     for (let i = pos.length - 2; i >= 0; i--) pos[i] = Math.min(pos[i], pos[i + 1] - abstand);
     return pos;
-  })();
+  };
 
   function streckenband(aktiv, klein) {
+    const bandPos = bandPositionen(klein ? 6.8 : 4.5);
     const halte = RW.stationen.map((h, i) => {
       const klassen = ["band-halt", i % 2 === 0 ? "oben" : "unten"];
       if (i % 4 >= 2) klassen.push("weit");
@@ -547,6 +555,43 @@
     };
   }
 
+  // Wegpunkte auf der Etappe, die an einem Halt beginnt
+  const naechsterHalt = h => RW.stationen.find(s => s.nr === h.nr + 1);
+  const wegpunkteNach = id => wegpunkte.filter(w => w.nach === id).sort((a, b) => a.meile - b.meile);
+  function wegNach(h) {
+    const nach = naechsterHalt(h);
+    if (!nach) return "";
+    const liste = wegpunkteNach(nach.id);
+    const kopf = `<h2>Auf dem Weg nach ${esc(nach.name)}</h2><p class="leise">${etappeText(nach)} Meilen bis zur nächsten Station.${liste.length ? "" : " Unterwegs nur Feld und Wald."}</p>`;
+    return `<section class="weg-nach">${kopf}${liste.length ? `<ul class="weg-liste">${liste.map(w => `
+      <li><span class="weg-meile">Meile ${w.meile}</span><div><a class="weg-name" href="#/unterwegs/${w.id}">${esc(w.name)}</a><span class="weg-art">${esc(w.art)}</span><p>${esc(w.kurz)}</p></div></li>`).join("")}</ul>` : ""}</section>`;
+  }
+
+  function seiteUnterwegs() {
+    const etappen = RW.stationen.slice(0, -1).map(h => ({ von: h, nach: naechsterHalt(h) }));
+    const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Etappen</p><ul>${etappen.map(e => `<li><a href="#/unterwegs/etappe-${e.nach.id}">${esc(e.von.name)} → ${esc(e.nach.name)}</a></li>`).join("")}</ul></nav>`;
+    const inhalt = etappen.map(e => {
+      const liste = wegpunkteNach(e.nach.id);
+      return `<section class="etappe" id="etappe-${e.nach.id}">
+        <h2><a href="${linkZu(e.von)}">${esc(e.von.name)}</a> → <a href="${linkZu(e.nach)}">${esc(e.nach.name)}</a></h2>
+        <p class="etappe-zeile">Meile ${meileText(e.von)} bis ${meileText(e.nach)} · ${etappeText(e.nach)} Meilen</p>
+        ${liste.map(w => `<section class="wegpunkt" id="${w.id}">
+          <h3>${esc(w.name)}</h3>
+          <p class="weg-art">${esc(w.art)}, Meile ${w.meile} ${w.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</p>
+          <p>${esc(w.kurz)}</p>
+          <p class="weg-szene"><strong>Am Weg:</strong> ${esc(w.szene)}</p>
+        </section>`).join("") || `<p class="leise">Auf dieser kurzen Etappe gibt es keinen eigenen Halt.</p>`}
+      </section>`;
+    }).join("");
+    return {
+      html: `<h1>Zwischen den Stationen</h1>
+      <p class="einleitung initiale">Zwischen zwei Stationen liegt ein Tag auf der Straße, und der ist selten leer. Dörfer, Brücken, Schenken und Baustellen säumen den Raulsweg.</p>
+      <p>Die Orte stammen überwiegend aus der Karte von avesmaps.de; was dort geschieht, ist Erfindung dieses Bandes. Zu jedem Ort gehört eine kurze Szene, die sich unterwegs einstreuen lässt.</p>
+      ${toc}${inhalt}`,
+      eigene: []
+    };
+  }
+
   function seiteStation(id) {
     const i = stationen.findIndex(s => s.id === id);
     if (i < 0) return seiteFehlt();
@@ -577,6 +622,7 @@
             <p><a href="#/karte/${c.id}">${esc(c.art)} mit Legende</a></p></section>`).join("")}
           ${tempelAn(s.id) ? tempelKasten(tempelAn(s.id)) : ""}
           ${figurenAn(s.id).length ? `<h2>Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
+          ${wegNach(s)}
         </div>
         <aside class="seitenleiste">
           <section>
@@ -620,6 +666,7 @@
           <p class="einleitung initiale">${esc(o.kurz)}</p>
           ${absaetze(o.beschreibung)}
           <p class="leise">Die Stadt selbst ist in offiziellen Regionalbänden ausführlich beschrieben. Dieser Band betrachtet sie nur als Anfang und Ende der Straße.</p>
+          ${wegNach(o)}
           ${chronikBezug("ort:" + o.id)}
         </div>
         <aside class="seitenleiste">
@@ -896,16 +943,18 @@
       else if (teil === "figuren") seite = seiteFiguren();
       else if (teil === "figur") seite = seiteFigur(id);
       else if (teil === "tempel") seite = seiteTempel();
+      else if (teil === "unterwegs") seite = seiteUnterwegs();
       else if (teil === "chronik") seite = seiteChronik();
       else if (teil === "karten") seite = seiteKarten();
       else if (teil === "karte") seite = seiteKarte(id);
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;
-      if (teil === "maechte" || teil === "tempel" || teil === "chronik") {
+      if (teil === "maechte" || teil === "tempel" || teil === "chronik" || teil === "unterwegs") {
         // Jeder Eintrag verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
         if (teil === "maechte") main.querySelectorAll(".macht").forEach(sek => verlinken(sek, ["macht:" + sek.id]));
         else if (teil === "tempel") main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
+        else if (teil === "unterwegs") main.querySelectorAll(".wegpunkt").forEach(sek => verlinken(sek, ["wegpunkt:" + sek.id]));
         else main.querySelectorAll(".chronik-eintrag").forEach(sek => verlinken(sek, []));
       } else verlinken(main, seite.eigene);
       bilderAbsichern();
