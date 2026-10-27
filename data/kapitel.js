@@ -167,6 +167,7 @@ RW.kapitel = {
 
       <h2>Zum Mitnehmen</h2>
       <p>Den ganzen Band gibt es auch als <a href="export/der-raulsweg.epub" download>EPUB für E-Reader</a>, mit Meisterinformationen in umrandeten Kästen und Bildern in Graustufen.</p>
+      <p>Für den Spieltisch gibt es das <a href="export/stempelheft.pdf" download>Stempelheft des Raulswegs</a> als PDF (A5, 16 Seiten) und als <a href="export/stempelheft-a4-bogen.pdf" download>Druckbogen für A4</a>: beidseitig über die kurze Kante drucken, falten, ineinanderlegen, heften.</p>
 
       <h2>Quellen</h2>
       <ul>
@@ -204,7 +205,7 @@ RW.ausbaustufen = [
   { nr: 4, titel: "Karte und Strecke", text: "Karte der ganzen Strecke nach avesmaps.de, Entfernungen nach der Routenplanung, Wegpunkte mit Szenen zwischen den Stationen (vorhanden). Offen: Reisezeitrechner.", erledigt: true },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
-  { nr: 7, titel: "Handouts", text: "Geleitbrief, Leumundsbrief, Stationsstempel-Heft zum Sammeln, Botenbriefe." },
+  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken (vorhanden). Offen: Geleitbrief, Leumundsbrief, Botenbriefe." },
   { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten mit Eintragsvorlage, Verweisen von Stationen, Figuren, Tempeln und Mächten und Markierung der geltenden Möglichkeiten (vorhanden). Offen: Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }
 ];

@@ -56,6 +56,10 @@ Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B.
 
 `python3 tools/karten.py` zeichnet die schwarz-weißen Karten und Grundrisse neu nach `img/karten/*.svg` (Schriften liegen in `tools/fonts/`, SIL Open Font License). Texte und Legenden stehen in `data/karten.js`; die Nummern in den Plänen müssen zur Legende passen. Die EPUB-Fassung zeichnet die Pläne mit größeren Nummern und dreht sie hochkant. Die Streckenkarte folgt `tools/strecke_geo.py`: Orte, Straßen und Flüsse nach avesmaps.de (1 Karteneinheit ≈ 2,99 Meilen); erfundene Stationen werden nach ihrer Meilenzahl zwischen die Nachbarn gesetzt.
 
+## Stempelheft
+
+`python3 tools/stempelheft.py` erzeugt `export/stempelheft.pdf` (16 Seiten A5) und `export/stempelheft-a4-bogen.pdf` (ausgeschossen für Rückstichheftung: A4 quer, beidseitig über die kurze Kante drucken). Benötigt node, Playwright für Python und pypdf.
+
 ## Chronik
 
 Nach jeder gespielten Geschichte einen Eintrag in `data/chronik.js` ergänzen (Vorlage auf der Seite `#/chronik` und im Kopf der Datei). Stationen, Figuren, Tempel und Mächte zeigen dann „In der Chronik“; eine mit `variante` enthüllte Möglichkeit wird in den Meisterinformationen als geltend markiert.
