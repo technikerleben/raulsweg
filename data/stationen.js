@@ -26,11 +26,11 @@ RW.stationen = [
   {
     id: "nattersquell", nr: 1, name: "Nattersquell", typ: "station",
     gottheit: "Travia", emblem: "Gans",
-    meile: 10, etappe: 10, schaetzung: false,
+    meile: 34, etappe: 34, schaetzung: true,
     status: "fertig", kanon: true, bild: "01-nattersquell", jahreszeit: "Frühmorgen",
     kurz: "Die erste Rast vor den Toren Gareths. Fertig, gastfreundlich und stolz darauf, die erste geweihte Station des Edikts zu sein.",
     beschreibung: [
-      "Nattersquell liegt nur einen halben Tagesmarsch von Gareth entfernt an der Quelle der Natter. Für Eilige ist es kaum mehr als ein Brunnen am Wegrand, für den reisenden Hof aber die traditionelle erste Nacht: Wer hier übernachtet, ist offiziell aufgebrochen, auch wenn Gareths Türme noch zu sehen sind.",
+      "Nattersquell liegt einen guten Tagesmarsch östlich von Gareth an einer Quelle, die der Natter zufließt. Für Eilige ist es kaum mehr als ein Brunnen am Wegrand, für den reisenden Hof aber die traditionelle erste Nacht: Wer hier übernachtet, ist offiziell aufgebrochen.",
       "Die Station wurde als Erste fertiggestellt und der Travia geweiht. Ihr großer Herd brennt Tag und Nacht, und die Stationswirtin achtet streng darauf, dass jeder Gast, ob Bettler oder Baron, zuerst einen Becher warmer Milch erhält. Das Gastrecht von Nattersquell ist sprichwörtlich geworden: Wer hier Streit sucht, bekommt es mit dem ganzen Dorf zu tun."
     ],
     vorlesetext: [
@@ -50,7 +50,7 @@ RW.stationen = [
   {
     id: "hartsteen", nr: 2, name: "Hartsteen", typ: "station",
     gottheit: "Ingerimm", emblem: "Hammer und Amboss",
-    meile: 30, etappe: 20, schaetzung: true,
+    meile: 62, etappe: 28, schaetzung: false,
     status: "fertig", kanon: true, bild: "02-hartsteen", jahreszeit: "Mittag",
     kurz: "Selbstbewusste Reichsstadt mit Grafenburg und Steinbrüchen. Liefert den Stein für halb den Raulsweg.",
     beschreibung: [
@@ -74,7 +74,7 @@ RW.stationen = [
   {
     id: "sonnenfeld", nr: 3, name: "Sonnenfeld", typ: "station",
     gottheit: "Praios", emblem: "Sonnenscheibe",
-    meile: 50, etappe: 20, schaetzung: true,
+    meile: 86, etappe: 24, schaetzung: true,
     status: "rohbau", kanon: false, bild: "03-sonnenfeld", jahreszeit: "Spätsommer",
     kurz: "Die künftige Hoftagspfalz der Kaiserin, mitten in den Weizenfeldern. Halb fertig, hoch ambitioniert und hinter dem Zeitplan.",
     beschreibung: [
@@ -98,7 +98,7 @@ RW.stationen = [
   {
     id: "rommilyser-kreuz", nr: 4, name: "Rommilyser Kreuz", typ: "station",
     gottheit: "Phex", emblem: "Fuchs und Mond",
-    meile: 65, etappe: 15, schaetzung: true,
+    meile: 115, etappe: 29, schaetzung: true,
     status: "rohbau", kanon: false, bild: "04-rommilyser-kreuz", jahreszeit: "Herbstabend",
     kurz: "Die Wegkreuzung, an der die alte Straße nach Rommilys abzweigt. Ein Rohbau, eine verunstaltete Wegweisertafel und viel böses Blut.",
     beschreibung: [
@@ -122,11 +122,11 @@ RW.stationen = [
   {
     id: "feste-hohenstein", nr: 5, name: "Feste Hohenstein", typ: "station", begriffe: ["Hohenstein"],
     gottheit: "Rondra", emblem: "Löwe",
-    meile: 75, etappe: 10, schaetzung: true,
+    meile: 120, etappe: 5, schaetzung: false,
     status: "erweiterung", kanon: true, bild: "05-feste-hohenstein", jahreszeit: "Klarer Morgen",
     kurz: "Die alte Festung am Beginn des Darpatwegs, jetzt Kontrollposten des Raulswegs. Wer hier durchwill, braucht Papiere und Geduld.",
     beschreibung: [
-      "An der Feste Hohenstein beginnt der Abschnitt, den man im Volksmund den Darpatweg nennt. Die alte Festung bewacht eine Enge, durch die sich die Straße zwängt, und war schon immer ein Ort, an dem man Reisende im Blick behielt.",
+      "An der Feste Hohenstein beginnt der Abschnitt, den man im Volksmund den Darpatweg nennt. Die alte Festung bewacht eine Enge, durch die sich die Straße zwängt, und die alte Rabenbrücke über die Natter gleich unterhalb. Sie war schon immer ein Ort, an dem man Reisende im Blick behielt. Der Raulsweg quert die Natter hier nicht mehr, sondern bleibt am Nordufer und erreicht den Fluss erst an der Natterbrücke wieder.",
       "Mit dem Edikt wurde Hohenstein zum wichtigsten Kontrollposten der Strecke ausgebaut. Die Wachen suchen besonders nach Schmuggelware, gefälschten Papieren und Baumaterial, das von den Baustellen verschwunden ist. Vor dem Tor bilden sich lange Schlangen, und wer keinen gültigen Geleitbrief oder Leumundsbrief vorweisen kann, wartet länger."
     ],
     vorlesetext: [
@@ -146,11 +146,11 @@ RW.stationen = [
   {
     id: "natterbruecke", nr: 6, name: "Natterbrücke", typ: "station",
     gottheit: "Efferd", emblem: "Welle und Delfin",
-    meile: 85, etappe: 10, schaetzung: true,
+    meile: 140, etappe: 20, schaetzung: true,
     status: "rohbau", kanon: false, bild: "06-natterbruecke", jahreszeit: "Regen",
     kurz: "Die alte Brücke über die Natter ist abgerissen, die neue noch nicht fertig. Bis dahin tragen Träger die Reisenden durchs Wasser.",
     beschreibung: [
-      "An dieser Stelle quert der Raulsweg die Natter. Die alte Brücke war zu schmal für die Kutschen und Wagen, die der Raulsweg bringen sollte, also wurde sie abgerissen. Die neue Steinbrücke steht noch auf Gerüsten.",
+      "Kurz bevor die Natter bei Hausen in den Darpat mündet, quert sie der Raulsweg. Der alte Weg führte über die schmale Rabenbrücke bei der Feste Hohenstein; die Kanzlei hat die neue Straße am Nordufer weitergeführt, weil das Tal hier breit genug für eine große Brücke ist. Die alte Holzbrücke der Fischer war zu schmal für Kutschen und wurde abgerissen. Die neue Steinbrücke steht noch auf Gerüsten.",
       "Bis zur Fertigstellung setzt eine Gilde von Flussträgern die Reisenden über. Fußgänger reiten auf ihren Schultern, Sänften und Gepäck werden auf Plattformen hinübergetragen, Wagen werden an Seilen durch die Furt gezogen. Nach starkem Regen schwillt die Natter an, und dann geht gar nichts mehr. Die Herberge am Ufer ist an solchen Tagen hoffnungslos überfüllt."
     ],
     vorlesetext: [
@@ -170,11 +170,11 @@ RW.stationen = [
   {
     id: "mardramund", nr: 7, name: "Mardramund", typ: "station",
     gottheit: "Hesinde", emblem: "Schlange",
-    meile: 100, etappe: 15, schaetzung: true,
+    meile: 170, etappe: 30, schaetzung: false,
     status: "erweiterung", kanon: true, bild: "07-mardramund", jahreszeit: "Wintermorgen im Nebel",
     kurz: "Stilles Städtchen am Fluss mit der neuen Stationskanzlei. Hier liegen Register, Passierscheine und Abrechnungen der ganzen Strecke.",
     beschreibung: [
-      "Mardramund ist ein ruhiger Ort, in dem die Natter in einen größeren Fluss mündet. Die Kanzlei hat ihn gewählt, um auf halber Strecke ein Archiv für den Raulsweg einzurichten: Hier werden die Abrechnungen der Stationen geprüft, Geleitbriefe registriert und Leumundsbriefe ausgestellt.",
+      "Mardramund ist ein ruhiger Ort am Darpat, dort, wo ein Bach von Westen in den Fluss mündet. Die Kanzlei hat ihn gewählt, um auf halber Strecke ein Archiv für den Raulsweg einzurichten: Hier werden die Abrechnungen der Stationen geprüft, Geleitbriefe registriert und Leumundsbriefe ausgestellt.",
       "Das neue Kanzleigebäude mit seinen hohen Fenstern ist fertig, der Anbau für das Archiv noch nicht. Schreiber eilen mit Stapeln von Büchern über die Straße, und vor der Tür wartet fast immer ein gesatteltes Botenpferd."
     ],
     vorlesetext: [
@@ -194,7 +194,7 @@ RW.stationen = [
   {
     id: "wandlether-hof", nr: 8, name: "Wandlether Hof", typ: "station",
     gottheit: "Firun", emblem: "Bär und Eiskristall",
-    meile: 120, etappe: 20, schaetzung: true,
+    meile: 190, etappe: 20, schaetzung: true,
     status: "rohbau", kanon: false, bild: "08-wandlether-hof", jahreszeit: "Winterdämmerung",
     kurz: "Einsame Wehrstation im Wald, an der die Straße nach Wandleth abzweigt. Neu befestigt, weil der Abschnitt gefährlich ist.",
     beschreibung: [
@@ -218,7 +218,7 @@ RW.stationen = [
   {
     id: "wasserburg", nr: 9, name: "Wasserburg", typ: "station",
     gottheit: "Tsa", emblem: "Eidechse",
-    meile: 145, etappe: 25, schaetzung: true,
+    meile: 210, etappe: 20, schaetzung: false,
     status: "erweiterung", kanon: true, bild: "09-wasserburg", jahreszeit: "Frühlingsfest",
     kurz: "Kleine Stadt um eine Wasserburg, deren Station gerade erweitert und mit einem großen Tsa-Fest eingeweiht werden soll.",
     beschreibung: [
@@ -242,7 +242,7 @@ RW.stationen = [
   {
     id: "gnitzenkuhl", nr: 10, name: "Gnitzenkuhl", typ: "station",
     gottheit: "Peraine", emblem: "Storch",
-    meile: 175, etappe: 30, schaetzung: true,
+    meile: 260, etappe: 50, schaetzung: true,
     status: "erweiterung", kanon: true, bild: "10-gnitzenkuhl", jahreszeit: "Schwüler Mittag",
     kurz: "Pfahldorf am Sumpfrand, berüchtigt für seine Mücken. Die neue Heilerstation ist die einzige, die wirklich jeder Reisende zu schätzen weiß.",
     beschreibung: [
@@ -266,7 +266,7 @@ RW.stationen = [
   {
     id: "gaulsfurt", nr: 11, name: "Gaulsfurt", typ: "station",
     gottheit: "Boron", emblem: "Zerbrochenes Rad",
-    meile: 205, etappe: 30, schaetzung: false,
+    meile: 285, etappe: 25, schaetzung: true,
     status: "erweiterung", kanon: true, bild: "11-gaulsfurt", jahreszeit: "Abendrot",
     kurz: "Furt am Südufer des Darpat, Kreuzung mit der Kronstraße nach Zorgan. Ein Ort des Handels und der Erinnerung an die Schlacht von 1039 BF.",
     beschreibung: [
@@ -290,7 +290,7 @@ RW.stationen = [
   {
     id: "rabicum", nr: 12, name: "Rabicum", typ: "station",
     gottheit: "Rahja", emblem: "Rose",
-    meile: 215, etappe: 10, schaetzung: false,
+    meile: 306, etappe: 21, schaetzung: true,
     status: "fertig", kanon: true, bild: "12-rabicum", jahreszeit: "Sommernacht",
     kurz: "Weinort in den Hügeln vor Perricum. Die letzte Station, und für viele die schönste: Wein, Lieder und der erste Blick auf das Meer.",
     beschreibung: [
@@ -313,7 +313,7 @@ RW.stationen = [
   },
   {
     id: "perricum", nr: 13, name: "Perricum", typ: "stadt",
-    meile: 240, etappe: 25, schaetzung: false, kanon: true,
+    meile: 326, etappe: 20, schaetzung: true, kanon: true,
     kurz: "Reichsstadt an der Mündung des Darpat, Tor zum Perlenmeer und Ziel des Raulswegs.",
     beschreibung: [
       "Perricum liegt an der Mündung des Darpat in den Golf von Perricum. Die Stadt ist Sitz des Markgrafen, wichtigster Kriegshafen des Mittelreichs und Heimat der Perlenmeerflotte. Hier steht auch das Gründungshaus der Beilunker Reiter.",
@@ -322,12 +322,12 @@ RW.stationen = [
   }
 ];
 
-/* Reisezeiten: Schätzwerte für die gesamte Strecke (ca. 240 Meilen) auf ausgebauter Straße */
+/* Reisezeiten: Schätzwerte für die gesamte Strecke (ca. 326 Meilen) auf ausgebauter Straße */
 RW.reisezeiten = [
-  { art: "Wanderer zu Fuß", proTag: "30–35", dauer: "7–8 Tage" },
-  { art: "Händler mit Pferdekarren", proTag: "25–30", dauer: "8–10 Tage" },
-  { art: "Reisekutsche mit eigenen Pferden", proTag: "35–45", dauer: "5–7 Tage" },
-  { art: "Reisekutsche mit Pferdewechsel an den Stationen", proTag: "60–80", dauer: "3–4 Tage" },
-  { art: "Adliger Tross", proTag: "15–20", dauer: "12–16 Tage" },
-  { art: "Beilunker Reiter mit Pferdewechsel", proTag: "120–180", dauer: "1½–2 Tage" }
+  { art: "Wanderer zu Fuß", proTag: "30–35", dauer: "10–11 Tage" },
+  { art: "Händler mit Pferdekarren", proTag: "25–30", dauer: "11–13 Tage" },
+  { art: "Reisekutsche mit eigenen Pferden", proTag: "35–45", dauer: "8–9 Tage" },
+  { art: "Reisekutsche mit Pferdewechsel an den Stationen", proTag: "60–80", dauer: "4–5½ Tage" },
+  { art: "Adliger Tross", proTag: "15–20", dauer: "17–22 Tage" },
+  { art: "Beilunker Reiter mit Pferdewechsel", proTag: "120–180", dauer: "2–3 Tage" }
 ];

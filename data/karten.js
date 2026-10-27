@@ -12,8 +12,8 @@ window.RW = window.RW || {};
 RW.karten = [
   {
     id: "strecke", titel: "Der Raulsweg", art: "Karte", station: null,
-    datei: "img/karten/strecke.svg", massstab: "schematisch, etwa 240 Meilen",
-    kurz: "Die ganze Strecke von Gareth bis Perricum mit allen zwölf Stationen, den Flüssen Natter und Darpat und den abzweigenden Straßen nach Rommilys, Wandleth und Zorgan.",
+    datei: "img/karten/strecke.svg", massstab: "etwa 326 Meilen",
+    kurz: "Die ganze Strecke von Gareth bis Perricum mit allen zwölf Stationen, nach der Karte von avesmaps.de. Die Lage von Orten, Straßen und Flüssen ist dort gemessen, Wälder, Berge und Felder sind vereinfacht.",
     legende: []
   },
   {
@@ -54,7 +54,7 @@ RW.karten = [
       [8, "Quelle der Natter", "Ein klarer Quelltopf; der Bach läuft unter der Straße hindurch nach Süden."],
       [9, "Gasthaus Zur Quelle", "Das alte Dorfwirtshaus."],
       [10, "Dorflinde", ""],
-      [11, "Meilenstein", "Meile 10."],
+      [11, "Meilenstein", "Meile 34."],
       [12, "Bauernhäuser und Gärten", ""]
     ]
   },
@@ -201,7 +201,7 @@ RW.karten = [
       [6, "Brunnen", ""],
       [7, "Behelfsstall und Pferch", ""],
       [8, "Hügel mit schwarzem Wimpel", "Von hier überblickt man beide Straßen."],
-      [9, "Straße nach Rommilys", "Früher die Hauptrichtung, heute eine Nebenstraße."]
+      [9, "Feidewaldstraße nach Rommilys", "Die alte Reichsstraße läuft hier geradeaus weiter; der Raulsweg biegt nach Südosten ab."]
     ]
   },
   {
@@ -230,7 +230,7 @@ RW.karten = [
   {
     id: "natterbruecke", titel: "Furt und Brückenbaustelle", art: "Lageplan", station: "natterbruecke",
     datei: "img/karten/natterbruecke.svg", massstab: "1 Kästchen der Leiste = 10 Schritt",
-    kurz: "Die Natter zwischen den Stümpfen der alten und den Gerüsten der neuen Brücke. Bis die Brücke steht, geht es nur durch die Furt.",
+    kurz: "Die Natter kurz vor ihrer Mündung in den Darpat, zwischen den Stümpfen der alten Fischerbrücke und den Gerüsten der neuen. Bis die Brücke steht, geht es nur durch die Furt.",
     legende: [
       [1, "Herberge am Ufer", "Schankstube und Küche; bei Hochwasser hoffnungslos überfüllt."],
       [2, "Stall der Herberge", "Daneben der Misthaufen."],

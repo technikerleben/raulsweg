@@ -330,7 +330,7 @@
 <path d="M735.6 30 L750.4 215 L728.2 437 L757.8 659 L743 881" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <path id="p293" d="M632 74.4 L639.4 289" fill="none" stroke="none"/>
 <text class="tk halo" style="font-size:20px;letter-spacing:5px"><textPath href="#p293" startOffset="50%" text-anchor="middle">Natter</textPath></text>
-<text x="650.5" y="829.2" class="tk halo" text-anchor="middle" dominant-baseline="middle" style="font-size:13px">Fließrichtung ↓</text>
+<text x="650.5" y="80.4" class="tk halo" text-anchor="middle" dominant-baseline="middle" style="font-size:13px">↑ zur Mündung in den Darpat</text>
 <path d="M40 444.4 L521 444.4" fill="none" stroke="#1a1a1a" stroke-width="28.6" stroke-linecap="butt" stroke-linejoin="round"/>
 <path d="M40 444.4 L521 444.4" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
 <path d="M772.6 444.4 L1187 444.4" fill="none" stroke="#1a1a1a" stroke-width="28.6" stroke-linecap="butt" stroke-linejoin="round"/>
@@ -1073,8 +1073,8 @@
 <text x="1008" y="841" class="tn halo" text-anchor="middle" dominant-baseline="middle" style="font-size:12px">40</text>
 <text x="1045" y="841" class="tn halo" text-anchor="middle" dominant-baseline="middle" style="font-size:12px">50</text>
 <text x="1053" y="853" class="tk halo" text-anchor="start" dominant-baseline="middle" style="font-size:13px">Schritt</text>
-<g transform="rotate(0 1120 110)"><circle cx="1120" cy="110" r="26" fill="#fff" stroke="#1a1a1a" stroke-width="1"/><circle cx="1120" cy="110" r="22" fill="none" stroke="#1a1a1a" stroke-width=".5"/><path d="M1120 87 L1126 110 L1120 133 L1114 110 Z" fill="#fff" stroke="#1a1a1a" stroke-width=".9"/><path d="M1120 87 L1126 110 L1120 110 Z M1120 133 L1114 110 L1120 110 Z" fill="#1a1a1a"/></g>
-<text x="1120" y="71" class="t halo" text-anchor="middle" dominant-baseline="middle" style="font-size:16px">N</text></g>
+<g transform="rotate(-70 1120 110)"><circle cx="1120" cy="110" r="26" fill="#fff" stroke="#1a1a1a" stroke-width="1"/><circle cx="1120" cy="110" r="22" fill="none" stroke="#1a1a1a" stroke-width=".5"/><path d="M1120 87 L1126 110 L1120 133 L1114 110 Z" fill="#fff" stroke="#1a1a1a" stroke-width=".9"/><path d="M1120 87 L1126 110 L1120 110 Z M1120 133 L1114 110 L1120 110 Z" fill="#1a1a1a"/></g>
+<text x="1083.4" y="96.7" class="t halo" text-anchor="middle" dominant-baseline="middle" style="font-size:16px">N</text></g>
 <rect x="10" y="10" width="1180" height="880" rx="0" fill="none" stroke="#1a1a1a" stroke-width="2.4"/>
 <rect x="17" y="17" width="1166" height="866" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.8"/>
 <rect x="40" y="34" width="470" height="78" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>

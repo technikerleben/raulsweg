@@ -15,113 +15,133 @@ ZIEL = os.path.join(WURZEL, "img", "karten")
 
 # ====================================================================== Streckenkarte
 def strecke():
-    k = Bild(1600, 1000, "Der Raulsweg", "Von Gareth nach Perricum · schematisch, nicht maßstabsgetreu")
-    X = lambda meile: 140 + meile * (1330 / 240)
-    halte = [  # (nr, name, meile, y, beschriftung dx, dy, anker)
-        (0, "Gareth", 0, 575), (1, "Nattersquell", 10, 560), (2, "Hartsteen", 30, 538), (3, "Sonnenfeld", 50, 552),
-        (4, "Rommilyser Kreuz", 65, 532), (5, "Feste Hohenstein", 75, 512), (6, "Natterbrücke", 85, 520),
-        (7, "Mardramund", 100, 500), (8, "Wandlether Hof", 120, 540), (9, "Wasserburg", 145, 522),
-        (10, "Gnitzenkuhl", 175, 556), (11, "Gaulsfurt", 205, 538), (12, "Rabicum", 215, 520), (13, "Perricum", 240, 482)]
-    P = {n: (X(m), y) for n, _, m, y in halte}
+    """Karte nach avesmaps.de (Lage der Orte und Flüsse gemessen, Gelände vereinfacht)."""
+    import math
+    import json
+    import subprocess
+    import strecke_geo as geo
+    k = Bild(1600, 1000, "Der Raulsweg", "Von Gareth nach Perricum · nach avesmaps.de, Gelände vereinfacht")
+    M = 17.0
+    T = lambda p: (70 + (p[0] - 549.0) * M, 95 + (540.0 - p[1]) * M)
+    TT = lambda pts: [T(p) for p in pts]
 
-    # --- Meer und Küste
-    kueste = [(1600, 120), (1540, 180), (1515, 260), (1530, 330), (1508, 400), (1500, 455), (1520, 520), (1505, 600),
-              (1525, 690), (1515, 780), (1545, 870), (1600, 940)]
-    k.flaeche(kueste + [(1600, 1000), (1600, 100)], fill="url(#meer)", w=1.6)
-    k.kurve([(x + 9, y) for x, y in kueste], w=.6)
-    k.text(1560, 640, "Golf von Perricum", klasse="tk", groesse=19, drehung=-90, abstand=3)
+    # Stationen aus den Daten, erfundene Orte zwischen ihren Nachbarn eingepasst
+    daten = json.loads(subprocess.check_output(["node", "-e",
+        'global.window=global;require("./data/stationen.js");console.log(JSON.stringify(window.RW.stationen))'], cwd=WURZEL))
+    pos = {}
+    anker = [s for s in daten if s["id"] in geo.ORTE]
+    pts = geo.punkte()
+    bogen = [0.0]
+    for a, b in zip(pts, pts[1:]):
+        bogen.append(bogen[-1] + math.dist(a, b))
+    idx = {p: i for i, p in enumerate(geo.VERLAUF) if isinstance(p, str)}
+    def punkt_bei(b):
+        for i in range(len(pts) - 1):
+            if bogen[i + 1] >= b:
+                t = (b - bogen[i]) / max(1e-9, bogen[i + 1] - bogen[i])
+                return (pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t)
+        return pts[-1]
+    for s in daten:
+        if s["id"] in geo.ORTE:
+            pos[s["id"]] = geo.ORTE[s["id"]]
+            continue
+        vor = max((a for a in anker if a["meile"] < s["meile"]), key=lambda a: a["meile"])
+        nach = min((a for a in anker if a["meile"] > s["meile"]), key=lambda a: a["meile"])
+        f_ = (s["meile"] - vor["meile"]) / (nach["meile"] - vor["meile"])
+        pos[s["id"]] = punkt_bei(bogen[idx[vor["id"]]] + f_ * (bogen[idx[nach["id"]]] - bogen[idx[vor["id"]]]))
+    P = {s["id"]: T(pos[s["id"]]) for s in daten}
+
+    # --- Meer
+    kueste = TT([(632.5, 540), (633.2, 528), (632.4, 519), (633.5, 512), (632.0, 508.6), (631.8, 506.5), (633.0, 503),
+                 (632.2, 498), (633.6, 492)])
+    k.flaeche(kueste + [(1600, 1000), (1600, 0)], fill="url(#meer)", w=1.6, glatt_=True)
+    k.text(*T((636.5, 516)), "Golf von Perricum", klasse="tk", groesse=19, drehung=-90, abstand=3)
 
     # --- Gelände
-    k.bergland([(250, 575), (330, 572), (345, 615), (300, 635), (240, 620)], b=28, saat=4)          # Steinbrüche Hartsteen
-    k.text(292, 650, "Steinbrüche", klasse="tk", groesse=13)
-    k.bergland([(500, 440), (560, 425), (600, 460), (570, 480), (520, 480)], b=28, saat=5)         # Enge Hohenstein Nord
-    k.bergland([(510, 545), (575, 540), (600, 575), (540, 600), (500, 580)], b=28, saat=6)         # Enge Hohenstein Süd
-    k.bergland([(1300, 560), (1400, 545), (1440, 600), (1380, 640), (1300, 620)], b=30, saat=7)    # Hügel vor Perricum
-    k.flaeche([(360, 565), (450, 560), (470, 610), (420, 640), (360, 620)], fill="url(#feld)", stroke=None)
-    k.flaeche([(370, 500), (450, 505), (455, 535), (380, 538)], fill="url(#feld)", stroke=None)
-    k.text(412, 625, "Weizenfelder", klasse="tk", groesse=14)
-    k.flaeche([(1318, 545), (1360, 540), (1372, 568), (1330, 575)], fill="url(#wein)", stroke=None)
-    k.flaeche([(1060, 505), (1165, 500), (1180, 530), (1150, 600), (1070, 610), (1040, 570)], fill="url(#sumpf)", stroke=None)
-    k.text(1110, 625, "Gnitzensumpf", klasse="tk", groesse=14)
-    k.wald([(735, 560), (785, 568), (830, 562), (900, 548), (930, 600), (880, 680), (800, 710), (740, 690), (715, 620)], r=10, saat=11)
-    k.wald([(745, 505), (770, 478), (830, 466), (900, 482), (905, 520), (840, 528), (800, 524)], r=9, saat=12)
-    k.wald([(170, 380), (260, 360), (300, 420), (220, 450), (160, 430)], r=9, saat=13)
-    k.text(840, 728, "Wandlether Forst", klasse="tk", groesse=15)
-    k.text(300, 300, "G A R E T I E N", klasse="t", groesse=30, abstand=10, halo=False)
-    k.text(900, 300, "D A R P A T I E N", klasse="t", groesse=30, abstand=10, halo=False)
-    k.text(1090, 790, "M A R K G R A F S C H A F T", klasse="t", groesse=20, abstand=6, halo=False)
-    k.text(1090, 822, "P E R R I C U M", klasse="t", groesse=26, abstand=8, halo=False)
+    k.bergland(TT([(616, 538), (628, 538), (631, 528), (624, 519), (614, 522), (611, 530)]), b=32, saat=4, dichte=.9)
+    k.text(*T((622, 531)), "T R O L L Z A C K E N", klasse="t", groesse=17, abstand=4, drehung=28)
+    k.bergland(TT([(583, 503), (596, 506), (600, 499), (592, 494.5), (582, 495)]), b=30, saat=5, dichte=.9)
+    k.bergland(TT([(586.6, 533.6), (588.6, 533.2), (588.9, 532.5), (586.8, 532.6)]), b=24, saat=6, dichte=1.5)
+    k.wald(TT([(575, 534.4), (580.5, 534.0), (582.5, 533.0), (578, 531.6), (574.5, 532.3)]), r=8, saat=11)
+    k.text(*T((578.5, 531.0)), "Natternwald", klasse="tk", groesse=13)
+    k.wald(TT([(599.5, 520.8), (603.5, 519.0), (604.6, 516.0), (604.3, 512.0), (601.5, 512.5), (599.0, 516.5)]), r=9, saat=12)
+    k.wald(TT([(607.6, 520.0), (612, 520.5), (613, 514), (610.5, 509), (607.5, 510.5)]), r=9, saat=13)
+    k.text(*T((601.2, 511.6)), "Wandlether Forst", klasse="tk", groesse=14)
+    k.flaeche(TT([(578, 538.0), (583.5, 538.2), (584.5, 536.6), (579, 536.4)]), fill="url(#feld)", stroke=None)
+    k.flaeche(TT([(608.5, 501.6), (614.5, 501.4), (615, 499.8), (609, 499.6)]), fill="url(#sumpf)", stroke=None)
+    k.text(*T((612, 499.2)), "Sumpf", klasse="tk", groesse=13)
+    k.flaeche(TT([(614.4, 504.4), (616.6, 504.6), (616.8, 503.6), (614.6, 503.5)]), fill="url(#wasser)", w=1)
+    k.flaeche(TT([(623, 503.0), (626.5, 504.4), (627.2, 503.4), (624, 502.2)]), fill="url(#wein)", stroke=None)
+    k.flaeche(TT([(561.3, 537.6), (563.0, 537.8), (563.1, 536.6), (561.5, 536.5)]), fill="url(#wasser)", w=1)
+    k.text(*T((562.2, 535.9)), "Krähensee", klasse="tk", groesse=12)
+    k.text(*T((560, 528.4)), "G A R E T I E N", klasse="t", groesse=28, abstand=9, halo=False)
+    k.text(*T((612, 539.0)), "R O M M I L Y S E R   M A R K", klasse="t", groesse=18, abstand=5, halo=False)
+    k.text(*T((617.5, 507.4)), "P E R R I C U M E R   L A N D", klasse="t", groesse=18, abstand=5, halo=False)
 
     # --- Flüsse
-    darpat = [(590, 28), (596, 150), (582, 280), (598, 380), (640, 440), (700, 452), (770, 455), (860, 445), (950, 470),
-              (1030, 478), (1110, 485), (1200, 492), (1290, 507), (1370, 488), (1440, 470), (1508, 470)]
-    k.fluss(darpat, b0=7, b1=22)
-    k.text_pfad([(800, 437), (870, 428), (940, 450)], "Darpat", groesse=18, abstand=4)
-    k.text_pfad([(570, 180), (575, 300)], "Darpat", groesse=16, abstand=3)
-    natter = [P[1], (210, 600), (300, 640) if False else (300, 680), (400, 700), (500, 660), (590, 560), (622, 522),
-              (650, 480), (700, 456)]
-    k.fluss([(P[1][0], P[1][1] + 6)] + natter[1:], b0=2, b1=7, schraffur=False)
-    k.text_pfad([(320, 676), (440, 692)], "Natter", groesse=15, abstand=3)
-    # Wasserburg auf der Flussinsel
-    k.flaeche([(935, 462), (955, 458), (962, 470), (945, 476)], fill="#fff", w=1)
+    k.fluss(TT(geo.DARPAT), b0=6, b1=15)
+    k.text_pfad(TT([(598.9, 538.8), (599.2, 532.8)]), "Darpat", groesse=16, abstand=3)
+    k.text_pfad(TT([(611, 504.3), (616, 503.9)]), "Darpat", groesse=16, abstand=4)
+    k.fluss(TT(geo.NATTER), b0=3, b1=8, schraffur=False)
+    k.text_pfad(TT([(564.5, 530.0), (568, 530.6)]), "Natter", groesse=15, abstand=3)
 
-    # --- Nebenstraßen
-    netz = [([P[4], (510, 430), (545, 300), (555, 160), (550, 40)], 3.5)]
-    k.text(530, 240, "nach Rommilys", klasse="tk", groesse=15, drehung=-86)
-    netz.append(([P[8], (800, 620), (770, 800), (760, 975)], 3.5))
-    k.text(742, 900, "nach Wandleth", klasse="tk", groesse=15, drehung=-88)
-    netz.append(([P[11], (1295, 650), (1320, 800), (1335, 975)], 3.5))
-    k.text(1352, 900, "Kronstraße nach Zorgan", klasse="tk", groesse=15, drehung=-84)
-    netz.append(([(30, 585), P[0]], 5))
-    k.text(70, 610, "nach Angbar", klasse="tk", groesse=13)
+    # --- Straßen
+    netz = [(TT([geo.ORTE["rommilyser-kreuz"], (592.5, 536.2), geo.ORTE["rommilys"]]), 5),
+            (TT([geo.ORTE["feste-hohenstein"], geo.ORTE["rabenbruecke"], (589.2, 532.6), (592.15, 532.65), (595.512, 530.146)]), 3),
+            (TT([pos["wandlether-hof"], (600.5, 518.5), (592.0, 520.8), geo.ORTE["wandleth"]]), 3.5),
+            (TT([pos["gaulsfurt"], (620.6, 497.5), (621.5, 493.0)]), 3.5),
+            (TT([(549.0, 533.4), geo.ORTE["gareth"]]), 5)]
+    k.strassennetz(netz + [(TT(geo.punkte()), 8)])
+    k.text(*T((593.5, 537.0)), "Feidewaldstraße", klasse="tk", groesse=12)
+    k.text(*T((588.5, 520.6)), "nach Wandleth", klasse="tk", groesse=13)
+    k.text(*T((620.4, 495.0)), "Kronstraße nach Zorgan", klasse="tk", groesse=13, anker="end")
 
-    # --- Raulsweg
-    zug = [P[i] for i in range(14)]
-    k.strassennetz(netz + [(zug, 8)])
-
-    # --- Halte
+    # --- Städte und Stationen
     def stadt(x, y, r):
         k.kreis(x, y, r, fill="#fff", w=2)
         k.kreis(x, y, r - 5, fill="url(#schraffur-fein)", w=.8)
         for i in range(12):
-            import math
             a = i * math.pi / 6
             k.rechteck(x + (r + 2) * math.cos(a) - 2.5, y + (r + 2) * math.sin(a) - 2.5, 5, 5, fill=TINTE, stroke=None)
-
-    stadt(*P[0], 20)
-    stadt(*P[13], 18)
-    k.text(P[0][0] - 2, P[0][1] - 44, "Gareth", klasse="t", groesse=26, abstand=1.5)
-    k.text(P[13][0] - 40, P[13][1] - 40, "Perricum", klasse="t", groesse=24, abstand=1.5)
-    beschriftung = {1: (8, 34), 2: (0, -32), 3: (0, 34), 4: (-52, -52), 5: (22, -34), 6: (40, 32), 7: (6, -32), 8: (62, 30),
-                    9: (0, -32), 10: (0, 34), 11: (-4, 34), 12: (8, -34)}
-    for n, name, _, _ in halte[1:13]:
-        x, y = P[n]
-        k.nummer(x, y, n, r=13)
-        dx, dy = beschriftung[n]
-        zeilen = {"Rommilyser Kreuz": ["Rommilyser", "Kreuz"]}.get(name, [name])
-        for i, z in enumerate(zeilen):
+    stadt(*P["gareth"], 20)
+    stadt(*P["perricum"], 18)
+    stadt(*T(geo.ORTE["rommilys"]), 13)
+    k.text(P["gareth"][0], P["gareth"][1] - 42, "Gareth", klasse="t", groesse=26, abstand=1.5)
+    k.text(P["perricum"][0] - 34, P["perricum"][1] - 38, "Perricum", klasse="t", groesse=24, abstand=1.5)
+    X, Y = T(geo.ORTE["rommilys"])
+    k.text(X + 20, Y - 22, "Rommilys", klasse="t", groesse=19, anker="start")
+    X, Y = T(geo.ORTE["wandleth"])
+    k.kreis(X, Y, 6, fill="#fff", w=1.6)
+    k.text(X, Y - 18, "Wandleth", klasse="t", groesse=15)
+    lage = {"nattersquell": (0, -30), "hartsteen": (0, -30), "sonnenfeld": (0, 32), "rommilyser-kreuz": (-6, -48),
+            "feste-hohenstein": (-62, 30), "natterbruecke": (62, 26), "mardramund": (70, 6), "wandlether-hof": (-6, 32),
+            "wasserburg": (-66, 0), "gnitzenkuhl": (0, 32), "gaulsfurt": (-4, 32), "rabicum": (-6, 34)}
+    zeilen = {"rommilyser-kreuz": ["Rommilyser", "Kreuz"], "feste-hohenstein": ["Feste", "Hohenstein"]}
+    for s in daten:
+        if s["typ"] != "station":
+            continue
+        x, y = P[s["id"]]
+        k.nummer(x, y, s["nr"], r=13)
+        dx, dy = lage[s["id"]]
+        for i, z in enumerate(zeilen.get(s["id"], [s["name"]])):
             k.text(x + dx, y + dy + i * 18, z, klasse="t", groesse=16)
-    # Wegmarken
-    k.text(P[11][0] + 24, P[11][1] - 26, "Furt", klasse="tk", groesse=13)
-    k.text(705, 432, "Mündung der Natter", klasse="tk", groesse=12, anker="start")
 
     # --- Legende, Maßstab, Norden
-    lx, ly = 40, 790
-    k.rechteck(lx, ly, 330, 170, fill="#fff", w=1.2)
+    lx, ly = 40, 800
+    k.rechteck(lx, ly, 330, 160, fill="#fff", w=1.2)
     k.text(lx + 165, ly + 20, "Zeichenerklärung", klasse="t", groesse=16)
     k.strasse([(lx + 18, ly + 50), (lx + 70, ly + 50)], breite=8, glatt_=False)
     k.text(lx + 84, ly + 50, "Raulsweg (Reichsstraße 3)", klasse="tk", groesse=14, anker="start", halo=False)
     k.strasse([(lx + 18, ly + 78), (lx + 70, ly + 78)], breite=3.5, glatt_=False)
-    k.text(lx + 84, ly + 78, "Abzweigende Straße", klasse="tk", groesse=14, anker="start", halo=False)
-    k.nummer(lx + 44, ly + 108, 5, r=11)
-    k.text(lx + 84, ly + 108, "Station mit Nummer", klasse="tk", groesse=14, anker="start", halo=False)
-    k.kreis(lx + 44, ly + 138, 11, fill="url(#schraffur-fein)", w=1.6)
-    k.text(lx + 84, ly + 138, "Stadt", klasse="tk", groesse=14, anker="start", halo=False)
-    k.massstab(1110, 935, 1330 / 240, 40, "Meilen", segment=10)
-    k.nordpfeil(1460, 860)
-    k.rahmen(titel_breite=560, titel_x=40, titel_y=40, titel_groesse=46)
+    k.text(lx + 84, ly + 78, "Andere Straße", klasse="tk", groesse=14, anker="start", halo=False)
+    k.nummer(lx + 44, ly + 106, 5, r=11)
+    k.text(lx + 84, ly + 106, "Station mit Nummer", klasse="tk", groesse=14, anker="start", halo=False)
+    k.kreis(lx + 44, ly + 134, 11, fill="url(#schraffur-fein)", w=1.6)
+    k.text(lx + 84, ly + 134, "Stadt", klasse="tk", groesse=14, anker="start", halo=False)
+    k.massstab(1080, 940, M / geo.MEILEN_PRO_EINHEIT, 50, "Meilen", segment=10)
+    k.nordpfeil(1430, 870)
+    k.rahmen(titel_breite=600, titel_x=40, titel_y=40, titel_groesse=46)
     return k
-
 
 
 # ====================================================================== Musterstation
@@ -272,7 +292,7 @@ def natterbruecke():
     k.hang(ufer_w, laenge=11, abstand=6, seite=1)
     k.hang(ufer_o, laenge=11, abstand=6, seite=-1)
     k.text_pfad([P(160, 12), P(162, 70)], "Natter", groesse=20, abstand=5)
-    k.text(P(165, 216)[0], P(165, 216)[1], "Fließrichtung ↓", klasse="tk", groesse=13)
+    k.text(P(165, 12)[0], P(165, 12)[1] + 6, "↑ zur Mündung in den Darpat", klasse="tk", groesse=13)
     # Straße
     yS = P(0, 112)[1]
     k.strasse([P(0, 112), P(130, 112)], breite=26, glatt_=False)
@@ -356,7 +376,7 @@ def natterbruecke():
                     (13, 117, 60), (14, 55, 117), (15, 231, 135)):
         g.nummer(x, y, n)
     k.massstab(860, 850, 3.7, 50, "Schritt", segment=10)
-    k.nordpfeil(1120, 110)
+    k.nordpfeil(1120, 110, drehung=-70)
     k.rahmen(titel_breite=470, titel_x=40, titel_y=34)
     return k
 
@@ -577,7 +597,7 @@ def hohenstein():
                     (14, 191, 109), (15, 223, 74), (16, 120, 172)):
         g.nummer(x, y, n)
     k.massstab(870, 862, 4.1, 50, "Schritt", segment=10)
-    k.nordpfeil(1130, 120)
+    k.nordpfeil(1130, 120, drehung=-35)
     k.rahmen(titel_breite=470, titel_x=40, titel_y=34)
     return k
 
@@ -668,7 +688,7 @@ def mardramund():
                     (8, 23, -7.5), (9, -9.5, 10), (10, -10, 26.6), (11, 5, -10.8)):
         g.nummer(x, y, n)
     k.massstab(860, 920, 14, 10, "Schritt", segment=2)
-    k.nordpfeil(1130, 110)
+    k.nordpfeil(1130, 110, drehung=-60)
     k.rahmen(titel_breite=500, titel_x=40, titel_y=34)
     return k
 
@@ -739,7 +759,7 @@ def kreuz():
                     (7, 66, 84), (8, 76, 70), (9, 158, 50)):
         g.nummer(x, y, n)
     k.massstab(580, 70, 6.4, 30, "Schritt", segment=10)
-    k.nordpfeil(1130, 120)
+    k.nordpfeil(1130, 120, drehung=-45)
     k.rahmen(titel_breite=470, titel_x=40, titel_y=34)
     return k
 
@@ -822,7 +842,7 @@ def nattersquell():
     g.brunnen(104, 89.5, 1.6)
     X, Y = P(64, 76)
     k.rechteck(X - 9, Y - 6, 18, 12, fill="#fff", w=1.2)
-    k.text(X, Y + .5, "10", klasse="tn", groesse=10, halo=False)
+    k.text(X, Y + .5, "34", klasse="tn", groesse=10, halo=False)
     for i, (x, y) in enumerate(((20, 30), (45, 20), (180, 20), (186, 66), (40, 60), (8, 128), (150, 130))):
         g.b.einzelbaum(*P(x, y), r=12, saat=120 + i)
 
@@ -992,7 +1012,7 @@ def wandlether_hof():
                     (8, 94, 35), (9, 112, 11), (10, 112, 140), (11, 205, 124)):
         g.nummer(x, y, n)
     k.massstab(860, 862, 5, 40, "Schritt", segment=10)
-    k.nordpfeil(1130, 120)
+    k.nordpfeil(1130, 120, drehung=-75)
     k.rahmen(titel_breite=470, titel_x=40, titel_y=34)
     return k
 
@@ -1081,7 +1101,7 @@ def wasserburg():
                     (7, 221, 151), (8, 238, 172), (9, 92, 108), (10, 36, 104)):
         g.nummer(x, y, n)
     k.massstab(860, 862, 4.2, 50, "Schritt", segment=10)
-    k.nordpfeil(1130, 210)
+    k.nordpfeil(1130, 210, drehung=-90)
     k.rahmen(titel_breite=470, titel_x=40, titel_y=34)
     return k
 
@@ -1347,7 +1367,7 @@ def rabicum():
                     (8, 51, 66), (9, 20, 40), (10, 196, 131)):
         g.nummer(x, y, n)
     k.massstab(860, 862, 5, 40, "Schritt", segment=10)
-    k.nordpfeil(1130, 210)
+    k.nordpfeil(1130, 210, drehung=45)
     k.rahmen(titel_breite=470, titel_x=40, titel_y=34)
     return k
 

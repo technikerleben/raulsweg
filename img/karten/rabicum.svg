@@ -906,8 +906,8 @@
 <text x="1010" y="853" class="tn halo" text-anchor="middle" dominant-baseline="middle" style="font-size:12px">30</text>
 <text x="1060" y="853" class="tn halo" text-anchor="middle" dominant-baseline="middle" style="font-size:12px">40</text>
 <text x="1068" y="865" class="tk halo" text-anchor="start" dominant-baseline="middle" style="font-size:13px">Schritt</text>
-<g transform="rotate(0 1130 210)"><circle cx="1130" cy="210" r="26" fill="#fff" stroke="#1a1a1a" stroke-width="1"/><circle cx="1130" cy="210" r="22" fill="none" stroke="#1a1a1a" stroke-width=".5"/><path d="M1130 187 L1136 210 L1130 233 L1124 210 Z" fill="#fff" stroke="#1a1a1a" stroke-width=".9"/><path d="M1130 187 L1136 210 L1130 210 Z M1130 233 L1124 210 L1130 210 Z" fill="#1a1a1a"/></g>
-<text x="1130" y="171" class="t halo" text-anchor="middle" dominant-baseline="middle" style="font-size:16px">N</text></g>
+<g transform="rotate(45 1130 210)"><circle cx="1130" cy="210" r="26" fill="#fff" stroke="#1a1a1a" stroke-width="1"/><circle cx="1130" cy="210" r="22" fill="none" stroke="#1a1a1a" stroke-width=".5"/><path d="M1130 187 L1136 210 L1130 233 L1124 210 Z" fill="#fff" stroke="#1a1a1a" stroke-width=".9"/><path d="M1130 187 L1136 210 L1130 210 Z M1130 233 L1124 210 L1130 210 Z" fill="#1a1a1a"/></g>
+<text x="1157.6" y="182.4" class="t halo" text-anchor="middle" dominant-baseline="middle" style="font-size:16px">N</text></g>
 <rect x="10" y="10" width="1180" height="880" rx="0" fill="none" stroke="#1a1a1a" stroke-width="2.4"/>
 <rect x="17" y="17" width="1166" height="866" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.8"/>
 <rect x="40" y="34" width="470" height="78" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>

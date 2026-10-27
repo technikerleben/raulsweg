@@ -52,13 +52,11 @@ e = lambda t: html.escape(str(t or ""), quote=False)
 absaetze = lambda liste: "".join(f"<p>{e(p)}</p>" for p in (liste or []))
 
 def meile_text(h):
-    geschaetzt = any(s["nr"] > 0 and s["nr"] <= h["nr"] and s.get("schaetzung") for s in RW["stationen"])
-    return ("~" if geschaetzt else "") + str(h["meile"])
+    return ("~" if h.get("schaetzung") else "") + str(h["meile"])
 
 def etappe_text(h):
-    if h.get("etappe") is None:
-        return "–"
-    return ("~" if h.get("schaetzung") else "") + str(h["etappe"])
+    vor = next((s for s in RW["stationen"] if s["nr"] == h["nr"] - 1), {})
+    return ("~" if h.get("schaetzung") or vor.get("schaetzung") else "") + str(h["etappe"])
 
 def meister(titel, inhalt):
     return f'<div class="meister"><p class="meister-titel"><b>{e(titel)}</b></p>{inhalt}</div>'

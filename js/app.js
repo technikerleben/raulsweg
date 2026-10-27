@@ -34,9 +34,9 @@
   const ohneMeister = html => String(html).replace(/<div class="meister">[\s\S]*?<\/div>/g, " ");
   const statusText = { fertig: "fertig", erweiterung: "Erweiterung", rohbau: "Rohbau" };
 
-  const meileGeschaetzt = h => RW.stationen.some(s => s.nr > 0 && s.nr <= h.nr && s.schaetzung);
-  const meileText = h => (meileGeschaetzt(h) ? "~" : "") + h.meile;
-  const etappeText = h => h.etappe == null ? "–" : (h.schaetzung ? "~" : "") + h.etappe;
+  const vorgaenger = h => RW.stationen.find(s => s.nr === h.nr - 1);
+  const meileText = h => (h.schaetzung ? "~" : "") + h.meile;
+  const etappeText = h => h.etappe == null ? "–" : (h.schaetzung || (vorgaenger(h) || {}).schaetzung ? "~" : "") + h.etappe;
   const kanonMarke = h => h.kanon
     ? `<span class="marke-kanon" title="Ort aus offiziellen Quellen">Kanon</span>`
     : `<span class="marke-eigen" title="Für diesen Band ergänzter Ort">Ergänzung</span>`;
@@ -351,6 +351,16 @@
      ========================================================== */
   const linkZu = h => `${h.typ === "stadt" ? "#/ort/" : "#/station/"}${h.id}`;
 
+  // Positionen im Streckenband: nach Meilen, aber mit Mindestabstand, damit nahe Halte nicht übereinanderliegen
+  const bandPos = (() => {
+    const abstand = 4.5;
+    const pos = RW.stationen.map(h => (h.meile / gesamtMeilen) * 100);
+    for (let i = 1; i < pos.length; i++) pos[i] = Math.max(pos[i], pos[i - 1] + abstand);
+    pos[pos.length - 1] = Math.min(pos[pos.length - 1], 100);
+    for (let i = pos.length - 2; i >= 0; i--) pos[i] = Math.min(pos[i], pos[i + 1] - abstand);
+    return pos;
+  })();
+
   function streckenband(aktiv, klein) {
     const halte = RW.stationen.map((h, i) => {
       const klassen = ["band-halt", i % 2 === 0 ? "oben" : "unten"];
@@ -358,7 +368,7 @@
       if (h.typ === "stadt") klassen.push("stadt"); else if (!h.kanon) klassen.push("ergaenzt");
       if (h.id === aktiv) klassen.push("aktiv");
       const zeichen = h.typ === "stadt" ? h.name[0] : h.nr;
-      return `<a class="${klassen.join(" ")}" style="left:${(h.meile / gesamtMeilen) * 100}%" href="${linkZu(h)}" aria-label="${esc(h.name)}, Meile ${meileText(h)}"${h.id === aktiv ? ' aria-current="location"' : ""}>
+      return `<a class="${klassen.join(" ")}" style="left:${bandPos[i]}%" href="${linkZu(h)}" aria-label="${esc(h.name)}, Meile ${meileText(h)}"${h.id === aktiv ? ' aria-current="location"' : ""}>
           <span class="band-siegel">${zeichen}</span>
           <span class="band-name">${esc(h.name)}<span class="band-meile">Meile ${meileText(h)}</span></span>
         </a>`;

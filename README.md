@@ -53,7 +53,7 @@ Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B.
 
 ## Karten und Pläne
 
-`python3 tools/karten.py` zeichnet die schwarz-weißen Karten und Grundrisse neu nach `img/karten/*.svg` (Schriften liegen in `tools/fonts/`, SIL Open Font License). Texte und Legenden stehen in `data/karten.js`; die Nummern in den Plänen müssen zur Legende passen. Die EPUB-Fassung zeichnet die Pläne mit größeren Nummern und dreht sie hochkant.
+`python3 tools/karten.py` zeichnet die schwarz-weißen Karten und Grundrisse neu nach `img/karten/*.svg` (Schriften liegen in `tools/fonts/`, SIL Open Font License). Texte und Legenden stehen in `data/karten.js`; die Nummern in den Plänen müssen zur Legende passen. Die EPUB-Fassung zeichnet die Pläne mit größeren Nummern und dreht sie hochkant. Die Streckenkarte folgt `tools/strecke_geo.py`: Orte, Straßen und Flüsse nach avesmaps.de (1 Karteneinheit ≈ 2,99 Meilen); erfundene Stationen werden nach ihrer Meilenzahl zwischen die Nachbarn gesetzt.
 
 ## Chronik
 
@@ -67,7 +67,7 @@ Nach jeder gespielten Geschichte einen Eintrag in `data/chronik.js` ergänzen (V
 
 - **Kanon**: Ort aus offiziellen Quellen (Beschreibungen sind trotzdem Interpretation).
 - **Ergänzung**: für diesen Band erfundener Ort (Sonnenfeld, Rommilyser Kreuz, Natterbrücke, Wandlether Hof).
-- Entfernungen mit `~` sind geschätzt.
+- Entfernungen nach der Routenplanung von avesmaps.de; mit `~` gemessen oder geschätzt.
 
 ## Ausbaustufen
 
