@@ -149,22 +149,6 @@ RW.tempel = [
     ]
   },
   {
-    id: "jaegerschrein-wandleth", station: "wandlether-hof", gottheit: "Firun",
-    name: "Jägerschrein im Tann", begriffe: ["Jägerschrein"],
-    art: "Schrein", zustand: "rohbau",
-    kurz: "Ein Schrein aus Baumstämmen und einem Bärenschädel, ein Stück abseits der Palisade im Wald. Der neue Steinsockel für die Station ist erst halb gesetzt.",
-    beschreibung: [
-      "Der Jägerschrein steht auf einer kleinen Lichtung hinter dem Hof: drei aufrechte Stämme, darüber ein Bärenschädel, im Winter mit Eiszapfen behängt. Jäger lassen hier einen Teil ihrer Beute zurück.",
-      "Die Kanzlei hat einen steinernen Schrein innerhalb der Palisade bestellt, damit Reisende nicht in den Wald müssen. Der Sockel ist gesetzt, der Rest fehlt. Die meisten gehen trotzdem in den Wald."
-    ],
-    brauch: "Wer den Wald durchquert, hängt ein Stück Fell, Federn oder ein Büschel Haar an die Stämme. Wer jagt, lässt das Herz der ersten Beute zurück. Wer wildert, sagt man, findet den Weg zurück nicht.",
-    stempel: "Ein Bär unter einem Eiskristall, in schwarzer Farbe aus Holzkohle. Er liegt in einer Holzkiste am Schrein, und jeder stempelt selbst.",
-    dienste: "Jagdsegen, Spurenlesen gegen Gabe, Schutzzeichen für die Nachtreise.",
-    geweihte: "Kein ständiger Geweihter. Ab und zu taucht ein schweigsamer Firun-Geweihter auf, den die Leute nur den Grauen Jäger nennen.",
-    spannung: "Firuns Gebot verlangt ehrliche Jagd. Ausgerechnet der Wachhauptmann jagt im Schutzwald der Station, und eine Wilderin opfert hier regelmäßiger als er.",
-    meister: "Der Graue Jäger ist der einzige, dem die Köhlerin Rauke vertraut. Taucht er auf, während die Helden am Hof sind, kann er ihnen den Zugang zu ihr verschaffen, wenn sie ihm beweisen, dass sie Firuns Gebote achten."
-  },
-  {
     id: "tsahaus-wasserburg", station: "wasserburg", gottheit: "Tsa",
     name: "Tsahaus im Burggarten", begriffe: ["Tsahaus"],
     art: "Tempel", zustand: "erweiterung",
@@ -184,6 +168,22 @@ RW.tempel = [
       "Die Spende stammt aus Rommilys. Haus Rabenmund will zeigen, dass es großzügiger ist als die Kanzlei, und plant, das beim Fest öffentlich zu machen.",
       "Die Spende ist ehrlich gemeint und anonym. Gerade weil niemand weiß, woher sie kommt, wuchern Gerüchte, die das Fest zu sprengen drohen."
     ]
+  },
+  {
+    id: "jaegerschrein-wandleth", station: "wandlether-hof", gottheit: "Firun",
+    name: "Jägerschrein im Tann", begriffe: ["Jägerschrein"],
+    art: "Schrein", zustand: "rohbau",
+    kurz: "Ein Schrein aus Baumstämmen und einem Bärenschädel, ein Stück abseits der Palisade im Wald. Der neue Steinsockel für die Station ist erst halb gesetzt.",
+    beschreibung: [
+      "Der Jägerschrein steht auf einer kleinen Lichtung hinter dem Hof: drei aufrechte Stämme, darüber ein Bärenschädel, im Winter mit Eiszapfen behängt. Jäger lassen hier einen Teil ihrer Beute zurück.",
+      "Die Kanzlei hat einen steinernen Schrein innerhalb der Palisade bestellt, damit Reisende nicht in den Wald müssen. Der Sockel ist gesetzt, der Rest fehlt. Die meisten gehen trotzdem in den Wald."
+    ],
+    brauch: "Wer den Wald durchquert, hängt ein Stück Fell, Federn oder ein Büschel Haar an die Stämme. Wer jagt, lässt das Herz der ersten Beute zurück. Wer wildert, sagt man, findet den Weg zurück nicht.",
+    stempel: "Ein Bär unter einem Eiskristall, in schwarzer Farbe aus Holzkohle. Er liegt in einer Holzkiste am Schrein, und jeder stempelt selbst.",
+    dienste: "Jagdsegen, Spurenlesen gegen Gabe, Schutzzeichen für die Nachtreise.",
+    geweihte: "Kein ständiger Geweihter. Ab und zu taucht ein schweigsamer Firun-Geweihter auf, den die Leute nur den Grauen Jäger nennen.",
+    spannung: "Firuns Gebot verlangt ehrliche Jagd. Ausgerechnet der Wachhauptmann jagt im Schutzwald der Station, und eine Wilderin opfert hier regelmäßiger als er.",
+    meister: "Der Graue Jäger ist der einzige, dem die Köhlerin Rauke vertraut. Taucht er auf, während die Helden am Hof sind, kann er ihnen den Zugang zu ihr verschaffen, wenn sie ihm beweisen, dass sie Firuns Gebote achten."
   },
   {
     id: "storchenhaus-gnitzenkuhl", station: "gnitzenkuhl", gottheit: "Peraine",

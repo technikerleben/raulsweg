@@ -40,7 +40,7 @@
 <path d="M134 842 L1128 842" fill="none" stroke="#fff" stroke-width="60" stroke-linecap="butt" stroke-linejoin="round"/>
 <path d="M134 812.6 L1128 812.6 L1128 871.4 L134 871.4 Z" fill="url(#pflaster)" stroke="none"/>
 <text x="232" y="842" class="tk halo" text-anchor="middle" dominant-baseline="middle" style="font-size:14px">← Natterbrücke</text>
-<text x="1030" y="842" class="tk halo" text-anchor="middle" dominant-baseline="middle" style="font-size:14px">Wandlether Hof →</text>
+<text x="1030" y="842" class="tk halo" text-anchor="middle" dominant-baseline="middle" style="font-size:14px">Wasserburg →</text>
 <text x="316" y="212" class="tk halo" text-anchor="middle" dominant-baseline="middle" style="font-size:14px">zum Fluss ↑</text>
 <rect x="412.6" y="392.6" width="590.8" height="338.8" rx="0" fill="#fff" stroke="none"/>
 <path d="M400 380 h616 v364 h-616 Z M412.6 392.6 v338.8 h590.8 v-338.8 Z" fill="#1a1a1a" fill-rule="evenodd" stroke="#1a1a1a" stroke-width=".6"/>

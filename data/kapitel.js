@@ -32,11 +32,11 @@ RW.kapitel = {
       <p>In Rommilys nennt man sie <strong>Rohajas Rennbahn</strong>. Die Kanzlei hat entschieden, die Strecke nicht über Rommilys zu führen, sondern gerade nach Perricum. Für Haus Rabenmund und die Kaufleute der Stadt ist das eine Kränkung und ein Verlust. Der Spottname ist seither auch in Gareth bekannt, und wer ihn in einer Kaiserpfalz benutzt, erntet strenge Blicke.</p>
 
       <h2>Der Verlauf</h2>
-      <p>Von Gareth führt der Raulsweg nach Osten über Nattersquell und Hartsteen durch das fruchtbare Herz Garetiens, immer ein Stück nördlich der Natter. Am Rommilyser Kreuz verlässt er die alte Straße, die geradeaus nach Rommilys weiterläuft, und wendet sich nach Südosten. An der Feste Hohenstein zwängt er sich durch eine Enge, folgt dem Nordufer der Natter und quert sie an der Natterbrücke kurz vor ihrer Mündung. Von dort begleitet er als Darpatweg den Darpat nach Süden, über Mardramund und Wasserburg durch Wald, und dann nach Osten durch Sumpf und Felder über Gaulsfurt. Die letzten Meilen führen durch Weinberge nach Perricum.</p>
+      <p>Von Gareth führt der Raulsweg nach Osten über Nattersquell und Hartsteen durch das fruchtbare Herz Garetiens, immer ein Stück nördlich der Natter. Am Rommilyser Kreuz verlässt er die alte Straße, die geradeaus nach Rommilys weiterläuft, und wendet sich nach Südosten. An der Feste Hohenstein zwängt er sich durch eine Enge, folgt dem Nordufer der Natter und quert sie an der Natterbrücke kurz vor ihrer Mündung. Von dort begleitet er als Darpatweg den Darpat nach Süden über Mardramund nach Wasserburg, dann durch den Wandlether Forst und nach Osten durch Sumpf und Felder über Gaulsfurt. Die letzten Meilen führen durch Weinberge nach Perricum.</p>
       <div id="streckenband-platz"></div>
       <p>Wie die Strecke durch das Land läuft, zeigt die <a href="#/karte/strecke">Karte des Raulswegs</a>.</p>
       <div id="entfernungen-platz"></div>
-      <p class="leise">Die Entfernungen bis Hartsteen, zur Feste Hohenstein, nach Mardramund und nach Wasserburg stammen aus der Routenplanung von avesmaps.de entlang der Reichsstraße 3. Die übrigen, mit ~ gekennzeichnet, sind auf der Karte gemessen oder liegen an erfundenen Orten zwischen zwei gemessenen Punkten.</p>
+      <p class="leise">Die Entfernungen bis Hartsteen, zur Feste Hohenstein und nach Mardramund stammen aus der Routenplanung von avesmaps.de entlang der Reichsstraße 3. Die übrigen, mit ~ gekennzeichnet, sind auf der Karte gemessen oder liegen an erfundenen Orten zwischen zwei gemessenen Punkten. Wasserburg ist für gleichmäßigere Tagesetappen 10 Meilen näher an Mardramund gerückt.</p>
 
       <div class="meister">
         <p class="meister-titel">Meisterinformationen: Wann spielt der Band?</p>

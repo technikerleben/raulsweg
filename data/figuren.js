@@ -300,39 +300,7 @@ RW.figuren = [
     bild: "linnart-holm"
   },
 
-  /* ---------- 8 Wandlether Hof ---------- */
-  {
-    id: "firnwald-eiber", name: "Firnwald Eiber", begriffe: ["Eiber"],
-    rolle: "Wachhauptmann am Wandlether Hof", station: "wandlether-hof", maechte: ["kanzlei"],
-    kurz: "Ein Hauptmann, der lieber jagt als wacht, und der seinen Abschnitt für ruhiger hält, als er ist.",
-    aussehen: "Bärtig, Pelzmantel über dem Wappenrock, Bogen auf dem Rücken, Stiefel voller Schnee.",
-    auftreten: "Polternd, gastfreundlich, voller Jagdgeschichten. Unterschätzt jede Gefahr, die nicht vier Beine hat.",
-    motiv: "Ruhe, Wildbret und kein Ärger mit der Kanzlei.",
-    zitat: "Wölfe? Die tun keinem was, der nicht nach Schaf riecht.",
-    geheimnisse: [
-      "Eiber lässt die Nebenstraße nach Wandleth nachts unbewacht, weil ihm jemand dafür Pulver, Pfeile und Wein liefert. Was auf dieser Straße fährt, will er nicht wissen.",
-      "Eiber lässt die Nebenstraße unbewacht, weil er nachts selbst auf die Jagd geht. Mit den nächtlichen Wagen hat er nichts zu tun, aber er hat sie gesehen.",
-      "Eiber bewacht die Straße gewissenhaft. Die nächtlichen Wagen gehören einem Adligen aus der Gegend, der sein eigenes Holz an den Zöllen vorbeischafft, und Eiber traut sich nicht, ihn anzuzeigen."
-    ],
-    bild: "firnwald-eiber"
-  },
-  {
-    id: "rauke", name: "Rauke", begriffe: [],
-    rolle: "Köhlerin und Wilderin", station: "wandlether-hof", maechte: [],
-    kurz: "Eine Köhlerin, die den Wald kennt wie keiner, und die mehr gesehen hat, als gut für sie ist.",
-    aussehen: "Rußgeschwärzt, zerzaust, mit einem Hund an der Seite und Fallen am Gürtel.",
-    auftreten: "Misstrauisch, scheu, spricht nur, wenn sie muss. Taucht auf, verschwindet wieder. Wer ihren Hund freundlich behandelt, hat schon halb gewonnen.",
-    motiv: "In Ruhe gelassen werden, und dass ihr Wald nicht noch mehr Straßen bekommt.",
-    zitat: "Wagen ohne Licht fahren nachts nach Wandleth. Wagen ohne Licht fahren nicht für die Kaiserin.",
-    geheimnisse: [
-      "Rauke hat die nächtlichen Wagen gezählt und weiß, wo sie im Wald halten. Sie würde es nur jemandem verraten, der ihr verspricht, dass ihre Wilderei unerwähnt bleibt.",
-      "Rauke ist die Tochter des früheren Försters, der wegen des Raulswegs seine Stelle verlor. Sie hält den Wandlether Hof für Diebesgut und tut alles, um ihm zu schaden.",
-      "Rauke macht mit den nächtlichen Wagen Geschäfte: Sie verkauft Holzkohle und Wegwissen. Fliegen die Wagen auf, fliegt sie mit."
-    ],
-    bild: "rauke"
-  },
-
-  /* ---------- 9 Wasserburg ---------- */
+  /* ---------- 8 Wasserburg ---------- */
   {
     id: "mutter-iselind", name: "Mutter Iselind", begriffe: ["Iselind"],
     rolle: "Tsa-Geweihte von Wasserburg", station: "wasserburg", maechte: ["kirchen"],
@@ -362,6 +330,38 @@ RW.figuren = [
       "Fabrizzio ist pleite und lebt seit Wochen auf Pump. Seine Truppe weiß nichts davon, und das Fest ist seine letzte Gelegenheit, alles zu bezahlen."
     ],
     bild: "fabrizzio-dellamonte"
+  },
+
+  /* ---------- 9 Wandlether Hof ---------- */
+  {
+    id: "firnwald-eiber", name: "Firnwald Eiber", begriffe: ["Eiber"],
+    rolle: "Wachhauptmann am Wandlether Hof", station: "wandlether-hof", maechte: ["kanzlei"],
+    kurz: "Ein Hauptmann, der lieber jagt als wacht, und der seinen Abschnitt für ruhiger hält, als er ist.",
+    aussehen: "Bärtig, Pelzmantel über dem Wappenrock, Bogen auf dem Rücken, Stiefel voller Schnee.",
+    auftreten: "Polternd, gastfreundlich, voller Jagdgeschichten. Unterschätzt jede Gefahr, die nicht vier Beine hat.",
+    motiv: "Ruhe, Wildbret und kein Ärger mit der Kanzlei.",
+    zitat: "Wölfe? Die tun keinem was, der nicht nach Schaf riecht.",
+    geheimnisse: [
+      "Eiber lässt die Nebenstraße nach Wandleth nachts unbewacht, weil ihm jemand dafür Pulver, Pfeile und Wein liefert. Was auf dieser Straße fährt, will er nicht wissen.",
+      "Eiber lässt die Nebenstraße unbewacht, weil er nachts selbst auf die Jagd geht. Mit den nächtlichen Wagen hat er nichts zu tun, aber er hat sie gesehen.",
+      "Eiber bewacht die Straße gewissenhaft. Die nächtlichen Wagen gehören einem Adligen aus der Gegend, der sein eigenes Holz an den Zöllen vorbeischafft, und Eiber traut sich nicht, ihn anzuzeigen."
+    ],
+    bild: "firnwald-eiber"
+  },
+  {
+    id: "rauke", name: "Rauke", begriffe: [],
+    rolle: "Köhlerin und Wilderin", station: "wandlether-hof", maechte: [],
+    kurz: "Eine Köhlerin, die den Wald kennt wie keiner, und die mehr gesehen hat, als gut für sie ist.",
+    aussehen: "Rußgeschwärzt, zerzaust, mit einem Hund an der Seite und Fallen am Gürtel.",
+    auftreten: "Misstrauisch, scheu, spricht nur, wenn sie muss. Taucht auf, verschwindet wieder. Wer ihren Hund freundlich behandelt, hat schon halb gewonnen.",
+    motiv: "In Ruhe gelassen werden, und dass ihr Wald nicht noch mehr Straßen bekommt.",
+    zitat: "Wagen ohne Licht fahren nachts nach Wandleth. Wagen ohne Licht fahren nicht für die Kaiserin.",
+    geheimnisse: [
+      "Rauke hat die nächtlichen Wagen gezählt und weiß, wo sie im Wald halten. Sie würde es nur jemandem verraten, der ihr verspricht, dass ihre Wilderei unerwähnt bleibt.",
+      "Rauke ist die Tochter des früheren Försters, der wegen des Raulswegs seine Stelle verlor. Sie hält den Wandlether Hof für Diebesgut und tut alles, um ihm zu schaden.",
+      "Rauke macht mit den nächtlichen Wagen Geschäfte: Sie verkauft Holzkohle und Wegwissen. Fliegen die Wagen auf, fliegt sie mit."
+    ],
+    bild: "rauke"
   },
 
   /* ---------- 10 Gnitzenkuhl ---------- */

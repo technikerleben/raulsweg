@@ -192,34 +192,10 @@ RW.stationen = [
     figuren: [], gebaeude: []
   },
   {
-    id: "wandlether-hof", nr: 8, name: "Wandlether Hof", typ: "station",
-    gottheit: "Firun", emblem: "Bär und Eiskristall",
-    meile: 190, etappe: 20, schaetzung: true,
-    status: "rohbau", kanon: false, bild: "08-wandlether-hof", jahreszeit: "Winterdämmerung",
-    kurz: "Einsame Wehrstation im Wald, an der die Straße nach Wandleth abzweigt. Neu befestigt, weil der Abschnitt gefährlich ist.",
-    beschreibung: [
-      "Zwischen Mardramund und Wasserburg führt der Raulsweg durch dichten Wald. An der Abzweigung nach Wandleth steht der Wandlether Hof, ursprünglich ein Gehöft, jetzt eine kleine Wehrstation mit neuer Palisade und Wachturm.",
-      "Der Abschnitt gilt als der unsicherste der Strecke. Im Winter liegt hier Schnee, und es gibt Wölfe, aber die Reisenden fürchten vor allem die Menschen: Wegelagerer, Wilderer und Gestalten, die lieber nicht gefragt werden, wohin sie wollen."
-    ],
-    vorlesetext: [
-      "Die Bäume stehen so dicht, dass es schon dämmert, obwohl der Tag noch nicht vorbei sein sollte. Frischer Schnee liegt auf der Straße, und darin, quer über den Weg, zieht sich eine Spur großer Pfoten. Dann seht ihr Licht zwischen den Stämmen: eine Palisade aus neuen, hellen Pfählen, ein Wachturm mit einer Fackel, Rauch aus einem Schornstein. Ein paar Reisende mit Laternen beeilen sich, das Tor zu erreichen, bevor es geschlossen wird. Irgendwo im Wald heult etwas, und niemand dreht sich danach um."
-    ],
-    geruechte: [
-      "Die Wegelagerer im Wald kennen die Termine der Geldtransporte. Woher?",
-      "Der Wachhauptmann am Hof jagt lieber, als zu wachen. Was er erlegt, landet nicht immer in der Küche der Station.",
-      "Die Straße nach Wandleth wird seit dem Edikt kaum noch gepflegt. Trotzdem sieht man dort nachts Wagenspuren."
-    ],
-    konflikt: "Die Wehrstation soll den Wald sicher machen, ist aber unterbesetzt und schlecht ausgerüstet. Wer hier Überfälle verhindern oder geschehen lassen will, hat leichtes Spiel.",
-    meister: {
-      hintergrund: "Der Wandlether Hof ist der einsamste Ort der Reise und eignet sich für Stimmung, Gefahr und Wildnis. Die Seitenstraße nach Wandleth ist ein guter Weg, auf dem Dinge den Raulsweg verlassen oder betreten können, ohne an einem Kontrollposten vorbeizukommen."
-    },
-    figuren: [], gebaeude: []
-  },
-  {
-    id: "wasserburg", nr: 9, name: "Wasserburg", typ: "station",
+    id: "wasserburg", nr: 8, name: "Wasserburg", typ: "station",
     gottheit: "Tsa", emblem: "Eidechse",
-    meile: 210, etappe: 20, schaetzung: false,
-    status: "erweiterung", kanon: true, bild: "09-wasserburg", jahreszeit: "Frühlingsfest",
+    meile: 200, etappe: 30, schaetzung: true,
+    status: "erweiterung", kanon: true, bild: "08-wasserburg", jahreszeit: "Frühlingsfest",
     kurz: "Kleine Stadt um eine Wasserburg, deren Station gerade erweitert und mit einem großen Tsa-Fest eingeweiht werden soll.",
     beschreibung: [
       "Wasserburg verdankt seinen Namen der Burg, die von einem Graben umgeben auf einer Flussinsel liegt. Die Station hier ist alt, wird aber für den Raulsweg großzügig erweitert, mit neuen Flügeln für Gäste und einem neuen Relais für die Pferde.",
@@ -240,9 +216,33 @@ RW.stationen = [
     figuren: [], gebaeude: []
   },
   {
+    id: "wandlether-hof", nr: 9, name: "Wandlether Hof", typ: "station",
+    gottheit: "Firun", emblem: "Bär und Eiskristall",
+    meile: 230, etappe: 30, schaetzung: true,
+    status: "rohbau", kanon: false, bild: "09-wandlether-hof", jahreszeit: "Winterdämmerung",
+    kurz: "Einsame Wehrstation im Wald, an der die Straße nach Wandleth abzweigt. Neu befestigt, weil der Abschnitt gefährlich ist.",
+    beschreibung: [
+      "Hinter Wasserburg, wo der Darpat nach Osten abbiegt, führt der Raulsweg durch dichten Wald. An der Abzweigung nach Wandleth steht der Wandlether Hof, ursprünglich ein Gehöft, jetzt eine kleine Wehrstation mit neuer Palisade und Wachturm.",
+      "Der Abschnitt gilt als der unsicherste der Strecke. Im Winter liegt hier Schnee, und es gibt Wölfe, aber die Reisenden fürchten vor allem die Menschen: Wegelagerer, Wilderer und Gestalten, die lieber nicht gefragt werden, wohin sie wollen."
+    ],
+    vorlesetext: [
+      "Die Bäume stehen so dicht, dass es schon dämmert, obwohl der Tag noch nicht vorbei sein sollte. Frischer Schnee liegt auf der Straße, und darin, quer über den Weg, zieht sich eine Spur großer Pfoten. Dann seht ihr Licht zwischen den Stämmen: eine Palisade aus neuen, hellen Pfählen, ein Wachturm mit einer Fackel, Rauch aus einem Schornstein. Ein paar Reisende mit Laternen beeilen sich, das Tor zu erreichen, bevor es geschlossen wird. Irgendwo im Wald heult etwas, und niemand dreht sich danach um."
+    ],
+    geruechte: [
+      "Die Wegelagerer im Wald kennen die Termine der Geldtransporte. Woher?",
+      "Der Wachhauptmann am Hof jagt lieber, als zu wachen. Was er erlegt, landet nicht immer in der Küche der Station.",
+      "Die Straße nach Wandleth wird seit dem Edikt kaum noch gepflegt. Trotzdem sieht man dort nachts Wagenspuren."
+    ],
+    konflikt: "Die Wehrstation soll den Wald sicher machen, ist aber unterbesetzt und schlecht ausgerüstet. Wer hier Überfälle verhindern oder geschehen lassen will, hat leichtes Spiel.",
+    meister: {
+      hintergrund: "Der Wandlether Hof ist der einsamste Ort der Reise und eignet sich für Stimmung, Gefahr und Wildnis. Die Seitenstraße nach Wandleth ist ein guter Weg, auf dem Dinge den Raulsweg verlassen oder betreten können, ohne an einem Kontrollposten vorbeizukommen."
+    },
+    figuren: [], gebaeude: []
+  },
+  {
     id: "gnitzenkuhl", nr: 10, name: "Gnitzenkuhl", typ: "station",
     gottheit: "Peraine", emblem: "Storch",
-    meile: 260, etappe: 50, schaetzung: true,
+    meile: 260, etappe: 30, schaetzung: true,
     status: "erweiterung", kanon: true, bild: "10-gnitzenkuhl", jahreszeit: "Schwüler Mittag",
     kurz: "Pfahldorf am Sumpfrand, berüchtigt für seine Mücken. Die neue Heilerstation ist die einzige, die wirklich jeder Reisende zu schätzen weiß.",
     beschreibung: [

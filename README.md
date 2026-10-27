@@ -37,8 +37,8 @@ Verzeichnis: `img/stationen/`
 | 5 | `05-feste-hohenstein` |
 | 6 | `06-natterbruecke` |
 | 7 | `07-mardramund` |
-| 8 | `08-wandlether-hof` |
-| 9 | `09-wasserburg` |
+| 8 | `08-wasserburg` |
+| 9 | `09-wandlether-hof` |
 | 10 | `10-gnitzenkuhl` |
 | 11 | `11-gaulsfurt` |
 | 12 | `12-rabicum` |
