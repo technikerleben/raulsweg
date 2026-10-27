@@ -501,3 +501,16 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .wegpunkt h3 { margin: 0; }
 .weg-szene { font-size: .98rem; }
 @media (max-width: 780px) { .weg-liste li { flex-direction: column; gap: 0; } .weg-meile { flex: none; } }
+
+/* ---------- Dokumente ---------- */
+.dokument { max-width: var(--mass); margin-bottom: 2.4rem; }
+.dok-herkunft { font-family: var(--schrift-kapit); color: var(--tinte-weich); font-size: .95rem; margin-top: -.4rem; }
+.dok-blatt { background: var(--blatt); border: 1px solid var(--linie); box-shadow: 0 1px 0 var(--linie), 0 8px 22px rgba(60, 40, 20, .12);
+  padding: 1.6rem 1.8rem 1.4rem; margin-top: 1rem; font-size: 1.04rem; hyphens: auto; }
+.dok-blatt p { max-width: none; }
+.dok-anrede { font-style: italic; }
+.dok-anrede::first-letter { font-family: var(--schrift-titel); font-size: 2.6em; float: left; line-height: .9; margin: .08em .12em 0 0; color: var(--rubrik); font-style: normal; }
+.dok-schluss { text-align: right; font-style: italic; margin-top: 1.4rem; }
+.dok-siegel { display: inline-block; margin-top: .6rem; padding: .5rem .9rem; border: 2px solid var(--rubrik); border-radius: 50%; color: var(--rubrik); font-family: var(--schrift-kapit); font-style: normal; font-size: .82rem; transform: rotate(-6deg); }
+@media (max-width: 780px) { .dok-blatt { padding: 1.1rem 1rem; } }
+@media print { .dok-blatt { box-shadow: none; } }

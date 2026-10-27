@@ -80,6 +80,11 @@
     begriffe: [w.name, ...(w.begriffe || []), ...(w.name.includes("„") ? [w.name.replace(/^.*„|“.*$/g, "")] : [])],
     href: `#/unterwegs/${w.id}`, kurz: w.kurz, text: [w.kurz, w.szene].join(" ")
   }));
+  const dokumente = RW.dokumente || [];
+  dokumente.forEach(d => eintragen({
+    schluessel: "dokument:" + d.id, art: d.art, name: d.titel, begriffe: [d.titel, ...(d.begriffe || [])],
+    href: `#/dokumente/${d.id}`, kurz: d.kurz, text: [d.kurz, ohneTags(d.text)].join(" ")
+  }));
   tempel.forEach(t => eintragen({
     schluessel: "tempel:" + t.id, art: tempelArt(t), name: t.name,
     begriffe: [t.name, ...(t.begriffe || [])], href: `#/tempel/${t.id}`, kurz: t.kurz,
@@ -121,7 +126,7 @@
     });
   });
 
-  const reihenfolge = { ort: 0, station: 1, wegpunkt: 2, tempel: 3, figur: 4, macht: 5, kapitel: 6, glossar: 7 };
+  const reihenfolge = { ort: 0, station: 1, wegpunkt: 2, tempel: 3, figur: 4, macht: 5, dokument: 6, kapitel: 7, glossar: 8 };
   const nrVon = e => (RW.stationen.find(s => e.schluessel.endsWith(":" + s.id)) || {}).nr;
   function sortiert(menge) {
     return [...(menge || [])].map(k => register.get(k)).filter(Boolean).sort((a, b) => {
@@ -173,7 +178,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .weg-meile, .weg-art, .weg-name, .etappe-zeile";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -286,6 +291,7 @@
         <li><a href="#/maechte" data-route="maechte">Mächte am Weg</a></li>
         <li><a href="#/figuren" data-route="figuren">Figuren</a></li>
         <li><a href="#/tempel" data-route="tempel">Die zwölf Tempel</a></li>
+        <li><a href="#/dokumente" data-route="dokumente">Dokumente</a></li>
         <li><a href="#/karten" data-route="karten">Karten und Pläne</a></li>
         <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
@@ -565,6 +571,22 @@
     const kopf = `<h2>Auf dem Weg nach ${esc(nach.name)}</h2><p class="leise">${etappeText(nach)} Meilen bis zur nächsten Station.${liste.length ? "" : " Unterwegs nur Feld und Wald."}</p>`;
     return `<section class="weg-nach">${kopf}${liste.length ? `<ul class="weg-liste">${liste.map(w => `
       <li><span class="weg-meile">Meile ${w.meile}</span><div><a class="weg-name" href="#/unterwegs/${w.id}">${esc(w.name)}</a><span class="weg-art">${esc(w.art)}</span><p>${esc(w.kurz)}</p></div></li>`).join("")}</ul>` : ""}</section>`;
+  }
+
+  function seiteDokumente() {
+    const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>${dokumente.map(d => `<li><a href="#/dokumente/${d.id}">${esc(d.titel)}</a></li>`).join("")}</ul></nav>`;
+    return {
+      html: `<h1>Dokumente</h1>
+      <p class="einleitung initiale">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird. Alle Texte sind öffentlich und können den Spielern als Handout dienen.</p>
+      ${toc}
+      ${dokumente.map(d => `<section class="dokument" id="${d.id}">
+        <h2>${esc(d.titel)}</h2>
+        <p class="dok-herkunft">${esc(d.art)} · ${esc(d.herkunft)}</p>
+        <p>${esc(d.kurz)}</p>
+        <div class="dok-blatt">${d.text}</div>
+      </section>`).join("")}`,
+      eigene: []
+    };
   }
 
   function seiteUnterwegs() {
@@ -944,17 +966,19 @@
       else if (teil === "figur") seite = seiteFigur(id);
       else if (teil === "tempel") seite = seiteTempel();
       else if (teil === "unterwegs") seite = seiteUnterwegs();
+      else if (teil === "dokumente") seite = seiteDokumente();
       else if (teil === "chronik") seite = seiteChronik();
       else if (teil === "karten") seite = seiteKarten();
       else if (teil === "karte") seite = seiteKarte(id);
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;
-      if (teil === "maechte" || teil === "tempel" || teil === "chronik" || teil === "unterwegs") {
+      if (teil === "maechte" || teil === "tempel" || teil === "chronik" || teil === "unterwegs" || teil === "dokumente") {
         // Jeder Eintrag verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
         if (teil === "maechte") main.querySelectorAll(".macht").forEach(sek => verlinken(sek, ["macht:" + sek.id]));
         else if (teil === "tempel") main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
         else if (teil === "unterwegs") main.querySelectorAll(".wegpunkt").forEach(sek => verlinken(sek, ["wegpunkt:" + sek.id]));
+        else if (teil === "dokumente") main.querySelectorAll(".dokument").forEach(sek => verlinken(sek, ["dokument:" + sek.id]));
         else main.querySelectorAll(".chronik-eintrag").forEach(sek => verlinken(sek, []));
       } else verlinken(main, seite.eigene);
       bilderAbsichern();

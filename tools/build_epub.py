@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIEL = os.path.join(WURZEL, "export", "der-raulsweg.epub")
-DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte"]
+DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte", "dokumente"]
 
 # ---------------------------------------------------------------- Daten laden
 def daten_laden():
@@ -172,6 +172,7 @@ def kapitel_aufbereiten(roh):
     t = re.sub(r'<span class="(marke-kanon|marke-eigen|bau[^"]*)">(.*?)</span>', r"[\2]", t)
     t = re.sub(r"<span[^>]*>(.*?)</span>", r"\1", t, flags=re.S)
     t = re.sub(r'<p class="meister-titel">(.*?)</p>', r'<p class="meister-titel"><b>\1</b></p>', t)
+    t = re.sub(r"<br\s*>", "<br/>", t)
     t = t.replace("<strong>", "<b>").replace("</strong>", "</b>").replace("<em>", "<i>").replace("</em>", "</i>")
     return t
 
@@ -343,6 +344,11 @@ def baue_seiten():
         seite("karten.xhtml", "Karten und Pläne", "<h1>Karten und Pläne</h1><p class=\"einleitung\">Die Strecke im Überblick und eine Station nach dem Edikt. Die Pläne der Schauplätze stehen bei den Stationen.</p>"
               + "".join(karte_html(c) for c in allgemein))
     seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
+    if RW.get("dokumente"):
+        teile = ["<h1>Dokumente</h1><p class=\"einleitung\">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird.</p>"]
+        for d in RW["dokumente"]:
+            teile.append(f"<h2>{e(d['titel'])}</h2><p class=\"leise\">{e(d['art'])} · {e(d['herkunft'])}</p>" + kapitel_aufbereiten(d["text"]))
+        seite("dokumente.xhtml", "Dokumente", "".join(teile))
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])
     seite("bauplan.xhtml", "Bauplan des Bandes", f"<h1>Bauplan des Bandes</h1><ul>{stufen}</ul>")

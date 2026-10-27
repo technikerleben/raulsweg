@@ -24,7 +24,7 @@ RW.kapitel = {
 
       <h2>Von der Reichsstraße zum Raulsweg</h2>
       <p>Die Strecke von Gareth nach Perricum ist Teil der <strong>Reichsstraße 3</strong>, die von Elenvina über Angbar und Gareth bis an das Perlenmeer führt. Den östlichen Abschnitt ab der Feste Hohenstein nennt das Volk seit jeher den <strong>Darpatweg</strong>, weil er dem Lauf des Darpat folgt.</p>
-      <p>Mit ihrem <strong>Stationsedikt</strong> hat Kaiserin Rohaja beschlossen, diesen Abschnitt zur Musterstraße des Reiches auszubauen. Als Kaiserin, die mehr reist als residiert, braucht sie verlässliche Orte, an denen der Hof übernachten, Recht sprechen und Nachrichten empfangen kann. In festen Abständen sollen Stationen mit Kaiserpfalz, Pferdewechsel und Herbergen entstehen. Brücken werden erneuert, Fahrbahnen gepflastert, Meilensteine gesetzt.</p>
+      <p>Mit ihrem <strong>Stationsedikt</strong> hat Kaiserin Rohaja beschlossen, diesen Abschnitt zur Musterstraße des Reiches auszubauen. Als Kaiserin, die mehr reist als residiert, braucht sie verlässliche Orte, an denen der Hof übernachten, Recht sprechen und Nachrichten empfangen kann. In festen Abständen sollen Stationen mit Kaiserpfalz, Pferdewechsel und Herbergen entstehen. Brücken werden erneuert, Fahrbahnen gepflastert, Meilensteine gesetzt. Den <a href="#/dokumente/stationsedikt">Wortlaut des Edikts</a> und was Rommilys und Perricum dazu sagen, findet sich unter <a href="#/dokumente">Dokumente</a>.</p>
       <p>Vorbild dafür sind die alten Pfalzen der Kaiserzeit, die etwa eine Tagesreise voneinander entfernt lagen. Neu ist, dass jede Station einem der Zwölfgötter geweiht wird und dass die Kanzlei die ganze Strecke nach einheitlichen Regeln verwaltet.</p>
 
       <h2>Zwei Namen für eine Straße</h2>
@@ -196,7 +196,7 @@ RW.glossar = [
   { id: "pfalzvogt", name: "Pfalzvogt", begriffe: ["Pfalzvögte", "Pfalzvogts"], text: "Verwalter einer Kaiserpfalz in Abwesenheit des Hofes." },
   { id: "relais", name: "Relais", begriffe: [], text: "Pferdewechsel und Poststelle einer Station." },
   { id: "rohajas-rennbahn", name: "Rohajas Rennbahn", begriffe: [], text: "Spottname für den Raulsweg, aus Rommilys." },
-  { id: "stationsedikt", name: "Stationsedikt", begriffe: ["Edikt", "Edikts"], text: "Erlass der Kaiserin, mit dem der Ausbau des Raulswegs beschlossen wurde." },
+  { id: "stationsedikt", name: "Stationsedikt", begriffe: ["Edikt", "Edikts"], text: "Erlass der Kaiserin, mit dem der Ausbau des Raulswegs beschlossen wurde. Der Wortlaut steht unter Dokumente." },
   { id: "stationsstempel", name: "Stationsstempel", begriffe: [], text: "Stempel mit dem Emblem der Stationsgottheit, den sich Reisende in ein Büchlein drücken lassen." },
   { id: "wegemeister", name: "Wegemeister", begriffe: [], text: "Kaiserlicher Beamter, der für den Bau der Strecke verantwortlich ist." }
 ];
@@ -209,7 +209,7 @@ RW.ausbaustufen = [
   { nr: 4, titel: "Karte und Strecke", text: "Karte der ganzen Strecke nach avesmaps.de, Entfernungen nach der Routenplanung, Wegpunkte mit Szenen zwischen den Stationen (vorhanden). Offen: Reisezeitrechner.", erledigt: true },
   { nr: 5, titel: "Mächte und Netz", text: "Ausführliche Profile der Mächte am Weg, Beziehungsdiagramm, Meisterhintergrund zu den Geldflüssen am Weg." },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
-  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken (vorhanden). Offen: Geleitbrief, Leumundsbrief, Botenbriefe." },
+  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken, Dokumente: Stationsedikt, offener Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan (vorhanden). Offen: Geleitbrief, Leumundsbrief, Botenbriefe." },
   { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten mit Eintragsvorlage, Verweisen von Stationen, Figuren, Tempeln und Mächten und Markierung der geltenden Möglichkeiten (vorhanden). Offen: Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }
 ];
