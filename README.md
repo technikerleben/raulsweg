@@ -51,6 +51,14 @@ Endung `.webp`, `.jpg`, `.jpeg` oder `.png`; die Seite probiert sie in dieser Re
 
 Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 
+## Ansichten zu den Plänen
+
+Verzeichnis: `img/gebaeude/`, Dateiname = ID des Plans (z. B. `rabicum.webp`, weitere als `rabicum-2.webp` …). Die Liste der IDs steht in `img/gebaeude/LIESMICH.md`. Die Bilder erscheinen automatisch beim Plan und auf der Stationsseite.
+
+## Herkunft und Rechte
+
+Seite, Texte, Karten und Bilder sind mit KI erzeugt und gelten als gemeinfrei. Ausgenommen sind die Marken und Inhalte von Das Schwarze Auge (Ulisses Spiele GmbH) und die Schriften in `tools/fonts/` (SIL Open Font License).
+
 ## Figurenporträts
 
 Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B. `answald-kreutzer.webp`, `travine-holler.webp`. Hochformat 4:5, etwa 800 × 1000 Pixel. Fehlt ein Porträt, erscheint ein Monogramm.

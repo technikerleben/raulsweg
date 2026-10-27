@@ -126,6 +126,15 @@ def karte_html(karte, ueberschrift="h2"):
     if karte.get("legende"):
         teile.append("".join(f"<p><b>{n}</b> {e(name)}{('. ' + e(text)) if text else ''}</p>" for n, name, text in karte["legende"]))
     teile.append("<p class=\"leise\">Der Plan ist zum Lesen gedreht.</p>")
+    ansichten = []
+    for n in range(1, 13):
+        basis = f"img/gebaeude/{karte['id']}" + ("" if n == 1 else f"-{n}")
+        pfad_b = bild_hinzufuegen(basis, f"gebaeude-{karte['id']}-{n}", 760)
+        if not pfad_b:
+            break
+        ansichten.append(f'<div class="bild"><img src="{pfad_b}" alt="Ansicht {n}" style="width:100%"/></div>')
+    if ansichten:
+        teile.append("<h3>Ansichten</h3><p class=\"leise\">Die Bilder ergänzen den Plan und müssen ihm nicht in allen Einzelheiten entsprechen.</p>" + "".join(ansichten))
     return "".join(teile)
 
 def titelbild_erzeugen():
@@ -282,7 +291,7 @@ def baue_seiten():
           + kapitel_aufbereiten(RW["titel"]["einleitung"]).replace(
               "Mit dem Schalter oben rechts lassen sich Meisterinformationen einblenden.",
               "Meisterinformationen stehen in umrandeten Kästen.")
-          + f"<p class=\"leise\">Stand: {date.today().strftime('%d.%m.%Y')}. Inoffizielles Fanprojekt zu Das Schwarze Auge.</p>")
+          + f"<p class=\"leise\">Stand: {date.today().strftime('%d.%m.%Y')}. Inoffizielles Fanprojekt zu Das Schwarze Auge. Texte, Karten und Bilder sind mit KI erzeugt und gelten als gemeinfrei; die Marken und Inhalte von Das Schwarze Auge gehören der Ulisses Spiele GmbH.</p>")
     for schluessel in ("ueberblick", "stationswesen", "reisen"):
         seite(f"{schluessel}.xhtml", k[schluessel]["titel"], f"<h1>{e(k[schluessel]['titel'])}</h1>" + kapitel_aufbereiten(k[schluessel]["html"]))
 
@@ -295,7 +304,7 @@ def baue_seiten():
                  f"{STATUS.get(s.get('status'), '')} · {'Kanon' if s.get('kanon') else 'Ergänzung'}</p>"]
         bild = bild_hinzufuegen(f"img/stationen/{s['bild']}", s["bild"], 760)
         if bild:
-            teile.append(f'<div class="bild"><img src="{bild}" alt="{e(s["name"])}" style="width:100%"/></div>')
+            teile.append(f'<div class="bild"><img src="{bild}" alt="{e(s["name"])}" style="width:100%"/></div><p class="leise">Stimmungsbild: {e(s.get("jahreszeit", ""))}</p>')
         teile.append(f"<p class=\"einleitung\">{e(s['kurz'])}</p>{absaetze(s.get('beschreibung'))}")
         teile.append(f"<div class=\"vorlese\"><p><b>Zum Vorlesen</b></p>{''.join(f'<p><i>{e(p)}</i></p>' for p in s.get('vorlesetext', []))}</div>")
         teile.append("<h2>Gerüchte am Herdfeuer</h2><ul>" + "".join(f"<li>{e(g)}</li>" for g in s.get("geruechte", [])) + "</ul>")

@@ -523,3 +523,11 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .sprungliste { border-top: 3px double var(--rubrik); padding-top: .6rem; }
 @media (min-width: 1061px) { .seitenleiste { max-height: calc(100vh - 6rem); overflow-y: auto; scrollbar-width: thin; } }
 @media (min-width: 781px) { .wegweiser.vier { grid-template-columns: repeat(2, 1fr); } }
+
+/* ---------- Bildarten ---------- */
+.bild-art { display: inline-block; font-family: var(--schrift-kapit); font-style: normal; font-size: .8rem; letter-spacing: .04em;
+  border: 1px solid var(--linie); border-radius: 3px; padding: 0 .4rem; margin-right: .35rem; color: var(--tinte-weich); background: var(--blatt); }
+.gebaeude-bilder { margin-top: 1.2rem; max-width: 52rem; }
+.gebaeude-bilder h3 { margin: 0 0 .2rem; }
+.gebaeude-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .8rem; margin-top: .6rem; }
+.gebaeude-raster img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border: 4px solid var(--blatt-hell); outline: 1px solid var(--linie); box-shadow: var(--schatten); }

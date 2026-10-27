@@ -180,6 +180,17 @@ RW.kapitel = {
       <h2>Glossar</h2>
       <div id="glossar-platz"></div>
 
+      <h2>Bilder</h2>
+      <ul>
+        <li><strong>Stimmungsbilder</strong> zeigen jede Station in einer bestimmten Jahreszeit und Stimmung. Sie sind keine genaue Abbildung des Ortes.</li>
+        <li><strong>Pläne</strong> sind schwarz-weiß gezeichnet und geben die Anlage der Orte wieder.</li>
+        <li><strong>Ansichten</strong> zu den Plänen ergänzen diese. Sie müssen den Plänen nicht in allen Einzelheiten entsprechen.</li>
+      </ul>
+
+      <h2>Herkunft und Rechte</h2>
+      <p>Diese Seite, ihre Texte, Karten und Bilder sind mit Hilfe künstlicher Intelligenz erzeugt und gelten als gemeinfrei. Sie dürfen ohne Einschränkung genutzt, verändert und weitergegeben werden.</p>
+      <p>Davon ausgenommen sind die Marken und Inhalte von <em>Das Schwarze Auge</em>, die der Ulisses Spiele GmbH gehören, sowie die Schriften Alegreya und Grenze Gotisch, die unter der SIL Open Font License stehen.</p>
+
       <h2>Zum Mitnehmen</h2>
       <p>Den ganzen Band gibt es auch als <a href="export/der-raulsweg.epub" download>EPUB für E-Reader</a>, mit Meisterinformationen in umrandeten Kästen und Bildern in Graustufen.</p>
       <figure class="station-bild"><img src="img/stempelheft.webp" alt="Ein ausgefülltes Stempelheft des Raulswegs" loading="lazy"><figcaption>So sieht ein Stempelheft am Ende der Reise aus.</figcaption></figure>

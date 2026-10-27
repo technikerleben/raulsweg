@@ -437,9 +437,27 @@
   function stationsbild(s) {
     return `<figure class="station-bild">
         <img data-basis="img/stationen/${s.bild}" data-versuch="0" src="img/stationen/${s.bild}.${BILD_ENDUNGEN[0]}" alt="${esc(s.name)}: ${esc(s.jahreszeit || "")}" loading="lazy">
-        <figcaption>Station ${esc(s.nr)}, ${esc(s.name)}: ${esc(s.jahreszeit || "")}</figcaption>
+        <figcaption><span class="bild-art">Stimmungsbild</span> Station ${esc(s.nr)}, ${esc(s.name)}: ${esc(s.jahreszeit || "")}</figcaption>
       </figure>`;
   }
+  // Gebäudebilder zu den Plänen: img/gebaeude/<karten-id>.webp, <karten-id>-2.webp … (auch .jpg/.png)
+  const gebaeudeBlock = c => `<section class="gebaeude-bilder" data-karte="${c.id}" hidden>
+      <h3>Ansichten</h3><p class="leise">Die Bilder ergänzen den Plan. Sie zeigen, wie der Ort wirken kann, und müssen dem Plan nicht in allen Einzelheiten entsprechen.</p><div class="gebaeude-raster"></div></section>`;
+  const bildDa = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(true); i.onerror = () => ok(false); i.src = src; });
+  async function gebaeudeLaden() {
+    for (const block of main.querySelectorAll(".gebaeude-bilder[data-karte]")) {
+      const id = block.dataset.karte, raster = block.querySelector(".gebaeude-raster");
+      for (let n = 1; n <= 12; n++) {
+        const basis = `img/gebaeude/${id}${n === 1 ? "" : "-" + n}`;
+        let gefunden = null;
+        for (const endung of BILD_ENDUNGEN) { if (await bildDa(`${basis}.${endung}`)) { gefunden = `${basis}.${endung}`; break; } }
+        if (!gefunden || !block.isConnected) break;
+        raster.insertAdjacentHTML("beforeend", `<a href="${gefunden}" target="_blank" rel="noopener"><img src="${gefunden}" alt="Ansicht ${n} zum Plan" loading="lazy"></a>`);
+        block.hidden = false;
+      }
+    }
+  }
+
   function bilderAbsichern() {
     main.querySelectorAll("img[data-basis]").forEach(img => {
       img.addEventListener("error", () => {
@@ -676,7 +694,7 @@
           ${figurenAn(s.id).length ? `<h2 id="figuren">Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
           ${kartenAn(s.id).map(c => `<section class="karte-verweis" id="plan"><h2>Plan: ${esc(c.titel)}</h2>
             <a href="#/karte/${c.id}"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}" loading="lazy"></a>
-            <p><a href="#/karte/${c.id}">${esc(c.art)} mit Legende</a></p></section>`).join("")}
+            <p><a href="#/karte/${c.id}">${esc(c.art)} mit Legende</a></p>${gebaeudeBlock(c)}</section>`).join("")}
           ${wegNach(s)}
           ${chronikBezug("station:" + s.id)}
         </div>
@@ -953,6 +971,7 @@
       <p class="station-unterzeile">${kartenLink(c)}</p>
       <figure class="karte-gross"><a href="${c.datei}" target="_blank" rel="noopener" title="In voller Größe öffnen"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}"></a>
         <figcaption>${esc(c.massstab || "")} · <a href="${c.datei}" target="_blank" rel="noopener">in voller Größe öffnen</a></figcaption></figure>
+      ${gebaeudeBlock(c)}
       <p class="einleitung">${esc(c.kurz)}</p>
       ${legende}
       <nav class="blaettern" aria-label="Weitere Karten">
@@ -1020,6 +1039,7 @@
         else main.querySelectorAll(".chronik-eintrag").forEach(sek => verlinken(sek, []));
       } else verlinken(main, seite.eigene);
       bilderAbsichern();
+      gebaeudeLaden();
       const kopieren = document.getElementById("vorlage-kopieren");
       if (kopieren) kopieren.addEventListener("click", () => {
         const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };
