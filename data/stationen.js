@@ -218,11 +218,11 @@ RW.stationen = [
   {
     id: "wandlether-hof", nr: 9, name: "Wandlether Hof", typ: "station",
     gottheit: "Firun", emblem: "Bär und Eiskristall",
-    meile: 230, etappe: 30, schaetzung: true,
+    meile: 235, etappe: 35, schaetzung: true,
     status: "rohbau", kanon: false, bild: "09-wandlether-hof", jahreszeit: "Winterdämmerung",
     kurz: "Einsame Wehrstation im Wald, an der die Straße nach Wandleth abzweigt. Neu befestigt, weil der Abschnitt gefährlich ist.",
     beschreibung: [
-      "Hinter Wasserburg, wo der Darpat nach Osten abbiegt, führt der Raulsweg durch dichten Wald. An der Abzweigung nach Wandleth steht der Wandlether Hof, ursprünglich ein Gehöft, jetzt eine kleine Wehrstation mit neuer Palisade und Wachturm.",
+      "Hinter Wasserburg, kurz bevor der Darpat nach Osten abbiegt, führt der Raulsweg durch dichten Wald. Beim Weiler Gräfenweiche zweigt eine schmale Nebenstraße nach Westen ab, über die Hänge nach Blitztann und weiter nach Wandleth. An dieser Abzweigung steht der Wandlether Hof, ursprünglich ein Gehöft, jetzt eine kleine Wehrstation mit neuer Palisade und Wachturm.",
       "Der Abschnitt gilt als der unsicherste der Strecke. Im Winter liegt hier Schnee, und es gibt Wölfe, aber die Reisenden fürchten vor allem die Menschen: Wegelagerer, Wilderer und Gestalten, die lieber nicht gefragt werden, wohin sie wollen."
     ],
     vorlesetext: [
@@ -231,7 +231,8 @@ RW.stationen = [
     geruechte: [
       "Die Wegelagerer im Wald kennen die Termine der Geldtransporte. Woher?",
       "Der Wachhauptmann am Hof jagt lieber, als zu wachen. Was er erlegt, landet nicht immer in der Küche der Station.",
-      "Die Straße nach Wandleth wird seit dem Edikt kaum noch gepflegt. Trotzdem sieht man dort nachts Wagenspuren."
+      "Die Straße nach Wandleth wird seit dem Edikt kaum noch gepflegt. Trotzdem sieht man dort nachts Wagenspuren.",
+      "Wer den Bärenstempel aus Blitztann besitzt, ist den Weg dorthin allein gegangen. Zwei Händler aus Gareth haben es zu zweit versucht und kamen mit leeren Büchlein zurück."
     ],
     konflikt: "Die Wehrstation soll den Wald sicher machen, ist aber unterbesetzt und schlecht ausgerüstet. Wer hier Überfälle verhindern oder geschehen lassen will, hat leichtes Spiel.",
     meister: {
@@ -242,7 +243,7 @@ RW.stationen = [
   {
     id: "gnitzenkuhl", nr: 10, name: "Gnitzenkuhl", typ: "station",
     gottheit: "Peraine", emblem: "Storch",
-    meile: 260, etappe: 30, schaetzung: true,
+    meile: 260, etappe: 25, schaetzung: true,
     status: "erweiterung", kanon: true, bild: "10-gnitzenkuhl", jahreszeit: "Schwüler Mittag",
     kurz: "Pfahldorf am Sumpfrand, berüchtigt für seine Mücken. Die neue Heilerstation ist die einzige, die wirklich jeder Reisende zu schätzen weiß.",
     beschreibung: [

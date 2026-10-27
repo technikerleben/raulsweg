@@ -92,7 +92,7 @@ RW.karten = [
       [7, "Brunnen", "Daneben der Holzstapel."],
       [8, "Hinterpforte", "Ein Pfad führt in den Wald."],
       [9, "Jägerschrein", "Drei Stämme und ein Bärenschädel auf einer kleinen Lichtung."],
-      [10, "Straße nach Wandleth", "Kaum gepflegt, aber mit frischen Wagenspuren."],
+      [10, "Nebenstraße nach Blitztann und Wandleth", "Kaum gepflegt, aber mit frischen Wagenspuren. Über diesen Weg führt auch der Firunsgang nach Blitztann."],
       [11, "Köhlerplatz", "Meiler und Hütte, abseits im Wald."]
     ]
   },

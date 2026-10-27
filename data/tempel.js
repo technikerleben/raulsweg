@@ -179,7 +179,7 @@ RW.tempel = [
       "Die Kanzlei hat einen steinernen Schrein innerhalb der Palisade bestellt, damit Reisende nicht in den Wald müssen. Der Sockel ist gesetzt, der Rest fehlt. Die meisten gehen trotzdem in den Wald."
     ],
     brauch: "Wer den Wald durchquert, hängt ein Stück Fell, Federn oder ein Büschel Haar an die Stämme. Wer jagt, lässt das Herz der ersten Beute zurück. Wer wildert, sagt man, findet den Weg zurück nicht.",
-    stempel: "Ein Bär unter einem Eiskristall, in schwarzer Farbe aus Holzkohle. Er liegt in einer Holzkiste am Schrein, und jeder stempelt selbst.",
+    stempel: "Ein Bär unter einem Eiskristall, in schwarzer Farbe aus Holzkohle. Er liegt in einer Holzkiste am Schrein, und jeder stempelt selbst. Wer Firun mehr bieten will, geht den Firunsgang: allein, zu Fuß und ohne Feuer über die Nebenstraße nach Blitztann, gut neun Meilen durch Wald und über steinige Hänge. In Blitztann verwahrt der Dorfälteste eine eiserne Bärentatze. Wer allein ankommt, bekommt sie mit kaltem Ruß ins Büchlein gedrückt. Gefragt wird nicht; die Blitztanner sehen sich die Spuren an. Gruppen bekommen den Bärenstempel nie, auch nicht, wenn sie einzeln nacheinander ankommen.",
     dienste: "Jagdsegen, Spurenlesen gegen Gabe, Schutzzeichen für die Nachtreise.",
     geweihte: "Kein ständiger Geweihter. Ab und zu taucht ein schweigsamer Firun-Geweihter auf, den die Leute nur den Grauen Jäger nennen.",
     spannung: "Firuns Gebot verlangt ehrliche Jagd. Ausgerechnet der Wachhauptmann jagt im Schutzwald der Station, und eine Wilderin opfert hier regelmäßiger als er.",

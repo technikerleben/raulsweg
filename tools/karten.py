@@ -91,7 +91,7 @@ def strecke():
     # --- Straßen
     netz = [(TT([geo.ORTE["rommilyser-kreuz"], (592.5, 536.2), geo.ORTE["rommilys"]]), 5),
             (TT([geo.ORTE["feste-hohenstein"], geo.ORTE["rabenbruecke"], (589.2, 532.6), (592.15, 532.65), (595.512, 530.146)]), 3),
-            (TT([pos["wandlether-hof"], (601.0, 508.0), (590.0, 516.0), geo.ORTE["wandleth"]]), 3.5),
+            (TT([pos["wandlether-hof"], (605.4, 505.3), (604.8, 505.0), geo.ORTE["blitztann"], (600.0, 508.5), (590.0, 516.0), geo.ORTE["wandleth"]]), 3.5),
             (TT([pos["gaulsfurt"], (620.6, 497.5), (621.5, 493.0)]), 3.5),
             (TT([(549.0, 533.4), geo.ORTE["gareth"]]), 5)]
     k.strassennetz(netz + [(TT(geo.punkte()), 8)])
@@ -113,11 +113,14 @@ def strecke():
     k.text(P["perricum"][0] - 34, P["perricum"][1] - 38, "Perricum", klasse="t", groesse=24, abstand=1.5)
     X, Y = T(geo.ORTE["rommilys"])
     k.text(X + 20, Y - 22, "Rommilys", klasse="t", groesse=19, anker="start")
+    X, Y = T(geo.ORTE["blitztann"])
+    k.kreis(X, Y, 4.5, fill="#fff", w=1.4)
+    k.text(X - 8, Y - 14, "Blitztann", klasse="tk", groesse=13, anker="end")
     X, Y = T(geo.ORTE["wandleth"])
     k.kreis(X, Y, 6, fill="#fff", w=1.6)
     k.text(X, Y - 18, "Wandleth", klasse="t", groesse=15)
     lage = {"nattersquell": (0, -30), "hartsteen": (0, -30), "sonnenfeld": (0, 32), "rommilyser-kreuz": (-6, -48),
-            "feste-hohenstein": (-62, 30), "natterbruecke": (62, 26), "mardramund": (70, 6), "wandlether-hof": (-82, 0),
+            "feste-hohenstein": (-62, 30), "natterbruecke": (62, 26), "mardramund": (70, 6), "wandlether-hof": (84, -4),
             "wasserburg": (-66, 0), "gnitzenkuhl": (0, 32), "gaulsfurt": (-4, 32), "rabicum": (-6, 34)}
     zeilen = {"rommilyser-kreuz": ["Rommilyser", "Kreuz"], "feste-hohenstein": ["Feste", "Hohenstein"]}
     for s in daten:
@@ -974,7 +977,7 @@ def wandlether_hof():
         k.kurve([P(128 + dx, 106), P(126 + dx, 130), P(120 + dx, 172)], w=.7, dash="6 4")
     k.text(*P(8, 102), "← Wasserburg", klasse="tk", groesse=14, anker="start")
     k.text(*P(224, 102), "Gnitzenkuhl →", klasse="tk", groesse=14, anker="end")
-    k.text(*P(132, 164), "nach Wandleth", klasse="tk", groesse=14, anker="start")
+    k.text(*P(132, 164), "nach Blitztann und Wandleth", klasse="tk", groesse=14, anker="start")
     # Palisade
     g.palisade([(104, 92), (140, 92), (140, 40), (60, 40), (60, 92), (96, 92)], r=.6, geschlossen=False)
     g.mauer_rechteck(134, 34, 9, 9, d=1)                        # Wachturm
