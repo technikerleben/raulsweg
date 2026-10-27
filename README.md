@@ -7,21 +7,24 @@ Statische Website ohne Build-Schritt: `index.html` öffnen oder das Repo auf Ver
 ## Aufbau
 
 ```
-index.html          Gerüst, Navigation
-css/style.css       Gestaltung
-js/app.js           Navigation (Hash-Routen), Meister-Umschalter, Streckenband
-data/stationen.js   12 Stationen, Gareth, Perricum, Reisezeiten
-data/kapitel.js     Überblick, Stationswesen, Reisen, Anhang, Ausbaustufen
-data/maechte.js     Mächte am Weg
-data/figuren.js     Figuren (Stufe 2)
-data/tempel.js      Die zwölf Tempel
-data/chronik.js     Chronik der gespielten Geschichten
-data/karten.js      Karten und Pläne (Zeichnungen: tools/karten.py)
-data/wegpunkte.js   Orte und Szenen zwischen den Stationen
-img/titel.webp      Titelbild (optional)
-img/stationen/      Stationsbilder
-img/ui/             Ornamente, Karte (später)
+index.html            Gerüst, Navigation, Reihenfolge der Datenskripte
+css/style.css         Gestaltung (Pergament, Nachtansicht, Druck)
+js/app.js             Hash-Router, Seiten, Register, automatische Querverweise, Suche
+data/stationen.js     Gareth, zwölf Stationen, Perricum, Reisezeiten
+data/kapitel.js       Titel, Kapitel (Überblick, Stationswesen, Reisen, Für Spielleitungen, Anhang), Glossar, Ausbaustufen
+data/maechte.js       Mächte am Weg
+data/figuren.js       Figuren mit drei möglichen Geheimnissen
+data/tempel.js        Die zwölf Tempel
+data/wegpunkte.js     Orte und Szenen zwischen den Stationen
+data/karten.js        Karten und Pläne (Texte, Legenden)
+data/dokumente.js     Edikt, Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan
+data/chronik.js       Chronik der gespielten Geschichten
+img/                  Titelbild, Stationsbilder, Porträts, Stempelheft, Karten (SVG)
+tools/                EPUB, Karten, Stempelheft, Streckengeometrie, Schriften
+export/               EPUB und Stempelheft-PDFs (erzeugt)
 ```
+
+Querverweise entstehen automatisch: Jeder Name und jede Namensform aus `begriffe` wird beim ersten Vorkommen auf einer Seite verlinkt. Neue Namensformen also dort ergänzen statt Links von Hand zu setzen. Seiten-Anker: `#/kapitel/abschnitt`, auf Stations-, Orts-, Figuren- und Kartenseiten `#/station/<id>/<abschnitt>`.
 
 Die Daten liegen als `.js` statt `.json`, damit die Seite auch lokal per Doppelklick funktioniert.
 

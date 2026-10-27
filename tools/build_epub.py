@@ -190,7 +190,7 @@ def reisezeitenliste():
     return "<ul>" + "".join(f"<li><b>{e(r['art'])}:</b> {e(r['proTag'])} Meilen pro Tag, {e(r['dauer'])}</li>" for r in RW["reisezeiten"]) + "</ul>"
 
 def glossarliste():
-    return "".join(f"<p><b>{e(g['name'])}:</b> {e(g['text'])}</p>" for g in RW["glossar"])
+    return "".join(f"<p><b>{e(g['name'])}:</b> {e(g['text'])}</p>" for g in sorted(RW["glossar"], key=lambda g: g["name"]))
 
 # ---------------------------------------------------------------- Seiten
 SEITEN = []   # (dateiname, titel, xhtml-body)
@@ -315,6 +315,10 @@ def baue_seiten():
     perricum = ORTE["perricum"]
     seite("perricum.xhtml", "Perricum", f"<h1>Perricum</h1><p class=\"leise\">Ziel des Raulswegs, Meile {meile_text(perricum)}</p><p class=\"einleitung\">{e(perricum['kurz'])}</p>{absaetze(perricum.get('beschreibung'))}")
 
+    allgemein = [c for c in RW.get("karten", []) if not c.get("station")]
+    if allgemein:
+        seite("karten.xhtml", "Karten und Pläne", "<h1>Karten und Pläne</h1><p class=\"einleitung\">Die Strecke im Überblick und eine Station nach dem Edikt. Die Pläne der Schauplätze stehen bei den Stationen.</p>"
+              + "".join(karte_html(c) for c in allgemein))
     maechte = ["<h1>Mächte am Weg</h1><p class=\"einleitung\">Der Raulsweg gehört der Kaiserin. Verdienen wollen an ihm viele.</p>"]
     for m in RW["maechte"]:
         figuren = [f["name"] for f in FIGUREN if m["id"] in (f.get("maechte") or [])]
@@ -338,17 +342,13 @@ def baue_seiten():
                        + meister("Mögliche Geheimnisse", varianten(f["geheimnisse"], "figur:" + f["id"]) + "<p><i>Wähle eines, verbinde sie oder erfinde ein eigenes.</i></p>"))
     seite("figuren.xhtml", "Figuren", "".join(figuren))
 
-    seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
-    allgemein = [c for c in RW.get("karten", []) if not c.get("station")]
-    if allgemein:
-        seite("karten.xhtml", "Karten und Pläne", "<h1>Karten und Pläne</h1><p class=\"einleitung\">Die Strecke im Überblick und eine Station nach dem Edikt. Die Pläne der Schauplätze stehen bei den Stationen.</p>"
-              + "".join(karte_html(c) for c in allgemein))
-    seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
     if RW.get("dokumente"):
         teile = ["<h1>Dokumente</h1><p class=\"einleitung\">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird.</p>"]
         for d in RW["dokumente"]:
             teile.append(f"<h2>{e(d['titel'])}</h2><p class=\"leise\">{e(d['art'])} · {e(d['herkunft'])}</p>" + kapitel_aufbereiten(d["text"]))
         seite("dokumente.xhtml", "Dokumente", "".join(teile))
+    seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
+    seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])
     seite("bauplan.xhtml", "Bauplan des Bandes", f"<h1>Bauplan des Bandes</h1><ul>{stufen}</ul>")

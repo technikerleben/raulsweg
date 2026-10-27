@@ -142,6 +142,18 @@ RW.kapitel = {
         <li>Ob die vielen Schwierigkeiten am Raulsweg zusammenhängen oder nur zufällig gleichzeitig auftreten.</li>
       </ul>
 
+      <h2>Werkzeugkasten</h2>
+      <p>Was der Band für eine eigene Geschichte bereithält, und wo es steht:</p>
+      <ul>
+        <li><strong>Schauplätze:</strong> zwölf Stationen mit Vorlesetext, Gerüchten und Konflikt, dazu ein <a href="#/karten">Plan für jede Station</a>.</li>
+        <li><strong>Unterwegs:</strong> <a href="#/unterwegs">Wegpunkte zwischen den Stationen</a>, jeder mit einer kurzen Szene zum Einstreuen.</li>
+        <li><strong>Menschen:</strong> <a href="#/figuren">Figuren</a> mit je drei möglichen Geheimnissen und die <a href="#/maechte">Mächte am Weg</a>, die hinter ihnen stehen.</li>
+        <li><strong>Glaube:</strong> <a href="#/tempel">zwölf Tempel</a> mit Bräuchen, Stempeln und schwelenden Konflikten.</li>
+        <li><strong>Handouts:</strong> das <a href="#/dokumente">Edikt und die Stellungnahmen</a> aus Rommilys und Perricum sowie das Stempelheft unter <a href="#/anhang/zum-mitnehmen">Zum Mitnehmen</a>.</li>
+        <li><strong>Reisen:</strong> <a href="#/reisen">Reisezeiten, Wetter und Etikette</a> und die <a href="#/ueberblick/der-verlauf">Entfernungen</a>.</li>
+      </ul>
+      <p>Die Meisterinformationen blendet der Schalter oben rechts ein. Wer leitet, schaltet sie ein; wer spielt, lässt sie aus.</p>
+
       <h2>Was festgehalten wird</h2>
       <p>Nach jeder Geschichte lohnt es sich, kurz festzuhalten, was sich verändert hat: welche Geheimnisse enthüllt wurden, wer gestorben, verschwunden oder neu aufgetaucht ist und wie die Stationen jetzt dastehen. Daraus entsteht mit der Zeit die <a href="#/chronik">Chronik des Raulswegs</a>. Dort steht auch eine Vorlage für den Eintrag.</p>
     `
@@ -189,15 +201,19 @@ RW.kapitel = {
 /* Glossar – Begriffe werden im ganzen Band automatisch verlinkt.
    begriffe: weitere Schreibweisen, die ebenfalls verlinkt werden */
 RW.glossar = [
-  { id: "darpatweg", name: "Darpatweg", begriffe: [], text: "Volkstümlicher Name des Abschnitts der Reichsstraße 3 von der Feste Hohenstein nach Perricum." },
-  { id: "geleitbrief", name: "Geleitbrief", begriffe: ["Geleitbriefe", "Geleitbriefs"], text: "Schreiben der Kanzlei, das Zugang zu den Kaiserpfalzen und Wechselpferden gewährt." },
-  { id: "kaiserpfalz", name: "Kaiserpfalz", begriffe: ["Kaiserpfalzen"], text: "Hauptgebäude einer Station, dem Hof und hohen Gästen vorbehalten." },
-  { id: "leumundsbrief", name: "Leumundsbrief", begriffe: ["Leumundsbriefe"], text: "Bescheinigung über untadeligen Ruf und geordnete Geschäfte. Pflicht für Lieferanten und Pächter, ausgestellt in Mardramund." },
+  { id: "darpatweg", name: "Darpatweg", begriffe: [], text: "Volkstümlicher Name des Abschnitts der Reichsstraße 3 von der Feste Hohenstein nach Perricum." , mehr: ["#/karte/strecke", "Zur Streckenkarte"] },
+  { id: "geleitbrief", name: "Geleitbrief", begriffe: ["Geleitbriefe", "Geleitbriefs"], text: "Schreiben der Kanzlei, das Zugang zu den Kaiserpfalzen und Wechselpferden gewährt." , mehr: ["#/stationswesen/der-geleitbrief", "Mehr zum Geleitbrief"] },
+  { id: "kaiserpfalz", name: "Kaiserpfalz", begriffe: ["Kaiserpfalzen"], text: "Hauptgebäude einer Station, dem Hof und hohen Gästen vorbehalten." , mehr: ["#/karte/musterstation", "Zum Grundriss der Musterstation"] },
+  { id: "leumundsbrief", name: "Leumundsbrief", begriffe: ["Leumundsbriefe"], text: "Bescheinigung über untadeligen Ruf und geordnete Geschäfte. Pflicht für Lieferanten und Pächter, ausgestellt in Mardramund." , mehr: ["#/stationswesen/der-leumundsbrief", "Mehr zum Leumundsbrief"] },
   { id: "pfalzvogt", name: "Pfalzvogt", begriffe: ["Pfalzvögte", "Pfalzvogts"], text: "Verwalter einer Kaiserpfalz in Abwesenheit des Hofes." },
-  { id: "relais", name: "Relais", begriffe: [], text: "Pferdewechsel und Poststelle einer Station." },
+  { id: "relais", name: "Relais", begriffe: [], text: "Pferdewechsel und Poststelle einer Station." , mehr: ["#/karte/musterstation", "Zum Grundriss der Musterstation"] },
   { id: "rohajas-rennbahn", name: "Rohajas Rennbahn", begriffe: [], text: "Spottname für den Raulsweg, aus Rommilys." },
-  { id: "stationsedikt", name: "Stationsedikt", begriffe: ["Edikt", "Edikts"], text: "Erlass der Kaiserin, mit dem der Ausbau des Raulswegs beschlossen wurde. Der Wortlaut steht unter Dokumente." },
-  { id: "stationsstempel", name: "Stationsstempel", begriffe: [], text: "Stempel mit dem Emblem der Stationsgottheit, den sich Reisende in ein Büchlein drücken lassen." },
+  { id: "stationsedikt", name: "Stationsedikt", begriffe: ["Edikt", "Edikts"], text: "Erlass der Kaiserin, mit dem der Ausbau des Raulswegs beschlossen wurde." , mehr: ["#/dokumente/stationsedikt", "Zum Wortlaut"] },
+  { id: "stationsstempel", name: "Stationsstempel", begriffe: [], text: "Stempel mit dem Emblem der Stationsgottheit, den sich Reisende in ein Büchlein drücken lassen." , mehr: ["#/stationswesen/der-stationsstempel", "Mehr zum Stationsstempel"] },
+  { id: "baerenstempel", name: "Bärenstempel", begriffe: ["Bärentatze"], text: "Besonderer Stempel aus Blitztann, den nur bekommt, wer den Firunsgang allein geht.", mehr: ["#/tempel/jaegerschrein-wandleth", "Zum Jägerschrein"] },
+  { id: "feidewaldstrasse", name: "Feidewaldstraße", begriffe: [], text: "Die alte Reichsstraße, die am Rommilyser Kreuz geradeaus nach Rommilys weiterläuft.", mehr: ["#/karte/kreuz", "Zum Plan der Kreuzung"] },
+  { id: "firunsgang", name: "Firunsgang", begriffe: ["Firunsgangs"], text: "Pilgerweg allein, zu Fuß und ohne Feuer von Gräfenweiche nach Blitztann.", mehr: ["#/tempel/jaegerschrein-wandleth", "Zum Jägerschrein"] },
+  { id: "stempelheft", name: "Stempelheft", begriffe: ["Stempelhefte", "Stempelheften"], text: "Kleines Heft der Kanzlei mit einer Doppelseite für die zwölf Stationsstempel.", mehr: ["#/stationswesen/der-stationsstempel", "Mehr zum Stempelheft"] },
   { id: "wegemeister", name: "Wegemeister", begriffe: [], text: "Kaiserlicher Beamter, der für den Bau der Strecke verantwortlich ist." }
 ];
 

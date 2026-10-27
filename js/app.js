@@ -4,12 +4,18 @@
      #/                     Titelseite
      #/ueberblick[/abschnitt]   #/stationswesen[/…]   #/reisen[/…]
      #/anhang[/begriff]     Glossar-Begriffe sind Anker
-     #/stationen            Übersicht        #/station/<id>
-     #/ort/<id>             Gareth, Perricum
+     #/spielleitung[/…]     Für Spielleitungen
+     #/stationen            Übersicht        #/station/<id>[/abschnitt]
+     #/ort/<id>[/abschnitt] Gareth, Perricum
+     #/unterwegs[/<id>]     Wegpunkte zwischen den Stationen (Anker: Wegpunkt oder etappe-<station>)
      #/maechte[/<id>]       Mächte am Weg
-     #/chronik[/<id>]       Chronik der gespielten Geschichten
+     #/figuren[/<station>]  Übersicht        #/figur/<id>
+     #/tempel[/<id>]        Die zwölf Tempel
+     #/dokumente[/<id>]     Edikt, Briefe, Verlautbarungen
      #/karten               Karten und Pläne  #/karte/<id>
+     #/chronik[/<id>]       Chronik der gespielten Geschichten
      #/bauplan              Ausbaustufen
+   Daten: data/*.js (window.RW), Reihenfolge der Skripte in index.html
    ========================================================== */
 (function () {
   "use strict";
@@ -166,7 +172,7 @@
   function chronikBezug(schluessel) {
     const eintraege = chronikZu(schluessel);
     if (!eintraege.length) return "";
-    return `<section class="chronik-bezug"><h2>In der Chronik</h2><ul>${eintraege.map(c => {
+    return `<section class="chronik-bezug" id="chronik"><h2>In der Chronik</h2><ul>${eintraege.map(c => {
       const enth = (c.enthuellt || []).filter(x => x.ziel === schluessel);
       const ver = (c.veraenderungen || []).filter(x => x.ziel === schluessel);
       return `<li><a class="chronik-titel" href="#/chronik/${esc(c.id)}">${esc(c.titel)}</a><span class="chronik-zeile">${chronikZeile(c)}</span>
@@ -277,6 +283,7 @@
         <li><a href="#/" data-route="">Titelseite</a></li>
         <li><a href="#/ueberblick" data-route="ueberblick">Der Raulsweg im Überblick</a></li>
         <li><a href="#/stationswesen" data-route="stationswesen">Das Stationswesen</a></li>
+        <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
       <p class="nav-gruppe">Die Strecke</p>
       <ul>
@@ -285,6 +292,7 @@
         <li><a href="#/ort/perricum" data-route="ort/perricum"><span class="nav-nr">P</span><span>Perricum</span></a></li>
         <li><a href="#/stationen" data-route="stationen">Alle Stationen im Überblick</a></li>
         <li><a href="#/unterwegs" data-route="unterwegs">Zwischen den Stationen</a></li>
+        <li><a href="#/karten" data-route="karten">Karten und Pläne</a></li>
       </ul>
       <p class="nav-gruppe">Hintergrund</p>
       <ul>
@@ -292,13 +300,12 @@
         <li><a href="#/figuren" data-route="figuren">Figuren</a></li>
         <li><a href="#/tempel" data-route="tempel">Die zwölf Tempel</a></li>
         <li><a href="#/dokumente" data-route="dokumente">Dokumente</a></li>
-        <li><a href="#/karten" data-route="karten">Karten und Pläne</a></li>
-        <li><a href="#/reisen" data-route="reisen">Reisen auf dem Raulsweg</a></li>
       </ul>
       <p class="nav-gruppe">Für die Runde</p>
       <ul>
         <li><a href="#/spielleitung" data-route="spielleitung">Für Spielleitungen</a></li>
         <li><a href="#/chronik" data-route="chronik">Chronik${chronik.length ? ` <span class="nav-zahl">${chronik.length}</span>` : ""}</a></li>
+        <li><a href="#/anhang/zum-mitnehmen" data-route="anhang/zum-mitnehmen">Zum Mitnehmen</a></li>
       </ul>
       <p class="nav-gruppe">Anhang</p>
       <ul>
@@ -346,7 +353,8 @@
 
   function navMarkieren(route) {
     const teile = route.split("/");
-    const basis = teile[0] === "figur" ? "figuren" : ["station", "ort"].includes(teile[0]) ? teile.slice(0, 2).join("/") : teile[0];
+    const basis = teile[0] === "figur" ? "figuren" : teile[0] === "karte" ? "karten"
+      : ["station", "ort"].includes(teile[0]) || route === "anhang/zum-mitnehmen" ? teile.slice(0, 2).join("/") : teile[0];
     nav.querySelectorAll("a[data-route]").forEach(a => {
       if (a.dataset.route === basis) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
@@ -419,9 +427,10 @@
   }
 
   function glossarListe() {
-    return `<dl class="glossar">${RW.glossar.map(g => {
+    return `<dl class="glossar">${RW.glossar.slice().sort((a, b) => a.name.localeCompare(b.name, "de")).map(g => {
       const rv = sortiert(rueckverweise.get("glossar:" + g.id)).filter(e => !e.schluessel.startsWith("glossar:") && e.schluessel !== "kapitel:anhang");
-      return `<dt id="${g.id}">${esc(g.name)}</dt><dd>${esc(g.text)}${rv.length ? `<br><span class="leise">Erwähnt bei ${rv.map(verweisLink).join(", ")}</span>` : ""}</dd>`;
+      const mehr = g.mehr ? ` <a href="${g.mehr[0]}">${esc(g.mehr[1])}</a>` : "";
+      return `<dt id="${g.id}">${esc(g.name)}</dt><dd>${esc(g.text)}${mehr}${rv.length ? `<br><span class="leise">Erwähnt bei ${rv.map(verweisLink).join(", ")}</span>` : ""}</dd>`;
     }).join("")}</dl>`;
   }
 
@@ -475,7 +484,7 @@
   }
   const tempelAn = id => tempel.find(t => t.station === id);
   function tempelKasten(t) {
-    return `<section class="tempel-kasten">
+    return `<section class="tempel-kasten" id="${t.id}">
         <h2>${esc(t.name)}</h2>
         <p class="tempel-zeile">${esc(tempelArt(t))} ${bauMarke({ status: t.zustand })}</p>
         <p>${esc(t.kurz)}</p>
@@ -511,16 +520,30 @@
       ${RW.titel.einleitung.replace('class="einleitung"', 'class="einleitung initiale"')}
       ${streckenband()}
       <h2>Wohin?</h2>
+      <h3 class="wegweiser-gruppe">Ankommen</h3>
       <div class="wegweiser">
         <a href="#/ueberblick"><strong>Der Raulsweg</strong><span>Geschichte, Namen, Verlauf und Entfernungen</span></a>
-        <a href="#/stationswesen"><strong>Das Stationswesen</strong><span>Kaiserpfalz, Relais, Herbergen und Papiere</span></a>
-        <a href="#/ort/gareth"><strong>Die Reise beginnen</strong><span>Von Gareth Station für Station bis Perricum</span></a>
-        <a href="#/maechte"><strong>Mächte am Weg</strong><span>Wer am Raulsweg verdienen will</span></a>
+        <a href="#/stationswesen"><strong>Das Stationswesen</strong><span>Kaiserpfalz, Relais, Herbergen, Papiere und Stempel</span></a>
         <a href="#/reisen"><strong>Reisen</strong><span>Reisezeiten, Wetter und Etikette</span></a>
+      </div>
+      <h3 class="wegweiser-gruppe">Die Strecke</h3>
+      <div class="wegweiser">
+        <a href="#/ort/gareth"><strong>Die Reise beginnen</strong><span>Von Gareth Station für Station bis Perricum</span></a>
+        <a href="#/unterwegs"><strong>Zwischen den Stationen</strong><span>Dörfer, Brücken und kleine Szenen am Weg</span></a>
+        <a href="#/karten"><strong>Karten und Pläne</strong><span>Streckenkarte, Musterstation, ein Plan je Station</span></a>
+      </div>
+      <h3 class="wegweiser-gruppe">Hintergrund</h3>
+      <div class="wegweiser vier">
+        <a href="#/maechte"><strong>Mächte am Weg</strong><span>Wer am Raulsweg verdienen will</span></a>
+        <a href="#/figuren"><strong>Figuren</strong><span>Wirte, Wachen, Bauleute und Geschäftemacher</span></a>
+        <a href="#/tempel"><strong>Die zwölf Tempel</strong><span>Weihestätten, Bräuche und Stempel</span></a>
+        <a href="#/dokumente"><strong>Dokumente</strong><span>Das Edikt und was Rommilys und Perricum dazu sagen</span></a>
+      </div>
+      <h3 class="wegweiser-gruppe">Für die Runde</h3>
+      <div class="wegweiser">
         <a href="#/spielleitung"><strong>Für Spielleitungen</strong><span>Eigene Geschichten am Raulsweg leiten</span></a>
-        <a href="#/karten"><strong>Karten und Pläne</strong><span>Streckenkarte, Musterstation, Schauplätze</span></a>
         <a href="#/chronik"><strong>Chronik</strong><span>Was die Runde am Raulsweg erlebt hat</span></a>
-        <a href="#/anhang"><strong>Glossar</strong><span>Begriffe, Kennzeichnung, Quellen</span></a>
+        <a href="#/anhang/zum-mitnehmen"><strong>Zum Mitnehmen</strong><span>EPUB und Stempelheft zum Drucken</span></a>
       </div>`,
       eigene: []
     };
@@ -533,7 +556,7 @@
       .replace('<div id="entfernungen-platz"></div>', entfernungstabelle())
       .replace('<div id="reisezeiten-platz"></div>', reisezeitentabelle())
       .replace('<div id="glossar-platz"></div>', glossarListe())
-      .replace(/<h2>(.*?)<\/h2>/g, (_, t) => `<h2 id="${slug(ohneTags(t).trim())}">${t}</h2>`)
+      .replace(/<h([23])>(.*?)<\/h\1>/g, (_, n, t) => `<h${n} id="${slug(ohneTags(t).trim())}">${t}</h${n}>`)
       .replace('class="einleitung"', 'class="einleitung initiale"');
     const abschnitte = [...kap.html.matchAll(/<h2>(.*?)<\/h2>/g)].map(m => ohneTags(m[1]).trim());
     const toc = abschnitte.length >= 3
@@ -569,7 +592,7 @@
     if (!nach) return "";
     const liste = wegpunkteNach(nach.id);
     const kopf = `<h2>Auf dem Weg nach ${esc(nach.name)}</h2><p class="leise">${etappeText(nach)} Meilen bis zur nächsten Station.${liste.length ? "" : " Unterwegs nur Feld und Wald."}</p>`;
-    return `<section class="weg-nach">${kopf}${liste.length ? `<ul class="weg-liste">${liste.map(w => `
+    return `<section class="weg-nach" id="weiter">${kopf}${liste.length ? `<ul class="weg-liste">${liste.map(w => `
       <li><span class="weg-meile">Meile ${w.meile}</span><div><a class="weg-name" href="#/unterwegs/${w.id}">${esc(w.name)}</a><span class="weg-art">${esc(w.art)}</span><p>${esc(w.kurz)}</p></div></li>`).join("")}</ul>` : ""}</section>`;
   }
 
@@ -614,6 +637,17 @@
     };
   }
 
+  function sprungliste(s) {
+    const punkte = [["vorlesen", "Zum Vorlesen"], ["geruechte", "Gerüchte"], ["brodelt", "Was hier brodelt"]];
+    const t = tempelAn(s.id);
+    if (t) punkte.push([t.id, t.name]);
+    if (figurenAn(s.id).length) punkte.push(["figuren", "Figuren"]);
+    if (kartenAn(s.id).length) punkte.push(["plan", "Plan"]);
+    if (naechsterHalt(s)) punkte.push(["weiter", "Auf dem Weg nach " + naechsterHalt(s).name]);
+    if (chronikZu("station:" + s.id).length) punkte.push(["chronik", "In der Chronik"]);
+    return `<nav class="sprungliste" aria-label="Auf dieser Seite"><h3>Auf dieser Seite</h3><ul>${punkte.map(([a, n]) => `<li><a href="#/station/${s.id}/${a}">${esc(n)}</a></li>`).join("")}</ul></nav>`;
+  }
+
   function seiteStation(id) {
     const i = stationen.findIndex(s => s.id === id);
     if (i < 0) return seiteFehlt();
@@ -632,21 +666,22 @@
         <div>
           <p class="einleitung initiale">${esc(s.kurz)}</p>
           ${absaetze(s.beschreibung)}
-          <div class="vorlese"><p class="vorlese-titel">Zum Vorlesen</p>${absaetze(s.vorlesetext)}</div>
-          <h2>Gerüchte am Herdfeuer</h2>
+          <div class="vorlese" id="vorlesen"><p class="vorlese-titel">Zum Vorlesen</p>${absaetze(s.vorlesetext)}</div>
+          <h2 id="geruechte">Gerüchte am Herdfeuer</h2>
           <ul class="geruechte">${(s.geruechte || []).map(g => `<li>${esc(g)}</li>`).join("")}</ul>
-          <h2>Was hier brodelt</h2>
+          <h2 id="brodelt">Was hier brodelt</h2>
           <p>${esc(s.konflikt)}</p>
           ${s.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(s.meister.hintergrund)}</p></div>` : ""}
-          ${chronikBezug("station:" + s.id)}
-          ${kartenAn(s.id).map(c => `<section class="karte-verweis"><h2>Plan: ${esc(c.titel)}</h2>
+          ${tempelAn(s.id) ? tempelKasten(tempelAn(s.id)) : ""}
+          ${figurenAn(s.id).length ? `<h2 id="figuren">Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
+          ${kartenAn(s.id).map(c => `<section class="karte-verweis" id="plan"><h2>Plan: ${esc(c.titel)}</h2>
             <a href="#/karte/${c.id}"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}" loading="lazy"></a>
             <p><a href="#/karte/${c.id}">${esc(c.art)} mit Legende</a></p></section>`).join("")}
-          ${tempelAn(s.id) ? tempelKasten(tempelAn(s.id)) : ""}
-          ${figurenAn(s.id).length ? `<h2>Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
           ${wegNach(s)}
+          ${chronikBezug("station:" + s.id)}
         </div>
         <aside class="seitenleiste">
+          ${sprungliste(s)}
           <section>
             <h3>Steckbrief</h3>
             <dl>
@@ -655,6 +690,8 @@
               ${tempelAn(s.id) ? `<dt>Tempel</dt><dd><a href="#/tempel/${tempelAn(s.id).id}">${esc(tempelAn(s.id).name)}</a></dd>` : ""}
               <dt>Ab Gareth</dt><dd>Meile ${meileText(s)}</dd>
               <dt>Etappe</dt><dd>${etappeText(s)} Meilen von <a href="${linkZu(vor)}">${esc(vor.name)}</a></dd>
+              <dt>Weiter</dt><dd>${etappeText(nach)} Meilen nach <a href="${linkZu(nach)}">${esc(nach.name)}</a></dd>
+              ${kartenAn(s.id).length ? `<dt>Plan</dt><dd><a href="#/karte/${kartenAn(s.id)[0].id}">${esc(kartenAn(s.id)[0].titel)}</a></dd>` : ""}
               <dt>Bauzustand</dt><dd>${bauMarke(s)}</dd>
               <dt>Herkunft</dt><dd>${kanonMarke(s)}</dd>
               <dt>Stimmung</dt><dd>${esc(s.jahreszeit)}</dd>
@@ -950,9 +987,10 @@
   let letzteSeite = null;
   function zeigen() {
     const route = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
-    const [teil, id] = route.split("/");
-    const mitAnker = id && !["station", "ort", "figur", "karte"].includes(teil);
-    const seitenSchluessel = mitAnker ? teil : route;
+    const [teil, id, abschnitt] = route.split("/");
+    const einzelseite = ["station", "ort", "figur", "karte"].includes(teil);
+    const anker = einzelseite ? abschnitt : id;
+    const seitenSchluessel = einzelseite ? `${teil}/${id}` : teil;
 
     if (seitenSchluessel !== letzteSeite) {
       let seite;
@@ -994,7 +1032,7 @@
     navMarkieren(route);
     vorschauWeg();
 
-    const ziel = mitAnker ? document.getElementById(id) : null;
+    const ziel = anker ? document.getElementById(anker) : null;
     if (ziel) {
       ziel.scrollIntoView({ block: "start" });
       ziel.classList.remove("ziel-markiert"); void ziel.offsetWidth; ziel.classList.add("ziel-markiert");

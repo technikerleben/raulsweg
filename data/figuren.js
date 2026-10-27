@@ -16,7 +16,7 @@ RW.figuren = [
 
   /* ---------- Unterwegs auf der ganzen Strecke ---------- */
   {
-    id: "answald-kreutzer", name: "Answald Kreutzer", begriffe: ["Kreutzer"],
+    id: "answald-kreutzer", name: "Answald Kreutzer", begriffe: ["Kreutzer", "Answald"],
     rolle: "Kaiserlicher Wegemeister", station: "unterwegs", maechte: ["kanzlei"],
     kurz: "Der Mann, der für den Bau des Raulswegs geradesteht und dafür jede Nacht zu wenig schläft.",
     aussehen: "Mitte fünfzig, hager, mit tintenfleckigen Fingern und einem Mantel, der zu oft nass geworden ist. Trägt eine Mappe mit Plänen, die er niemandem aus der Hand gibt.",
@@ -31,7 +31,7 @@ RW.figuren = [
     bild: "answald-kreutzer"
   },
   {
-    id: "jorinde-haselbach", name: "Jorinde Haselbach", begriffe: ["Jorinde"],
+    id: "jorinde-haselbach", name: "Jorinde Haselbach", begriffe: ["Jorinde", "Haselbach"],
     rolle: "Beilunker Reiterin", station: "unterwegs", maechte: ["beilunker"],
     kurz: "Eine der schnellsten Reiterinnen der Strecke. Überholt jeden Tross und hört dabei mehr, als sie sagt.",
     aussehen: "Ende zwanzig, drahtig, sonnengebräunt, das Haar kurz geschoren. Die Botentasche trägt sie quer über der Brust, als wäre sie ein Teil von ihr.",
@@ -46,7 +46,7 @@ RW.figuren = [
     bild: "jorinde-haselbach"
   },
   {
-    id: "ludeger-vanstein", name: "Ludeger Vanstein", begriffe: ["Vanstein"],
+    id: "ludeger-vanstein", name: "Ludeger Vanstein", begriffe: ["Vanstein", "Ludeger"],
     rolle: "Faktor eines neuen Kontors", station: "unterwegs", maechte: ["neue-kontore"],
     kurz: "Ein freundlicher, zahlungskräftiger Kaufmann, der auf Pachten am Raulsweg bietet und nie über seine Geldgeber spricht.",
     aussehen: "Um die vierzig, rundes Gesicht, gepflegter Bart, gute, aber unauffällige Kleidung. Hat immer ein kleines Kästchen mit Wechselbriefen dabei.",
@@ -78,7 +78,7 @@ RW.figuren = [
 
   /* ---------- 1 Nattersquell ---------- */
   {
-    id: "travine-holler", name: "Travine Holler", begriffe: ["Travine"],
+    id: "travine-holler", name: "Travine Holler", begriffe: ["Travine", "Holler"],
     rolle: "Stationswirtin von Nattersquell", station: "nattersquell", maechte: ["kirchen"],
     kurz: "Die Wirtin, die einen Grafen vor die Tür setzte, weil er ihren Knecht schlug.",
     aussehen: "Um die sechzig, kräftig, mit hochgesteckten grauen Zöpfen und Mehl an den Unterarmen. Trägt ein Gansamulett der Travia.",
@@ -93,7 +93,7 @@ RW.figuren = [
     bild: "travine-holler"
   },
   {
-    id: "ugo-brennecke", name: "Ugo Brennecke", begriffe: ["Brennecke"],
+    id: "ugo-brennecke", name: "Ugo Brennecke", begriffe: ["Brennecke", "Ugo"],
     rolle: "Wirt des alten Gasthauses Zur Quelle", station: "nattersquell", maechte: [],
     kurz: "Der alte Dorfwirt, dem die neue Station die Gäste genommen hat.",
     aussehen: "Hängende Schultern, Schürze über einem Bauch, der bessere Zeiten kannte, und ein Gesicht voller Groll.",
@@ -110,7 +110,7 @@ RW.figuren = [
 
   /* ---------- 2 Hartsteen ---------- */
   {
-    id: "gerlind-brucker", name: "Gerlind Brucker", begriffe: ["Gerlind"],
+    id: "gerlind-brucker", name: "Gerlind Brucker", begriffe: ["Gerlind", "Brucker"],
     rolle: "Meisterin der Steinmetzgilde", station: "hartsteen", maechte: ["adel"],
     kurz: "Die Frau, die den Stein für halb den Raulsweg liefert und jeden Quader zweimal abrechnet.",
     aussehen: "Breitschultrig, Staub in den Falten, ein Lederschurz über feinem Tuch. Ihre Hände sind die einer Steinmetzin, ihr Ring der einer Ratsfrau.",
@@ -125,7 +125,7 @@ RW.figuren = [
     bild: "gerlind-brucker"
   },
   {
-    id: "eberwin-lohmar", name: "Eberwin Lohmar", begriffe: ["Lohmar"],
+    id: "eberwin-lohmar", name: "Eberwin Lohmar", begriffe: ["Lohmar", "Eberwin"],
     rolle: "Pfalzvogt von Hartsteen", station: "hartsteen", maechte: ["kanzlei"],
     kurz: "Der Verwalter der zu prächtig geratenen Pfalz, der sich vor allem um Etikette sorgt.",
     aussehen: "Mittleres Alter, steif wie ein frisch gestärkter Kragen, mit kleiner Brille und einem Gästebuch unter dem Arm.",
@@ -142,7 +142,7 @@ RW.figuren = [
 
   /* ---------- 3 Sonnenfeld ---------- */
   {
-    id: "alrike-sonnwald", name: "Alrike Sonnwald", begriffe: ["Alrike"],
+    id: "alrike-sonnwald", name: "Alrike Sonnwald", begriffe: ["Alrike", "Sonnwald"],
     rolle: "Baumeisterin der Pfalz Sonnenfeld", station: "sonnenfeld", maechte: ["kanzlei"],
     kurz: "Die idealistische Baumeisterin, die eine Pfalz für Jahrhunderte bauen will und dafür zu wenig Zeit bekommt.",
     aussehen: "Anfang dreißig, Kalkstaub im Haar, eine Wachstafel am Gürtel und Augen, die nicht stillhalten.",
@@ -157,7 +157,7 @@ RW.figuren = [
     bild: "alrike-sonnwald"
   },
   {
-    id: "wido-krumhaber", name: "Wido Krumhaber", begriffe: ["Wido"],
+    id: "wido-krumhaber", name: "Wido Krumhaber", begriffe: ["Wido", "Krumhaber"],
     rolle: "Enteigneter Bauer", station: "sonnenfeld", maechte: [],
     kurz: "Der Bauer, auf dessen Feldern die Pfalz steht, und der noch immer auf seine Entschädigung wartet.",
     aussehen: "Wettergegerbt, krummer Rücken, die Mütze in den Händen. Steht jeden Tag am Bauzaun.",
@@ -189,7 +189,7 @@ RW.figuren = [
     bild: "ugdalf-von-rabenmund"
   },
   {
-    id: "ysilda-graumann", name: "Ysilda Graumann", begriffe: ["Ysilda"],
+    id: "ysilda-graumann", name: "Ysilda Graumann", begriffe: ["Ysilda", "Graumann"],
     rolle: "Hüterin des Phex-Schreins an der Kreuzung", station: "rommilyser-kreuz", maechte: ["kirchen"],
     kurz: "Eine unscheinbare Schreinhüterin, die mehr Händlern zuhört, als diese ahnen.",
     aussehen: "Klein, grau gekleidet, mit wachen Augen und einem Lächeln, das man leicht übersieht.",
@@ -206,7 +206,7 @@ RW.figuren = [
 
   /* ---------- 5 Feste Hohenstein ---------- */
   {
-    id: "walburga-steinhauer", name: "Walburga Steinhauer", begriffe: ["Walburga"],
+    id: "walburga-steinhauer", name: "Walburga Steinhauer", begriffe: ["Walburga", "Torhauptfrau"],
     rolle: "Torhauptfrau der Feste Hohenstein", station: "feste-hohenstein", maechte: ["kanzlei"],
     kurz: "Die strenge Kommandantin des Kontrollpostens, die Befehle befolgt, auch wenn sie sie nicht versteht.",
     aussehen: "Groß, graues Haar unter dem Helm, eine Narbe am Kinn, Rüstung in Rot und Gold, immer tadellos.",
@@ -221,7 +221,7 @@ RW.figuren = [
     bild: "walburga-steinhauer"
   },
   {
-    id: "melchior-pfeilsticker", name: "Melchior Pfeilsticker", begriffe: ["Pfeilsticker"],
+    id: "melchior-pfeilsticker", name: "Melchior Pfeilsticker", begriffe: ["Pfeilsticker", "Melchior"],
     rolle: "Schreiber am Tor", station: "feste-hohenstein", maechte: ["kanzlei"],
     kurz: "Der Schreiber, der stempelt, schreibt, stempelt und nie den Blick hebt, und der sich trotzdem an alles erinnert.",
     aussehen: "Schmal, gebeugt, mit Ärmelschonern und einem Tintenfass, das nie leer wird.",
@@ -238,7 +238,7 @@ RW.figuren = [
 
   /* ---------- 6 Natterbrücke ---------- */
   {
-    id: "bruna-lehmkuhl", name: "Bruna Lehmkuhl", begriffe: ["Bruna", "Mutter Bruna"],
+    id: "bruna-lehmkuhl", name: "Bruna Lehmkuhl", begriffe: ["Bruna", "Mutter Bruna", "Lehmkuhl"],
     rolle: "Älteste der Flussträger", station: "natterbruecke", maechte: ["traeger"],
     kurz: "Die Anführerin der Trägergilde, so stark wie stur, die für ihre Leute verhandelt.",
     aussehen: "Um die fünfzig, Schultern wie ein Ochse, nackte Füße, Hände wie Schaufeln, ein Lachen, das man über den Fluss hört.",
@@ -253,7 +253,7 @@ RW.figuren = [
     bild: "bruna-lehmkuhl"
   },
   {
-    id: "gesa-natterer", name: "Gesa Natterer", begriffe: ["Gesa"],
+    id: "gesa-natterer", name: "Gesa Natterer", begriffe: ["Gesa", "Natterer"],
     rolle: "Herbergswirtin am Ufer", station: "natterbruecke", maechte: [],
     kurz: "Die Wirtin, die bei Hochwasser das beste Geschäft ihres Lebens macht und es auch so behandelt.",
     aussehen: "Schlank, scharfes Gesicht, gestärkte Haube und ein Schlüsselbund, der bei jedem Schritt klirrt.",
@@ -270,7 +270,7 @@ RW.figuren = [
 
   /* ---------- 7 Mardramund ---------- */
   {
-    id: "odilo-federlein", name: "Odilo Federlein", begriffe: ["Federlein"],
+    id: "odilo-federlein", name: "Odilo Federlein", begriffe: ["Federlein", "Odilo"],
     rolle: "Vorsteher der Stationskanzlei", station: "mardramund", maechte: ["kanzlei"],
     kurz: "Der Herr über Register, Passierscheine und Leumundsbriefe, früher Buchhalter eines großen Handelshauses.",
     aussehen: "Um die fünfzig, glatt rasiert, sorgfältig gekleidet, mit einer Brille, die er beim Nachdenken putzt.",
@@ -285,7 +285,7 @@ RW.figuren = [
     bild: "odilo-federlein"
   },
   {
-    id: "linnart-holm", name: "Linnart Holm", begriffe: ["Linnart"],
+    id: "linnart-holm", name: "Linnart Holm", begriffe: ["Linnart", "Holm"],
     rolle: "Junger Kanzleischreiber", station: "mardramund", maechte: ["kanzlei"],
     kurz: "Ein übereifriger junger Schreiber, der lieber die Bücher rettet als sich selbst.",
     aussehen: "Achtzehn, schlaksig, Tinte an der Nase, ein Stapel Bücher unter dem Arm, zu dünner Mantel.",
@@ -317,7 +317,7 @@ RW.figuren = [
     bild: "mutter-iselind"
   },
   {
-    id: "fabrizzio-dellamonte", name: "Fabrizzio Dellamonte", begriffe: ["Fabrizzio"],
+    id: "fabrizzio-dellamonte", name: "Fabrizzio Dellamonte", begriffe: ["Fabrizzio", "Dellamonte"],
     rolle: "Prinzipal einer horasischen Gauklertruppe", station: "wasserburg", maechte: [],
     kurz: "Ein schillernder Gauklerprinzipal, der jedes Fest am Raulsweg bespielt und dabei alles sieht.",
     aussehen: "Bunter Mantel, gezwirbelter Schnurrbart, ein Hut mit drei Federn, die schon bessere Tage gesehen haben.",
@@ -334,7 +334,7 @@ RW.figuren = [
 
   /* ---------- 9 Wandlether Hof ---------- */
   {
-    id: "firnwald-eiber", name: "Firnwald Eiber", begriffe: ["Eiber"],
+    id: "firnwald-eiber", name: "Firnwald Eiber", begriffe: ["Eiber", "Firnwald"],
     rolle: "Wachhauptmann am Wandlether Hof", station: "wandlether-hof", maechte: ["kanzlei"],
     kurz: "Ein Hauptmann, der lieber jagt als wacht, und der seinen Abschnitt für ruhiger hält, als er ist.",
     aussehen: "Bärtig, Pelzmantel über dem Wappenrock, Bogen auf dem Rücken, Stiefel voller Schnee.",
@@ -366,7 +366,7 @@ RW.figuren = [
 
   /* ---------- 10 Gnitzenkuhl ---------- */
   {
-    id: "bruder-hilbert", name: "Bruder Hilbert", begriffe: ["Hilbert"],
+    id: "bruder-hilbert", name: "Bruder Hilbert", begriffe: ["Hilbert", "Bruder Hilbert"],
     rolle: "Peraine-Geweihter und Leiter der Heilerstation", station: "gnitzenkuhl", maechte: ["kirchen"],
     kurz: "Ein müder, unbestechlicher Heiler, der mehr Kranke hat als Betten.",
     aussehen: "Hager, mit Augenringen und Kräuterflecken an der Kutte, einem Storchenamulett und ruhigen Händen.",
@@ -381,7 +381,7 @@ RW.figuren = [
     bild: "bruder-hilbert"
   },
   {
-    id: "grimald-schaufler", name: "Grimald Schaufler", begriffe: ["Schaufler"],
+    id: "grimald-schaufler", name: "Grimald Schaufler", begriffe: ["Schaufler", "Grimald"],
     rolle: "Bauaufseher am Damm", station: "gnitzenkuhl", maechte: ["adel"],
     kurz: "Ein Aufseher, der kranke Arbeiter durch neue ersetzt, weil der Zeitplan drängt.",
     aussehen: "Kräftig, mit Schlapphut gegen die Mücken, Peitsche am Gürtel, die er selten benutzt, aber gern zeigt.",
@@ -398,7 +398,7 @@ RW.figuren = [
 
   /* ---------- 11 Gaulsfurt ---------- */
   {
-    id: "khorim-ibn-dschelef", name: "Khorim ibn Dschelef", begriffe: ["Khorim"],
+    id: "khorim-ibn-dschelef", name: "Khorim ibn Dschelef", begriffe: ["Khorim", "ibn Dschelef"],
     rolle: "Wechselmeister im Mondsilberkontor", station: "gaulsfurt", maechte: ["mada-basari"],
     kurz: "Ein höflicher tulamidischer Geldwechsler, der jeden Wechselbrief des Raulswegs schon einmal in der Hand hatte.",
     aussehen: "Gepflegter grauer Bart, dunkelblaues Gewand mit Silberstickerei, eine Waage aus Messing und ein Lächeln, das nichts verrät.",
@@ -413,7 +413,7 @@ RW.figuren = [
     bild: "khorim-ibn-dschelef"
   },
   {
-    id: "odelinde-perval", name: "Odelinde Perval", begriffe: ["Odelinde"],
+    id: "odelinde-perval", name: "Odelinde Perval", begriffe: ["Odelinde", "Perval"],
     rolle: "Markgräfliche Zöllnerin", station: "gaulsfurt", maechte: ["perricum"],
     kurz: "Eine Zöllnerin im Dienst Perricums, die an der Kreuzung Zoll erhebt, den auch die Kanzlei beansprucht.",
     aussehen: "Mitte dreißig, streng frisiert, Wappenrock mit dem Delfin von Perricum, ein Siegelring und ein Zollbuch, dick wie eine Bibel.",
@@ -430,7 +430,7 @@ RW.figuren = [
 
   /* ---------- 12 Rabicum ---------- */
   {
-    id: "rahjalind-weinhold", name: "Rahjalind Weinhold", begriffe: ["Rahjalind"],
+    id: "rahjalind-weinhold", name: "Rahjalind Weinhold", begriffe: ["Rahjalind", "Weinhold"],
     rolle: "Stationswirtin von Rabicum", station: "rabicum", maechte: ["kirchen"],
     kurz: "Die Wirtin, die jeden kennt, der in den letzten zehn Jahren nach Perricum gereist ist.",
     aussehen: "Üppig, rote Locken, ein Kleid in Weinrot, Rosen im Haar, ein Lachen, das ansteckt.",
@@ -445,7 +445,7 @@ RW.figuren = [
     bild: "rahjalind-weinhold"
   },
   {
-    id: "albrin-korst", name: "Albrin Korst", begriffe: ["Korst"],
+    id: "albrin-korst", name: "Albrin Korst", begriffe: ["Korst", "Albrin"],
     rolle: "Der Herr im Weinkeller", station: "rabicum", maechte: ["neue-kontore"],
     kurz: "Ein stiller Gast, der einen ganzen Weinkeller gepachtet hat, nur um darin ungestört zu sein.",
     aussehen: "Unauffällig bis zur Unsichtbarkeit: graues Haar, graue Kleidung, ein Gesicht, das man sofort vergisst.",

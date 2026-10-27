@@ -514,3 +514,12 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .dok-siegel { display: inline-block; margin-top: .6rem; padding: .5rem .9rem; border: 2px solid var(--rubrik); border-radius: 50%; color: var(--rubrik); font-family: var(--schrift-kapit); font-style: normal; font-size: .82rem; transform: rotate(-6deg); }
 @media (max-width: 780px) { .dok-blatt { padding: 1.1rem 1rem; } }
 @media print { .dok-blatt { box-shadow: none; } }
+
+/* ---------- Titelseite: Wegweiser-Gruppen, Sprungliste ---------- */
+.wegweiser-gruppe { font-family: var(--schrift-kapit); color: var(--rubrik); font-size: 1.05rem; margin: 1.4rem 0 .5rem; font-weight: 500; }
+.sprungliste ul { list-style: none; padding: 0; margin: 0; }
+.sprungliste li { margin: 0 0 .25rem; }
+.sprungliste a { font-size: .98rem; }
+.sprungliste { border-top: 3px double var(--rubrik); padding-top: .6rem; }
+@media (min-width: 1061px) { .seitenleiste { max-height: calc(100vh - 6rem); overflow-y: auto; scrollbar-width: thin; } }
+@media (min-width: 781px) { .wegweiser.vier { grid-template-columns: repeat(2, 1fr); } }
