@@ -102,6 +102,7 @@ RW.kapitel = {
         <li><strong>Herbst:</strong> Erntezeit auf den Feldern um Sonnenfeld. Viele Fuhrwerke, viel Staub.</li>
         <li><strong>Winter:</strong> Der Wald um den Wandlether Hof ist verschneit, die Straße wird schwer. Der Hof reist im Winter selten.</li>
       </ul>
+      <p>Tabellen für das Wetter jedes Tages, für Begegnungen und Gerüchte unterwegs stehen bei den <a href="#/spielhilfen">Spielhilfen</a>.</p>
 
       <h2>Etikette auf der Straße</h2>
       <p>Naht ein Hofzug oder der Tross eines hohen Adligen, reiten Vorläufer voraus und fordern alle Reisenden auf, den Weg freizugeben und sich zu verneigen. Wer sitzen bleibt, beleidigt nicht nur den Adligen, sondern die Ordnung des Reiches.</p>
@@ -150,6 +151,7 @@ RW.kapitel = {
         <li><strong>Menschen:</strong> <a href="#/figuren">Figuren</a> mit je drei möglichen Geheimnissen und die <a href="#/maechte">Mächte am Weg</a>, die hinter ihnen stehen.</li>
         <li><strong>Glaube:</strong> <a href="#/tempel">zwölf Tempel</a> mit Bräuchen, Stempeln und schwelenden Konflikten.</li>
         <li><strong>Handouts:</strong> das <a href="#/dokumente">Edikt und die Stellungnahmen</a> aus Rommilys und Perricum sowie das Stempelheft unter <a href="#/anhang/zum-mitnehmen">Zum Mitnehmen</a>.</li>
+        <li><strong>Unterwegs würfeln:</strong> <a href="#/spielhilfen">Spielhilfen</a> mit Zufallsbegegnungen für vier Abschnitte, Gerüchten, Wetter und Namen, dazu ein Knopf, der einen ganzen Reisetag auswürfelt.</li>
         <li><strong>Reisen:</strong> <a href="#/reisen">Reisezeiten, Wetter und Etikette</a> und die <a href="#/ueberblick/der-verlauf">Entfernungen</a>.</li>
       </ul>
       <p>Die Meisterinformationen blendet der Schalter oben rechts ein. Wer leitet, schaltet sie ein; wer spielt, lässt sie aus.</p>
@@ -235,7 +237,7 @@ RW.ausbaustufen = [
   { nr: 3, titel: "Gebäude und Orte", text: "Grundriss der Musterstation und ein Plan für jede der zwölf Stationen, mit Legende (vorhanden). Offen: Obergeschosse und Innenstädte von Gareth und Perricum.", erledigt: true },
   { nr: 4, titel: "Karte und Strecke", text: "Karte der ganzen Strecke nach avesmaps.de, Entfernungen nach der Routenplanung, Wegpunkte mit Szenen zwischen den Stationen (vorhanden). Offen: Reisezeitrechner.", erledigt: true },
   { nr: 5, titel: "Mächte und Netz", text: "Neun Mächte mit eigener Profilseite: Haltung, Machtmittel, Fürsprecher, Stimme, Umgang, Stationen, Figuren und Dokumente; Beziehungsnetz mit fünfzehn öffentlich bekannten Verhältnissen; drei Möglichkeiten je Macht in den Meisterinformationen (vorhanden). Offen: Geldflüsse am Weg.", erledigt: true },
-  { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen je Abschnitt, Gerüchtetabellen (W20), Wetter, Namen für Herbergen, Händler und Reisende." },
+  { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen für vier Abschnitte der Strecke (je W20, mit Wendungen in den Meisterinformationen), Gerüchte am Weg (W20), Wetter für alle Jahreszeiten, Namen, Herbergen, Waren, Reisende und Eigenheiten; Reisetag und Namen per Knopf würfeln (vorhanden). Offen: ergänzende Orte abseits der Straße.", erledigt: true },
   { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken, Dokumente: Stationsedikt, offener Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan (vorhanden). Offen: Geleitbrief, Leumundsbrief, Botenbriefe." },
   { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten mit Eintragsvorlage, Verweisen von Stationen, Figuren, Tempeln und Mächten und Markierung der geltenden Möglichkeiten (vorhanden). Offen: Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }

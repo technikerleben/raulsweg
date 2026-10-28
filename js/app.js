@@ -184,7 +184,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .reisetag, .namen-werkzeug, .namen-liste, .w-zahl, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -304,6 +304,7 @@
       <p class="nav-gruppe">Für die Runde</p>
       <ul>
         <li><a href="#/spielleitung" data-route="spielleitung">Für Spielleitungen</a></li>
+        <li><a href="#/spielhilfen" data-route="spielhilfen">Spielhilfen</a></li>
         <li><a href="#/chronik" data-route="chronik">Chronik${chronik.length ? ` <span class="nav-zahl">${chronik.length}</span>` : ""}</a></li>
         <li><a href="#/anhang/zum-mitnehmen" data-route="anhang/zum-mitnehmen">Zum Mitnehmen</a></li>
       </ul>
@@ -570,8 +571,9 @@
         <a href="#/dokumente"><strong>Dokumente</strong><span>Das Edikt und was Rommilys und Perricum dazu sagen</span></a>
       </div>
       <h3 class="wegweiser-gruppe">Für die Runde</h3>
-      <div class="wegweiser">
+      <div class="wegweiser vier">
         <a href="#/spielleitung"><strong>Für Spielleitungen</strong><span>Eigene Geschichten am Raulsweg leiten</span></a>
+        <a href="#/spielhilfen"><strong>Spielhilfen</strong><span>Begegnungen, Gerüchte, Wetter und Namen zum Würfeln</span></a>
         <a href="#/chronik"><strong>Chronik</strong><span>Was die Runde am Raulsweg erlebt hat</span></a>
         <a href="#/anhang/zum-mitnehmen"><strong>Zum Mitnehmen</strong><span>EPUB und Stempelheft zum Drucken</span></a>
       </div>`,
@@ -725,6 +727,7 @@
               <dt>Bauzustand</dt><dd>${bauMarke(s)}</dd>
               <dt>Herkunft</dt><dd>${kanonMarke(s)}</dd>
               <dt>Stimmung</dt><dd>${esc(s.jahreszeit)}</dd>
+              ${abschnittVon(s.id) ? `<dt>Unterwegs</dt><dd><a href="#/spielhilfen/${abschnittVon(s.id).id}">Begegnungen: ${esc(abschnittVon(s.id).name)}</a></dd>` : ""}
             </dl>
           </section>
           ${verbindungsBlock("station:" + s.id)}
@@ -770,6 +773,134 @@
       </nav>`,
       eigene: ["ort:" + o.id]
     };
+  }
+
+  /* ---------- Spielhilfen: Begegnungen, Gerüchte, Wetter, Namen ---------- */
+  const SH = RW.spielhilfen || { abschnitte: [], geruechte: [], wetter: [], namen: {}, tagesabschnitte: [] };
+  const wuerfel = n => 1 + Math.floor(Math.random() * n);
+  const ziehe = liste => liste[wuerfel(liste.length) - 1];
+  const abschnittVon = sid => SH.abschnitte.find(a => a.stationen.includes(sid) || a.bis === sid);
+
+  function begegnungZeile(b, i) {
+    return `<tr data-w="${i + 1}"><td class="w-zahl">${i + 1}</td><td><strong>${esc(b.titel)}.</strong> ${esc(b.text)}${b.wendung ? `<span class="meister-zeile">Wendung: ${esc(b.wendung)}</span>` : ""}</td></tr>`;
+  }
+  const wuerfelKnopf = (ziel, n = 20) => `<p class="wurf"><button type="button" class="wurf-knopf" data-tabelle="${ziel}" data-seiten="${n}">W${n} würfeln</button><span class="wurf-ergebnis" aria-live="polite"></span></p>`;
+
+  function seiteSpielhilfen() {
+    const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>
+      <li><a href="#/spielhilfen/reisetag">Einen Reisetag würfeln</a></li>
+      <li><a href="#/spielhilfen/begegnungen">Zufallsbegegnungen</a></li>
+      <li><a href="#/spielhilfen/geruechte">Gerüchte am Weg</a></li>
+      <li><a href="#/spielhilfen/wetter">Wetter</a></li>
+      <li><a href="#/spielhilfen/namen">Namen und Eigenheiten</a></li></ul></nav>`;
+    const abschnitte = SH.abschnitte.map(a => {
+      const st = a.stationen.map(id => RW.stationen.find(s => s.id === id)).filter(Boolean);
+      return `<section class="sh-abschnitt" id="${a.id}">
+        <h3>${esc(a.name)}</h3>
+        <p class="leise">Meile ${a.meilen[0]} bis ${a.meilen[1]} · ${st.map(s => `<a href="#/station/${s.id}">${s.nr} ${esc(s.name)}</a>`).join(", ")} · Begegnung bei ${a.verkehr === 1 ? "1" : "1–" + a.verkehr} auf W6</p>
+        <p>${esc(a.kurz)}</p>
+        ${wuerfelKnopf("beg-" + a.id)}
+        <table class="w-tabelle" id="beg-${a.id}"><thead><tr><th>W20</th><th>Begegnung</th></tr></thead><tbody>${a.begegnungen.map(begegnungZeile).join("")}</tbody></table>
+      </section>`;
+    }).join("");
+    const geruechte = `<table class="w-tabelle" id="tab-geruechte"><thead><tr><th>W20</th><th>Gerücht</th></tr></thead><tbody>${SH.geruechte.map((g, i) => `<tr data-w="${i + 1}"><td class="w-zahl">${i + 1}</td><td>»${esc(g.text)}«${g.meister ? `<span class="meister-zeile">${esc(g.meister)}</span>` : ""}</td></tr>`).join("")}</tbody></table>`;
+    const wetter = SH.wetter.map(w => `<section class="sh-wetter" id="wetter-${w.id}"><h3>${esc(w.name)}</h3><p class="leise">${esc(w.monde)}</p>${wuerfelKnopf("tab-wetter-" + w.id)}
+      <table class="w-tabelle" id="tab-wetter-${w.id}"><thead><tr><th>W20</th><th>Wetter</th><th>Folgen</th></tr></thead><tbody>${w.tabelle.map(z => `<tr data-von="${z.von}" data-bis="${z.bis}"><td class="w-zahl">${z.von === z.bis ? z.von : z.von + "–" + z.bis}</td><td>${esc(z.wetter)}</td><td>${esc(z.folge)}</td></tr>`).join("")}</tbody></table></section>`).join("");
+    const N = SH.namen;
+    const liste = (titel, l, w) => `<div class="namen-liste"><h3>${titel}</h3><ol>${(l || []).map(x => `<li>${esc(x)}</li>`).join("")}</ol><p class="leise">W${w || (l || []).length}</p></div>`;
+    const auswahl = (name, opts) => `<select name="${name}">${opts.map(([v, t]) => `<option value="${v}">${esc(t)}</option>`).join("")}</select>`;
+    return {
+      html: `<h1>Spielhilfen</h1>
+      <p class="einleitung initiale">Für die Stunden zwischen den Stationen: wer einem begegnet, was man sich erzählt, wie das Wetter wird und wie der Mensch heißt, den die Runde gerade nach dem Weg fragt.</p>
+      <p>Alle Tabellen lassen sich mit einem W20 nutzen, am Tisch oder mit dem Knopf über jeder Tabelle. Die Wendungen und Hinweise in den Meisterinformationen sind Möglichkeiten. Wer leitet, wählt, verwirft oder erfindet neu.</p>
+      ${toc}
+      <h2 id="reisetag">Einen Reisetag würfeln</h2>
+      <p>Ein Wurf für Wetter, je ein W6 für Morgen, Mittag, Abend und Nacht, und ein Gerücht für den Abend in der Herberge. Wer in einer Station übernachtet, würfelt für die Nacht nicht.</p>
+      <form class="reisetag" onsubmit="return false">
+        <label>Abschnitt ${auswahl("abschnitt", SH.abschnitte.map(a => [a.id, a.name]))}</label>
+        <label>Jahreszeit ${auswahl("jahreszeit", SH.wetter.map(w => [w.id, w.name]))}</label>
+        <label class="haken"><input type="checkbox" name="station" checked> Nacht in einer Station</label>
+        <button type="button" class="reisetag-knopf">Reisetag würfeln</button>
+      </form>
+      <div class="reisetag-ergebnis" aria-live="polite"></div>
+
+      <h2 id="begegnungen">Zufallsbegegnungen</h2>
+      <p>Für jeden Tagesabschnitt einen W6: Bei einer 1 (im dichten Verkehr bei Gareth und vor Perricum bei 1 oder 2) kommt es zu einer Begegnung, dann W20 auf der Tabelle des Abschnitts. Was schon passiert ist, darf man streichen oder umdeuten. Einträge, die von der Nacht sprechen, passen tagsüber selten; dann einfach noch einmal würfeln.</p>
+      ${abschnitte}
+
+      <h2 id="geruechte">Gerüchte am Weg</h2>
+      <p>Was an den Herdfeuern der ganzen Strecke erzählt wird, zusätzlich zu den Gerüchten der einzelnen Stationen. Was davon stimmt, steht nirgends fest.</p>
+      ${wuerfelKnopf("tab-geruechte")}
+      ${geruechte}
+
+      <h2 id="wetter">Wetter</h2>
+      <p>Ein W20 am Morgen. Die Folgen gelten für Reisende auf der Straße, die Tagesstrecken stehen unter <a href="#/reisen/reisezeiten">Reisezeiten</a>. Wer zwei Tage hintereinander dasselbe würfelt, bekommt eben dasselbe Wetter.</p>
+      ${wetter}
+
+      <h2 id="namen">Namen und Eigenheiten</h2>
+      <p>Für Wirte, Fuhrleute, Händlerinnen und alle, die der Runde unterwegs über den Weg laufen. Familiennamen sind am Raulsweg oft Berufe, Orte oder Spottnamen.</p>
+      <div class="namen-werkzeug">
+        <button type="button" data-namen="person">Mittelreicher</button>
+        <button type="button" data-namen="tulamide">Tulamide</button>
+        <button type="button" data-namen="herberge">Herberge</button>
+        <button type="button" data-namen="haendler">Händler</button>
+        <button type="button" data-namen="reisend">Wer noch unterwegs ist</button>
+        <p class="namen-ergebnis" aria-live="polite"></p>
+      </div>
+      <div class="namen-raster">
+        ${liste("Vornamen, Männer", N.maenner)}${liste("Vornamen, Frauen", N.frauen)}${liste("Familiennamen", N.familien)}
+        ${liste("Tulamidisch, Männer", N.tulamidischM)}${liste("Tulamidisch, Frauen", N.tulamidischW)}${liste("Herbergen", N.herbergen)}
+        ${liste("Waren der Händler", N.waren)}${liste("Wer noch unterwegs ist", N.reisende)}${liste("Eigenheiten", N.eigenheiten)}
+      </div>`,
+      eigene: []
+    };
+  }
+
+  function spielhilfenBeleben() {
+    const seite = main.querySelector(".reisetag");
+    if (!seite && !main.querySelector(".wurf-knopf")) return;
+    main.querySelectorAll(".wurf-knopf").forEach(k => k.addEventListener("click", () => {
+      const tab = main.querySelector("#" + k.dataset.tabelle), w = wuerfel(+k.dataset.seiten || 20);
+      tab.querySelectorAll("tr.gewuerfelt").forEach(z => z.classList.remove("gewuerfelt"));
+      const zeile = [...tab.querySelectorAll("tbody tr")].find(z => z.dataset.w ? +z.dataset.w === w : w >= +z.dataset.von && w <= +z.dataset.bis);
+      if (!zeile) return;
+      zeile.classList.add("gewuerfelt");
+      const titel = zeile.querySelector("strong") ? zeile.querySelector("strong").textContent.replace(/\.$/, "") : zeile.cells[1].textContent.slice(0, 60);
+      k.nextElementSibling.textContent = `Gewürfelt: ${w}, ${titel}`;
+      zeile.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }));
+    const N = SH.namen, aus = main.querySelector(".namen-ergebnis");
+    const person = () => Math.random() < .5 ? `${ziehe(N.maenner)} ${ziehe(N.familien)}` : `${ziehe(N.frauen)} ${ziehe(N.familien)}`;
+    const tulamide = () => Math.random() < .5 ? `${ziehe(N.tulamidischM)} ibn ${ziehe(N.tulamidischM)}` : `${ziehe(N.tulamidischW)} saba ${ziehe(N.tulamidischW)}`;
+    const machen = {
+      person: () => `${person()}, ${ziehe(N.eigenheiten)}`,
+      tulamide: () => `${tulamide()}, ${ziehe(N.eigenheiten)}`,
+      herberge: () => `»${ziehe(N.herbergen)}«, Wirt oder Wirtin: ${person()}`,
+      haendler: () => `${Math.random() < .2 ? tulamide() : person()} handelt mit ${ziehe(N.waren)}`,
+      reisend: () => `${ziehe(N.reisende)}: ${person()}, ${ziehe(N.eigenheiten)}`
+    };
+    main.querySelectorAll("[data-namen]").forEach(k => k.addEventListener("click", () => { if (aus) aus.textContent = machen[k.dataset.namen](); }));
+    if (!seite) return;
+    const ergebnis = main.querySelector(".reisetag-ergebnis");
+    main.querySelector(".reisetag-knopf").addEventListener("click", () => {
+      const a = SH.abschnitte.find(x => x.id === seite.abschnitt.value), wz = SH.wetter.find(x => x.id === seite.jahreszeit.value);
+      const ww = wuerfel(20), wetter = wz.tabelle.find(z => ww >= z.von && ww <= z.bis);
+      const zeiten = SH.tagesabschnitte.filter(t => !(t === "Nacht" && seite.station.checked)).map(t => {
+        const w6 = wuerfel(6);
+        if (w6 > a.verkehr) return `<li><span class="rt-zeit">${t}</span> W6: ${w6}. Nichts Besonderes.</li>`;
+        // nachts nur, was in der Nacht spielt, tagsüber nur der Rest
+        const nachts = b => /nachts/i.test(b.text);
+        const gibt = a.begegnungen.some(b => nachts(b) === (t === "Nacht"));
+        let w = wuerfel(20), b = a.begegnungen[w - 1];
+        while (gibt && nachts(b) !== (t === "Nacht")) { w = wuerfel(20); b = a.begegnungen[w - 1]; }
+        return `<li class="rt-treffer"><span class="rt-zeit">${t}</span> W6: ${w6}, Begegnung, W20: ${w}. <strong>${esc(b.titel)}.</strong> ${esc(b.text)}${b.wendung ? `<span class="meister-zeile">Wendung: ${esc(b.wendung)}</span>` : ""}</li>`;
+      }).join("");
+      const gw = wuerfel(20), g = SH.geruechte[gw - 1];
+      ergebnis.innerHTML = `<p><strong>Wetter (${esc(wz.name)}, W20: ${ww}):</strong> ${esc(wetter.wetter)}. ${esc(wetter.folge)}</p>
+        <ul class="rt-liste">${zeiten}</ul>
+        <p><strong>Am Abend erzählt man sich (W20: ${gw}):</strong> »${esc(g.text)}«${g.meister ? `<span class="meister-zeile">${esc(g.meister)}</span>` : ""}</p>
+        <p class="leise">Unterwegs getroffen: ${esc(machen.reisend())}.</p>`;
+    });
   }
 
   /* ---------- Mächte und ihr Beziehungsnetz ---------- */
@@ -1137,6 +1268,7 @@
       else if (teil === "unterwegs") seite = seiteUnterwegs();
       else if (teil === "dokumente") seite = seiteDokumente();
       else if (teil === "chronik") seite = seiteChronik();
+      else if (teil === "spielhilfen") seite = seiteSpielhilfen();
       else if (teil === "karten") seite = seiteKarten();
       else if (teil === "karte") seite = seiteKarte(id);
       else if (teil === "bauplan") seite = seiteBauplan();
@@ -1152,6 +1284,7 @@
       bilderAbsichern();
       gebaeudeLaden();
       netzBeleben();
+      spielhilfenBeleben();
       const kopieren = document.getElementById("vorlage-kopieren");
       if (kopieren) kopieren.addEventListener("click", () => {
         const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };

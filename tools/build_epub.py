@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIEL = os.path.join(WURZEL, "export", "der-raulsweg.epub")
-DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte", "dokumente"]
+DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte", "dokumente", "spielhilfen"]
 
 # ---------------------------------------------------------------- Daten laden
 def daten_laden():
@@ -255,6 +255,29 @@ def chronik_html():
             teile.append(meister("Meisterinformation", f"<p>{e(c['meister'])}</p>"))
     return "".join(teile)
 
+def spielhilfen_html():
+    sh = RW.get("spielhilfen")
+    if not sh:
+        return "<h1>Spielhilfen</h1>"
+    w = lambda t: f"<i>{e(t)}</i>"
+    teile = ["<h1>Spielhilfen</h1><p class=\"einleitung\">Wer einem begegnet, was man sich erzählt, wie das Wetter wird und wie die Leute heißen. Alle Tabellen mit einem W20.</p>",
+             "<h2>Zufallsbegegnungen</h2><p>Für Morgen, Mittag, Abend und Nacht je einen W6. Bei einer 1 (im dichten Verkehr bei Gareth und vor Perricum bei 1 oder 2) kommt es zu einer Begegnung, dann W20 auf der Tabelle des Abschnitts. Wer in einer Station übernachtet, würfelt für die Nacht nicht. Die Wendungen sind Möglichkeiten für die Spielleitung.</p>"]
+    for a in sh["abschnitte"]:
+        st = ", ".join(f"{x['nr']} {x['name']}" for x in RW["stationen"] if x["id"] in a["stationen"])
+        teile.append(f"<h3>{e(a['name'])}</h3><p class=\"leise\">Meile {a['meilen'][0]} bis {a['meilen'][1]} · {e(st)}</p><p>{e(a['kurz'])}</p><ol>"
+                     + "".join(f"<li><b>{e(b['titel'])}.</b> {e(b['text'])}" + (f"<br/>{w('Wendung: ' + b['wendung'])}" if b.get("wendung") else "") + "</li>" for b in a["begegnungen"]) + "</ol>")
+    teile.append("<h2>Gerüchte am Weg</h2><ol>" + "".join(f"<li>»{e(g['text'])}«" + (f"<br/>{w(g['meister'])}" if g.get("meister") else "") + "</li>" for g in sh["geruechte"]) + "</ol>")
+    teile.append("<h2>Wetter</h2><p>Ein W20 am Morgen.</p>")
+    for z in sh["wetter"]:
+        teile.append(f"<h3>{e(z['name'])}</h3><p class=\"leise\">{e(z['monde'])}</p><ul>"
+                     + "".join(f"<li><b>{r['von'] if r['von'] == r['bis'] else str(r['von']) + '–' + str(r['bis'])}: {e(r['wetter'])}.</b> {e(r['folge'])}</li>" for r in z["tabelle"]) + "</ul>")
+    n = sh["namen"]
+    teile.append("<h2>Namen und Eigenheiten</h2>")
+    for titel, k in (("Vornamen, Männer", "maenner"), ("Vornamen, Frauen", "frauen"), ("Familiennamen", "familien"), ("Tulamidisch, Männer", "tulamidischM"),
+                     ("Tulamidisch, Frauen", "tulamidischW"), ("Herbergen", "herbergen"), ("Waren der Händler", "waren"), ("Wer noch unterwegs ist", "reisende"), ("Eigenheiten", "eigenheiten")):
+        teile.append(f"<h3>{titel}</h3><p>" + " · ".join(f"<b>{i}</b> {e(x)}" for i, x in enumerate(n.get(k, []), 1)) + "</p>")
+    return "".join(teile)
+
 def figur_kurz(f):
     return f"<li><b>{e(f['name'])}</b>, {e(f['rolle'])}. {e(f['kurz'])}</li>"
 
@@ -378,6 +401,7 @@ def baue_seiten():
             teile.append(f"<h2>{e(d['titel'])}</h2><p class=\"leise\">{e(d['art'])} · {e(d['herkunft'])}</p>" + kapitel_aufbereiten(d["text"]))
         seite("dokumente.xhtml", "Dokumente", "".join(teile))
     seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
+    seite("spielhilfen.xhtml", "Spielhilfen", spielhilfen_html())
     seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])
