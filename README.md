@@ -12,7 +12,7 @@ css/style.css         Gestaltung (Pergament, Nachtansicht, Druck)
 js/app.js             Hash-Router, Seiten, Register, automatische Querverweise, Suche
 data/stationen.js     Gareth, zwölf Stationen, Perricum, Reisezeiten
 data/kapitel.js       Titel, Kapitel (Überblick, Stationswesen, Reisen, Für Spielleitungen, Anhang), Glossar, Ausbaustufen
-data/maechte.js       Mächte am Weg
+data/maechte.js       Mächte am Weg und ihr Beziehungsnetz
 data/figuren.js       Figuren mit drei möglichen Geheimnissen
 data/tempel.js        Die zwölf Tempel
 data/wegpunkte.js     Orte und Szenen zwischen den Stationen
@@ -95,7 +95,7 @@ Nach jeder gespielten Geschichte einen Eintrag in `data/chronik.js` ergänzen (V
 2. Figuren (vorhanden; Porträts und Spielwerte offen)
 3. Gebäude und Orte – Feld `gebaeude: []`
 4. Karte und Strecke, Wegpunkte (vorhanden); Reisezeitrechner offen
-5. Mächte und Beziehungsnetz
+5. Mächte und Beziehungsnetz (vorhanden; `RW.beziehungen` in data/maechte.js, Profil unter `#/macht/<id>`)
 6. Spielhilfen (Begegnungen, Gerüchtetabellen, Wetter, Namen)
 7. Handouts (Geleitbrief, Leumundsbrief, Stempelheft)
 8. Geschichten am Raulsweg (Chronik, Szenario-Vorlage)

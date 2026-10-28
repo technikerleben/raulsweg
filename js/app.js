@@ -8,7 +8,7 @@
      #/stationen            Übersicht        #/station/<id>[/abschnitt]
      #/ort/<id>[/abschnitt] Gareth, Perricum
      #/unterwegs[/<id>]     Wegpunkte zwischen den Stationen (Anker: Wegpunkt oder etappe-<station>)
-     #/maechte[/<id>]       Mächte am Weg
+     #/maechte              Mächte am Weg mit Beziehungsnetz   #/macht/<id>   Profil
      #/figuren[/<station>]  Übersicht        #/figur/<id>
      #/tempel[/<id>]        Die zwölf Tempel
      #/dokumente[/<id>]     Edikt, Briefe, Verlautbarungen
@@ -66,8 +66,8 @@
   }));
   RW.maechte.forEach(m => eintragen({
     schluessel: "macht:" + m.id, art: "Macht am Weg", name: m.name,
-    begriffe: m.begriffe || [], href: `#/maechte/${m.id}`, kurz: kuerzen((m.beschreibung || [])[0] || ""),
-    text: [...(m.beschreibung || []), m.will, m.konflikt].join(" ")
+    begriffe: m.begriffe || [], href: `#/macht/${m.id}`, kurz: m.haltung || kuerzen((m.beschreibung || [])[0] || ""),
+    text: [...(m.beschreibung || []), m.will, m.konflikt, m.vertreter, m.hebel].join(" ")
   }));
   const figuren = RW.figuren || [];
   figuren.forEach(f => eintragen({
@@ -184,7 +184,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -353,7 +353,7 @@
 
   function navMarkieren(route) {
     const teile = route.split("/");
-    const basis = teile[0] === "figur" ? "figuren" : teile[0] === "karte" ? "karten"
+    const basis = teile[0] === "figur" ? "figuren" : teile[0] === "karte" ? "karten" : teile[0] === "macht" ? "maechte"
       : ["station", "ort"].includes(teile[0]) || route === "anhang/zum-mitnehmen" ? teile.slice(0, 2).join("/") : teile[0];
     nav.querySelectorAll("a[data-route]").forEach(a => {
       if (a.dataset.route === basis) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
@@ -772,29 +772,126 @@
     };
   }
 
-  function seiteMaechte() {
-    const liste = RW.maechte.map(m => {
-      const rv = sortiert(rueckverweise.get("macht:" + m.id)).filter(e => !e.schluessel.startsWith("glossar:"));
-      return `
-      <section class="macht" id="${m.id}">
-        <h2>${esc(m.name)}</h2>
-        <p class="macht-sitz">${esc(m.sitz)} ${m.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</p>
-        ${absaetze(m.beschreibung)}
-        <p><strong>Was sie wollen:</strong> ${esc(m.will)}</p>
-        <p><strong>Wo es reibt:</strong> ${esc(m.konflikt)}</p>
-        <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(m.meister)}</p></div>
-        ${figurenVon(m.id).length ? `<p class="leise">Figuren:</p><ul class="verbindungen">${figurenVon(m.id).map(f => `<li><a href="#/figur/${f.id}">${esc(f.name)}</a></li>`).join("")}</ul>` : ""}
-        ${rv.length ? `<p class="leise">Taucht auf bei:</p><ul class="verbindungen">${rv.map(e => `<li>${verweisLink(e)}</li>`).join("")}</ul>` : ""}
-        ${chronikBezug("macht:" + m.id)}
-      </section>`;
+  /* ---------- Mächte und ihr Beziehungsnetz ---------- */
+  const BEZIEHUNG = { buendnis: "Bündnis", geschaeft: "Geschäft", rivalitaet: "Rivalität", misstrauen: "Misstrauen" };
+  const beziehungen = RW.beziehungen || [];
+  const machtVon = id => RW.maechte.find(m => m.id === id);
+  const beziehungenVon = id => beziehungen.filter(b => b.a === id || b.b === id).map(b => ({ ...b, andere: machtVon(b.a === id ? b.b : b.a) }));
+
+  function beziehungsnetz(fokus) {
+    const W = 760, H = 560, cx = W / 2, cy = H / 2 + 4, r = 215;
+    const mitte = "kanzlei";
+    const ring = ["rabenmund", "adel", "neue-kontore", "mada-basari", "perricum", "beilunker", "traeger", "kirchen"].filter(machtVon);
+    const pos = { [mitte]: [cx, cy] };
+    ring.forEach((id, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / ring.length; pos[id] = [cx + r * 1.25 * Math.cos(a), cy + r * Math.sin(a)]; });
+    const kanten = beziehungen.filter(b => pos[b.a] && pos[b.b]).map(b => {
+      const [x1, y1] = pos[b.a], [x2, y2] = pos[b.b];
+      const aktiv = fokus && (b.a === fokus || b.b === fokus);
+      // Linien zwischen Ringknoten leicht nach außen biegen, damit keine durch die Mitte läuft
+      let mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      if (b.a !== mitte && b.b !== mitte) {
+        const dx = mx - cx, dy = my - cy, d = Math.hypot(dx, dy);
+        if (d < 40) { const l = Math.hypot(x2 - x1, y2 - y1); mx += -(y2 - y1) / l * 150; my += (x2 - x1) / l * 150; }
+        else { mx += dx / d * 30; my += dy / d * 30; }
+      }
+      const pfad = `M${x1.toFixed(1)} ${y1.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+      return `<g class="kante ${b.art}${aktiv ? " aktiv" : ""}" data-a="${b.a}" data-b="${b.b}"><title>${esc(machtVon(b.a).kurzname)} – ${esc(machtVon(b.b).kurzname)}: ${esc(BEZIEHUNG[b.art])}. ${esc(b.text)}</title>
+        <path d="${pfad}"/><path class="treffer" d="${pfad}"/></g>`;
     }).join("");
-    const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>${RW.maechte.map(m => `<li><a href="#/maechte/${m.id}">${esc(m.name)}</a></li>`).join("")}</ul></nav>`;
+    const knoten = Object.entries(pos).map(([id, [x, y]]) => {
+      const m = machtVon(id), name = m.kurzname || m.name, w = Math.max(96, name.length * 9.2 + 26);
+      return `<a href="#/macht/${id}" class="knoten${id === fokus ? " fokus" : ""}${id === mitte ? " mitte" : ""}" data-id="${id}" aria-label="${esc(m.name)}">
+        <rect x="${(x - w / 2).toFixed(1)}" y="${(y - 19).toFixed(1)}" width="${w.toFixed(1)}" height="38" rx="19"/>
+        <text x="${x.toFixed(1)}" y="${(y + 5.5).toFixed(1)}" text-anchor="middle">${esc(name)}</text></a>`;
+    }).join("");
+    const legende = Object.entries(BEZIEHUNG).map(([k, n]) => `<span><svg width="34" height="12" aria-hidden="true"><line class="${k}" x1="2" y1="6" x2="32" y2="6"/></svg>${n}</span>`).join("");
+    return `<figure class="netz"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Beziehungsnetz der Mächte am Weg">${kanten}${knoten}</svg>
+      <figcaption><div class="netz-legende">${legende}</div>Öffentlich bekannte Verhältnisse. Ein Klick auf eine Macht öffnet ihr Profil, ein Fingertipp oder Mauszeiger auf eine Linie zeigt, worum es geht.</figcaption></figure>`;
+  }
+  function netzBeleben() {
+    const svg = main.querySelector(".netz svg");
+    if (!svg) return;
+    const fokus = id => {
+      svg.classList.toggle("gedimmt", !!id);
+      svg.querySelectorAll(".kante").forEach(k => k.classList.toggle("hell", !!id && (k.dataset.a === id || k.dataset.b === id)));
+      svg.querySelectorAll(".knoten").forEach(k => k.classList.toggle("hell", !!id && (k.dataset.id === id
+        || [...svg.querySelectorAll(`.kante[data-a="${id}"], .kante[data-b="${id}"]`)].some(e => e.dataset.a === k.dataset.id || e.dataset.b === k.dataset.id))));
+    };
+    svg.querySelectorAll(".knoten").forEach(k => {
+      k.addEventListener("mouseenter", () => fokus(k.dataset.id));
+      k.addEventListener("focus", () => fokus(k.dataset.id));
+      k.addEventListener("mouseleave", () => fokus(null));
+      k.addEventListener("blur", () => fokus(null));
+    });
+  }
+
+  function seiteMaechte() {
+    const karten = RW.maechte.map(m => `
+      <li class="macht-karte">
+        <a class="macht-name" href="#/macht/${m.id}">${esc(m.name)}</a>
+        <span class="macht-sitz">${esc(m.sitz)} ${m.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</span>
+        <p>${esc(m.haltung || "")}</p>
+        <p class="leise">${beziehungenVon(m.id).length} Beziehungen · ${figurenVon(m.id).length} Figuren</p>
+      </li>`).join("");
     return {
       html: `<h1>Mächte am Weg</h1>
       <p class="einleitung initiale">Der Raulsweg gehört der Kaiserin. Verdienen wollen an ihm viele.</p>
-      <p>Keine dieser Parteien ist einfach gut oder böse, und keine handelt allein. Unter jeder Macht steht, an welchen Stationen sie auftaucht. Ausführliche Profile, Figuren und ein Beziehungsnetz folgen in einer späteren Ausbaustufe.</p>
-      ${toc}${liste}`,
+      <p>Keine dieser Parteien ist einfach gut oder böse, und keine handelt allein. Das Netz zeigt, was am Weg über ihre Verhältnisse bekannt ist. Was sich dahinter abspielen könnte, steht in den Meisterinformationen der einzelnen Profile, als Möglichkeiten, nicht als Wahrheit.</p>
+      ${beziehungsnetz()}
+      <h2>Die Mächte</h2>
+      <ul class="macht-raster">${karten}</ul>`,
       eigene: []
+    };
+  }
+
+  function seiteMacht(id) {
+    const i = RW.maechte.findIndex(m => m.id === id);
+    if (i < 0) return seiteFehlt();
+    const m = RW.maechte[i];
+    const vor = RW.maechte[(i - 1 + RW.maechte.length) % RW.maechte.length], nach = RW.maechte[(i + 1) % RW.maechte.length];
+    const bez = beziehungenVon(m.id);
+    const st = (m.stationen || []).map(sid => RW.stationen.find(s => s.id === sid)).filter(Boolean);
+    const doks = (m.dokumente || []).map(did => dokumente.find(d => d.id === did)).filter(Boolean);
+    const fig = figurenVon(m.id);
+    return {
+      html: `
+      <div class="figur-kopf"><div><h1>${esc(m.name)}</h1><p class="station-unterzeile">${esc(m.haltung || "Macht am Weg")}</p></div></div>
+      <div class="station-raster">
+        <div>
+          <p class="einleitung initiale">${esc((m.beschreibung || [])[0] || "")}</p>
+          ${absaetze((m.beschreibung || []).slice(1))}
+          <h3>Was sie wollen</h3><p>${esc(m.will)}</p>
+          <h3>Wo es reibt</h3><p>${esc(m.konflikt)}</p>
+          ${(m.mittel || []).length ? `<h3>Womit sie wirken</h3><ul>${m.mittel.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+          ${m.vertreter ? `<h3>Wer für sie spricht</h3><p>${esc(m.vertreter)}</p>` : ""}
+          ${m.stimme ? `<blockquote class="zitat"><p>»${esc(m.stimme)}«</p></blockquote>` : ""}
+          ${m.hebel ? `<h3>Wie man mit ihnen umgeht</h3><p>${esc(m.hebel)}</p>` : ""}
+          <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(m.meister)}</p>
+            ${(m.moeglichkeiten || []).length ? `<p class="moeglich-titel">Was hinter den Kulissen laufen könnte</p>${moeglichkeitenListe(m.moeglichkeiten, "macht:" + m.id)}<p class="moeglich-hinweis">Wähle eine, verbinde sie oder erfinde eine eigene.</p>` : ""}</div>
+          ${fig.length ? `<h2 id="figuren">Figuren</h2>${figurKarten(fig)}` : ""}
+          ${chronikBezug("macht:" + m.id)}
+        </div>
+        <aside class="seitenleiste">
+          <section>
+            <h3>Steckbrief</h3>
+            <dl>
+              <dt>Sitz</dt><dd>${esc(m.sitz)}</dd>
+              <dt>Herkunft</dt><dd>${m.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</dd>
+              ${st.length ? `<dt>Am Weg</dt><dd>${st.map(s => `<a href="#/station/${s.id}">${s.nr} ${esc(s.name)}</a>`).join("<br>")}</dd>` : m.id === "kirchen" ? `<dt>Am Weg</dt><dd><a href="#/tempel">alle zwölf Tempel</a></dd>` : ""}
+              ${doks.length ? `<dt>Dokument</dt><dd>${doks.map(d => `<a href="#/dokumente/${d.id}">${esc(d.titel)}</a>`).join("<br>")}</dd>` : ""}
+            </dl>
+          </section>
+          ${bez.length ? `<section><h3>Beziehungen</h3><ul class="beziehungen">${bez.map(b => `<li><span class="bez-art ${b.art}">${esc(BEZIEHUNG[b.art])}</span> <a href="#/macht/${b.andere.id}">${esc(b.andere.name)}</a><br><small>${esc(b.text)}</small></li>`).join("")}</ul></section>` : ""}
+          ${verbindungsBlock("macht:" + m.id)}
+        </aside>
+      </div>
+      <h2 id="netz">Im Netz der Mächte</h2>
+      ${beziehungsnetz(m.id)}
+      <nav class="blaettern" aria-label="Weitere Mächte">
+        <a href="#/macht/${vor.id}">← ${esc(vor.name)}</a>
+        <a href="#/macht/${nach.id}">${esc(nach.name)} →</a>
+      </nav>`,
+      eigene: ["macht:" + m.id]
     };
   }
 
@@ -844,7 +941,7 @@
             <dl>
               <dt>Rolle</dt><dd>${esc(f.rolle)}</dd>
               <dt>Anzutreffen</dt><dd>${ortHtml}</dd>
-              ${maechte.length ? `<dt>Gehört zu</dt><dd>${maechte.map(m => `<a href="#/maechte/${m.id}">${esc(m.name)}</a>`).join("<br>")}</dd>` : ""}
+              ${maechte.length ? `<dt>Gehört zu</dt><dd>${maechte.map(m => `<a href="#/macht/${m.id}">${esc(m.name)}</a>`).join("<br>")}</dd>` : ""}
             </dl>
           </section>
           ${andere.length ? `<section><h3>Ebenfalls hier</h3><ul class="verbindungen">${andere.map(x => `<li><a href="#/figur/${x.id}">${esc(x.name)}</a><br><small>${esc(x.rolle)}</small></li>`).join("")}</ul></section>` : ""}
@@ -1020,7 +1117,8 @@
   function zeigen() {
     const route = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
     const [teil, id, abschnitt] = route.split("/");
-    const einzelseite = ["station", "ort", "figur", "karte"].includes(teil);
+    if (teil === "maechte" && id) { location.replace(`#/macht/${id}`); return; }
+    const einzelseite = ["station", "ort", "figur", "karte", "macht"].includes(teil);
     const anker = einzelseite ? abschnitt : id;
     const seitenSchluessel = einzelseite ? `${teil}/${id}` : teil;
 
@@ -1032,6 +1130,7 @@
       else if (teil === "station") seite = seiteStation(id);
       else if (teil === "ort") seite = seiteOrt(id);
       else if (teil === "maechte") seite = seiteMaechte();
+      else if (teil === "macht") seite = seiteMacht(id);
       else if (teil === "figuren") seite = seiteFiguren();
       else if (teil === "figur") seite = seiteFigur(id);
       else if (teil === "tempel") seite = seiteTempel();
@@ -1043,16 +1142,16 @@
       else if (teil === "bauplan") seite = seiteBauplan();
       else seite = seiteFehlt();
       main.innerHTML = seite.html;
-      if (teil === "maechte" || teil === "tempel" || teil === "chronik" || teil === "unterwegs" || teil === "dokumente") {
+      if (teil === "tempel" || teil === "chronik" || teil === "unterwegs" || teil === "dokumente") {
         // Jeder Eintrag verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
-        if (teil === "maechte") main.querySelectorAll(".macht").forEach(sek => verlinken(sek, ["macht:" + sek.id]));
-        else if (teil === "tempel") main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
+        if (teil === "tempel") main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
         else if (teil === "unterwegs") main.querySelectorAll(".wegpunkt").forEach(sek => verlinken(sek, ["wegpunkt:" + sek.id]));
         else if (teil === "dokumente") main.querySelectorAll(".dokument").forEach(sek => verlinken(sek, ["dokument:" + sek.id]));
         else main.querySelectorAll(".chronik-eintrag").forEach(sek => verlinken(sek, []));
       } else verlinken(main, seite.eigene);
       bilderAbsichern();
       gebaeudeLaden();
+      netzBeleben();
       const kopieren = document.getElementById("vorlage-kopieren");
       if (kopieren) kopieren.addEventListener("click", () => {
         const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };

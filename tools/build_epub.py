@@ -333,13 +333,29 @@ def baue_seiten():
     if allgemein:
         seite("karten.xhtml", "Karten und Pläne", "<h1>Karten und Pläne</h1><p class=\"einleitung\">Die Strecke im Überblick und eine Station nach dem Edikt. Die Pläne der Schauplätze stehen bei den Stationen.</p>"
               + "".join(karte_html(c) for c in allgemein))
-    maechte = ["<h1>Mächte am Weg</h1><p class=\"einleitung\">Der Raulsweg gehört der Kaiserin. Verdienen wollen an ihm viele.</p>"]
+    BEZ = {"buendnis": "Bündnis", "geschaeft": "Geschäft", "rivalitaet": "Rivalität", "misstrauen": "Misstrauen"}
+    MNAME = {m["id"]: m["name"] for m in RW["maechte"]}
+    beziehungen = RW.get("beziehungen", [])
+    maechte = ["<h1>Mächte am Weg</h1><p class=\"einleitung\">Der Raulsweg gehört der Kaiserin. Verdienen wollen an ihm viele.</p>"
+               "<p>Keine dieser Parteien ist einfach gut oder böse, und keine handelt allein. Die Beziehungen stehen bei jeder Macht; was sich dahinter abspielen könnte, steht in den Meisterinformationen, als Möglichkeiten, nicht als Wahrheit.</p>"]
     for m in RW["maechte"]:
         figuren = [f["name"] for f in FIGUREN if m["id"] in (f.get("maechte") or [])]
+        stationen = [f"{x['nr']} {x['name']}" for x in RW["stationen"] if x["id"] in (m.get("stationen") or [])]
+        doks = [d["titel"] for d in RW.get("dokumente", []) if d["id"] in (m.get("dokumente") or [])]
+        bez = [(b, b["b"] if b["a"] == m["id"] else b["a"]) for b in beziehungen if m["id"] in (b["a"], b["b"])]
         maechte.append(f"<h2>{e(m['name'])}</h2><p class=\"leise\">{e(m['sitz'])} [{'Kanon' if m.get('kanon') else 'Ergänzung'}]</p>"
-                       f"{absaetze(m.get('beschreibung'))}<p><b>Was sie wollen:</b> {e(m['will'])}</p><p><b>Wo es reibt:</b> {e(m['konflikt'])}</p>"
+                       + (f"<p><i>{e(m['haltung'])}</i></p>" if m.get("haltung") else "")
+                       + f"{absaetze(m.get('beschreibung'))}<p><b>Was sie wollen:</b> {e(m['will'])}</p><p><b>Wo es reibt:</b> {e(m['konflikt'])}</p>"
+                       + (f"<p><b>Womit sie wirken:</b></p><ul>{''.join(f'<li>{e(x)}</li>' for x in m['mittel'])}</ul>" if m.get("mittel") else "")
+                       + (f"<p><b>Wer für sie spricht:</b> {e(m['vertreter'])}</p>" if m.get("vertreter") else "")
+                       + (f"<p class=\"einleitung\"><i>»{e(m['stimme'])}«</i></p>" if m.get("stimme") else "")
+                       + (f"<p><b>Wie man mit ihnen umgeht:</b> {e(m['hebel'])}</p>" if m.get("hebel") else "")
+                       + (f"<p><b>Am Weg:</b> {e(', '.join(stationen))}</p>" if stationen else "")
                        + (f"<p><b>Figuren:</b> {e(', '.join(figuren))}</p>" if figuren else "")
-                       + meister("Meisterinformation", f"<p>{e(m['meister'])}</p>"))
+                       + (f"<p><b>Dokument:</b> {e(', '.join(doks))}</p>" if doks else "")
+                       + (f"<p><b>Beziehungen</b></p><ul>{''.join(f'<li><b>{BEZ[b[0]['art']]}</b> mit {e(MNAME[b[1]])}: {e(b[0]['text'])}</li>' for b in bez)}</ul>" if bez else "")
+                       + meister("Meisterinformation", f"<p>{e(m['meister'])}</p>"
+                                 + (f"<p><b>Was hinter den Kulissen laufen könnte</b></p>{varianten(m['moeglichkeiten'], 'macht:' + m['id'])}" if m.get("moeglichkeiten") else "")))
     seite("maechte.xhtml", "Mächte am Weg", "".join(maechte))
 
     figuren = ["<h1>Figuren</h1><p class=\"einleitung\">Die Menschen, denen Reisende auf dem Raulsweg begegnen. Jede Figur hat ein Motiv und drei mögliche Geheimnisse.</p>"]

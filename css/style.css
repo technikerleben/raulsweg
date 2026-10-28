@@ -537,3 +537,42 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .tempel-bild img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border: 6px solid var(--blatt-hell); outline: 1px solid var(--linie); box-shadow: var(--schatten); background: var(--blatt-tief); }
 .tempel-bild figcaption { font-size: .9rem; color: var(--tinte-weich); margin-top: .45rem; font-style: italic; }
 .tempel-bild.klein { max-width: 30rem; }
+
+/* ---------- Mächte: Beziehungsnetz und Raster ---------- */
+.netz { margin: 1.5rem 0 2rem; }
+.netz svg { width: 100%; height: auto; display: block; }
+.netz .kante path { stroke: var(--tinte); stroke-width: 1.6; fill: none; opacity: .7; transition: opacity .15s; }
+.netz .kante path.treffer { stroke: transparent; stroke-width: 14; opacity: 1; }
+.netz .kante.buendnis path:not(.treffer) { stroke-width: 3; }
+.netz .kante.geschaeft path:not(.treffer) { stroke-width: 1.4; }
+.netz .kante.rivalitaet path:not(.treffer) { stroke-dasharray: 9 6; stroke: var(--rubrik); }
+.netz .kante.misstrauen path:not(.treffer) { stroke-dasharray: 2 5; stroke-linecap: round; stroke-width: 2.2; }
+.netz .kante.aktiv path:not(.treffer) { opacity: 1; stroke-width: 3; }
+.netz svg.gedimmt .kante path:not(.treffer) { opacity: .12; }
+.netz svg.gedimmt .kante.hell path:not(.treffer) { opacity: 1; }
+.netz svg.gedimmt .knoten { opacity: .35; }
+.netz svg.gedimmt .knoten.hell { opacity: 1; }
+.netz .knoten rect { fill: var(--blatt-hell); stroke: var(--tinte); stroke-width: 1.4; }
+.netz .knoten text { fill: var(--tinte); font-family: var(--schrift-kapit); font-size: 16px; }
+.netz .knoten.mitte rect { stroke-width: 2.4; }
+.netz .knoten.fokus rect { fill: var(--tinte); }
+.netz .knoten.fokus text { fill: var(--blatt); }
+.netz .knoten:hover rect, .netz .knoten:focus rect { stroke: var(--rubrik); stroke-width: 2.4; }
+.netz .knoten:focus { outline: none; }
+.netz figcaption { font-size: .9rem; color: var(--tinte-weich); margin-top: .5rem; }
+.netz-legende { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; margin-bottom: .3rem; }
+.netz-legende span { display: inline-flex; align-items: center; gap: .4rem; }
+.netz-legende line { stroke: var(--tinte); stroke-width: 1.6; }
+.netz-legende line.buendnis { stroke-width: 3; }
+.netz-legende line.rivalitaet { stroke-dasharray: 9 6; stroke: var(--rubrik); }
+.netz-legende line.misstrauen { stroke-dasharray: 2 5; stroke-linecap: round; stroke-width: 2.2; }
+.macht-raster { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; }
+.macht-karte { border: 1px solid var(--linie); padding: .9rem 1rem; display: flex; flex-direction: column; gap: .3rem; }
+.macht-karte p { margin: 0; }
+.macht-name { font-size: 1.15rem; text-decoration: none; }
+.macht-karte .macht-sitz { font-size: .85rem; }
+.beziehungen { list-style: none; padding: 0; margin: 0; }
+.beziehungen li { margin-bottom: .7rem; }
+.bez-art { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; padding: .05rem .35rem; border: 1px solid var(--linie); }
+.bez-art.rivalitaet { color: var(--rubrik); border-color: var(--rubrik); }
+.bez-art.buendnis { border-color: var(--tinte); font-weight: bold; }
