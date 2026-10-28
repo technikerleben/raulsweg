@@ -51,6 +51,10 @@ Endung `.webp`, `.jpg`, `.jpeg` oder `.png`; die Seite probiert sie in dieser Re
 
 Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
 
+## Tempelbilder
+
+Verzeichnis: `img/tempel/`, Dateiname = Tempel-ID aus `data/tempel.js` (Liste in `img/tempel/LIESMICH.md`), `.webp` im Querformat 3:2. Fehlt ein Bild, bleibt die Stelle leer.
+
 ## Ansichten zu den Plänen
 
 Verzeichnis: `img/gebaeude/`, Dateiname = ID des Plans (z. B. `rabicum.webp`, weitere als `rabicum-2.webp` …). Die Liste der IDs steht in `img/gebaeude/LIESMICH.md`. Die Bilder erscheinen automatisch beim Plan und auf der Stationsseite.

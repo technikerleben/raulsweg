@@ -531,3 +531,9 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .gebaeude-bilder h3 { margin: 0 0 .2rem; }
 .gebaeude-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .8rem; margin-top: .6rem; }
 .gebaeude-raster img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border: 4px solid var(--blatt-hell); outline: 1px solid var(--linie); box-shadow: var(--schatten); }
+
+/* ---------- Tempelbilder ---------- */
+.tempel-bild { margin: .8rem 0 1.1rem; max-width: 52rem; }
+.tempel-bild img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border: 6px solid var(--blatt-hell); outline: 1px solid var(--linie); box-shadow: var(--schatten); background: var(--blatt-tief); }
+.tempel-bild figcaption { font-size: .9rem; color: var(--tinte-weich); margin-top: .45rem; font-style: italic; }
+.tempel-bild.klein { max-width: 30rem; }

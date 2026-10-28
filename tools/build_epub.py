@@ -271,9 +271,14 @@ def weg_html(h):
         teile.append("<p>Auf dieser kurzen Etappe gibt es keinen eigenen Halt.</p>")
     return "".join(teile)
 
+def tempel_bild(t):
+    pfad = bild_hinzufuegen(f"img/tempel/{t['id']}", f"tempel-{t['id']}", 760)
+    return f'<div class="bild"><img src="{pfad}" alt="{e(t["name"])}" style="width:100%"/></div><p class="leise">Stimmungsbild: {e(t["name"])}</p>' if pfad else ""
+
 def tempel_html(t):
     return (f"<h2>{e(t['name'])}</h2>"
             f"<p class=\"leise\">{e(t['art'])} {e(GENITIV.get(t['gottheit'], t['gottheit']))} [{STATUS.get(t['zustand'], t['zustand'])}]</p>"
+            + tempel_bild(t) +
             f"{absaetze(t.get('beschreibung'))}"
             f"<p><b>Brauch:</b> {e(t['brauch'])}</p>"
             f"<p><b>Stempel:</b> {e(t['stempel'])}</p>"

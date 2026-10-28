@@ -460,11 +460,16 @@
 
   function bilderAbsichern() {
     main.querySelectorAll("img[data-basis]").forEach(img => {
+      if (img.dataset.ausblenden !== undefined) {
+        const zeigen = () => { const f = img.closest(img.dataset.ausblenden || "figure"); if (f) f.hidden = false; };
+        if (img.complete && img.naturalWidth) zeigen(); else img.addEventListener("load", zeigen);
+      }
       img.addEventListener("error", () => {
         const n = Number(img.dataset.versuch) + 1;
         if (n < BILD_ENDUNGEN.length) { img.dataset.versuch = n; img.src = `${img.dataset.basis}.${BILD_ENDUNGEN[n]}`; }
         else {
           const platz = document.createElement("div");
+          if (img.dataset.ausblenden !== undefined) { (img.closest(img.dataset.ausblenden || "figure") || img).remove(); return; }
           if (img.dataset.monogramm) {
             platz.className = "monogramm";
             platz.setAttribute("aria-hidden", "true");
@@ -478,6 +483,12 @@
       });
     });
   }
+
+  // Tempelbild: img/tempel/<tempel-id>.webp, verschwindet still, solange es fehlt
+  const tempelBild = (t, klein) => `<figure class="tempel-bild${klein ? " klein" : ""}" hidden>
+      <img data-basis="img/tempel/${t.id}" data-versuch="0" data-ausblenden="figure" src="img/tempel/${t.id}.${BILD_ENDUNGEN[0]}" alt="${esc(t.name)}">
+      <figcaption><span class="bild-art">Stimmungsbild</span> ${esc(t.name)}</figcaption>
+    </figure>`;
 
   const initialen = name => name.split(/\s+/).filter(w => /^\p{Lu}/u.test(w)).map(w => w[0]).slice(0, 2).join("");
   function moeglichkeitenListe(liste, schluessel) {
@@ -505,6 +516,7 @@
     return `<section class="tempel-kasten" id="${t.id}">
         <h2>${esc(t.name)}</h2>
         <p class="tempel-zeile">${esc(tempelArt(t))} ${bauMarke({ status: t.zustand })}</p>
+        ${tempelBild(t, true)}
         <p>${esc(t.kurz)}</p>
         <dl class="tempel-daten">
           <dt>Brauch</dt><dd>${esc(t.brauch)}</dd>
@@ -858,6 +870,7 @@
       <section class="tempel-eintrag" id="${t.id}">
         <h2>${esc(t.name)}</h2>
         <p class="tempel-zeile">${esc(tempelArt(t))} in <a href="#/station/${st.id}">${st.nr} ${esc(st.name)}</a> ${bauMarke({ status: t.zustand })}</p>
+        ${tempelBild(t)}
         ${absaetze(t.beschreibung)}
         <dl class="tempel-daten">
           <dt>Brauch</dt><dd>${esc(t.brauch)}</dd>
