@@ -4,6 +4,17 @@
    Tinte in Sepia, Rubriken in Zinnoberrot, Siegel in Rot und Indigo.
    ========================================================== */
 
+/* ---------- Schriften (SIL Open Font License, fonts/LICENSE-OFL.txt) ---------- */
+@font-face { font-family: "Alegreya"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/alegreya-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fonts/alegreya-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/alegreya-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/alegreya-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya"; font-style: italic; font-weight: 700; font-display: swap; src: url("../fonts/alegreya-latin-700-italic.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya SC"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/alegreya-sc-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya SC"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/alegreya-sc-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Grenze Gotisch"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/grenze-gotisch-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Grenze Gotisch"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/grenze-gotisch-latin-700-normal.woff2") format("woff2"); }
+
 :root {
   --grund: #D9C7A1;          /* Tisch hinter dem Blatt */
   --blatt: #EFE3C6;          /* Pergamentblatt */
@@ -96,12 +107,28 @@ a:hover { color: var(--rubrik); }
 }
 .marke-text { font-family: var(--schrift-titel); font-size: 1.65rem; line-height: 1; }
 .kopf-werkzeuge { display: flex; align-items: center; gap: .9rem; }
+/* Schaltflächen: .knopf für alles Klickbare, das eine Handlung auslöst oder wie eine Schaltfläche wirken soll */
 .knopf {
-  font: inherit; font-size: .95rem; color: var(--tinte); cursor: pointer;
-  background: transparent; border: 1px solid var(--linie); border-radius: 3px; padding: .25rem .7rem;
+  display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem;
+  font: inherit; font-family: var(--schrift-kapit); font-size: .95rem; line-height: 1.2; text-decoration: none; cursor: pointer;
+  color: var(--tinte); background: var(--blatt-hell); border: 1px solid var(--tinte-weich); border-radius: 3px; padding: .4rem .95rem;
 }
-.knopf:hover { background: var(--blatt-hell); }
-.menue-knopf { display: none; }
+.knopf:hover { color: var(--rubrik); border-color: var(--rubrik); }
+.knopf small { font-family: var(--schrift-text); font-size: .8rem; color: var(--tinte-weich); }
+.knopf-voll { background: var(--tinte); color: var(--blatt); border-color: var(--tinte); }
+.knopf-voll:hover { background: var(--rubrik); border-color: var(--rubrik); color: var(--blatt); }
+.knopf-voll small { color: var(--blatt-tief); }
+.knopf-pille { border-radius: 999px; border-color: var(--linie); min-height: 2.25rem; padding: .25rem .85rem; font-size: .9rem; }
+.knopf-pille span { color: var(--tinte-weich); font-size: .8rem; }
+.knopf-pille[aria-pressed="true"] { background: var(--tinte); color: var(--blatt); border-color: var(--tinte); }
+.knopf-pille[aria-pressed="true"] span { color: var(--blatt-tief); }
+.knopf-reihe { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; max-width: none; }
+.kopf .knopf { min-height: 2.25rem; padding: .25rem .75rem; font-family: var(--schrift-text); background: transparent; border-color: var(--linie); }
+.kopf .knopf:hover { background: var(--blatt-hell); color: var(--tinte); }
+.kopf .menue-knopf { display: none; }
+
+/* Nur für Vorlesehilfen sichtbar */
+.nur-vorlesen { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .umschalter { display: flex; align-items: center; gap: .5rem; font-size: .95rem; cursor: pointer; user-select: none; }
 .umschalter input { position: absolute; opacity: 0; width: 1px; height: 1px; }
@@ -162,7 +189,8 @@ h2::after {
     radial-gradient(circle, var(--rubrik) 2.5px, transparent 3px) center / 6px 6px no-repeat,
     linear-gradient(var(--linie), var(--linie)) center / 100% 1px no-repeat;
 }
-h3 { font-family: var(--schrift-kapit); font-weight: 700; font-size: 1.2rem; margin: 1.9rem 0 .35rem; color: var(--rubrik); }
+h3, h2.klein { font-family: var(--schrift-kapit); font-weight: 700; font-size: 1.2rem; line-height: 1.3; margin: 1.9rem 0 .35rem; color: var(--rubrik); }
+h2.klein::after { display: none; }
 p, ul, ol, dl, .vorlese, .meister, blockquote { max-width: var(--mass); }
 p { margin: 0 0 1rem; hyphens: auto; }
 .einleitung { font-size: 1.27rem; line-height: 1.55; }
@@ -173,9 +201,6 @@ p { margin: 0 0 1rem; hyphens: auto; }
 .leise { color: var(--tinte-weich); font-size: .95rem; }
 ul, ol { padding-left: 1.3rem; }
 li { margin-bottom: .35rem; }
-
-.zier { border: 0; text-align: center; margin: 2.5rem 0; max-width: var(--mass); }
-.zier::before { content: "❦"; font-size: 1.4rem; color: var(--rubrik); opacity: .75; }
 
 /* ---------- Querverweise ---------- */
 a.qv { color: var(--verweis); text-decoration: underline dotted; text-decoration-thickness: 1.5px; text-underline-offset: .22em; }
@@ -195,7 +220,7 @@ a.qv, .verbindungen a, .glossar a { hyphens: manual; }
 .titel {
   position: relative;
   margin: -2.5rem calc(-1 * clamp(1.1rem, 4vw, 3.75rem)) 2.5rem;
-  min-height: 22rem; background: var(--indigo) center / cover no-repeat;
+  min-height: 22rem; background: var(--indigo) url("../img/titel.webp") center / cover no-repeat;
   display: flex; align-items: flex-end; color: #F6EBD3;
 }
 .titel::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(25,18,10,.85), rgba(25,18,10,.15) 70%); }
@@ -335,23 +360,28 @@ td.zahl, th.zahl { text-align: right; font-variant-numeric: tabular-nums; }
 .verbindungen li { margin-bottom: .3rem; }
 .verbindungen small { color: var(--tinte-weich); }
 
-.blaettern { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--linie); }
-.blaettern a { text-decoration: none; }
+.blaettern { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--linie); }
+.blatt-knopf {
+  display: block; padding: .7rem 1rem; text-decoration: none; color: var(--tinte); line-height: 1.3;
+  background: var(--blatt-hell); border: 1px solid var(--linie); border-radius: 3px;
+}
+.blatt-knopf:hover { border-color: var(--rubrik); color: var(--rubrik); }
+.blatt-knopf.weiter { text-align: right; grid-column: 2; }
+.blatt-richtung { display: block; font-family: var(--schrift-kapit); font-size: .85rem; color: var(--tinte-weich); }
+.blatt-knopf.zurueck .blatt-richtung::before { content: "← "; }
+.blatt-knopf.weiter .blatt-richtung::after { content: " →"; }
 
 /* ---------- Übersichten ---------- */
 .stationsliste { list-style: none; padding: 0; max-width: 52rem; }
 .stationsliste li { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--linie); margin: 0; }
 .stationsliste .station-siegel { width: 2.6rem; height: 2.6rem; font-size: 1rem; margin: 0; }
-.stationsliste h3 { margin: 0 0 .2rem; font-family: var(--schrift-text); font-size: 1.25rem; color: var(--tinte); }
-.stationsliste h3 a { color: inherit; text-decoration: none; }
-.stationsliste h3 a:hover { color: var(--rubrik); }
+.stationsliste h2.klein { margin: 0 0 .2rem; font-family: var(--schrift-text); font-size: 1.25rem; color: var(--tinte); }
+.stationsliste h2 a { color: inherit; text-decoration: none; }
+.stationsliste h2 a:hover { color: var(--rubrik); }
 .stationsliste p { margin: .25rem 0 0; }
 .zeile-marken { display: flex; flex-wrap: wrap; gap: .4rem; font-size: .9rem; align-items: center; }
 
-.macht { margin-bottom: 1rem; max-width: var(--mass); padding-bottom: 1rem; border-bottom: 1px solid var(--linie); }
-.macht-sitz { color: var(--tinte-weich); margin-top: -.3rem; }
-.macht .verbindungen { display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
-.macht .verbindungen li { margin: 0; }
+.macht-sitz { color: var(--tinte-weich); }
 .ziel-markiert { animation: aufleuchten 1.6s ease-out; }
 @keyframes aufleuchten { from { background: color-mix(in srgb, var(--gold) 30%, transparent); } to { background: transparent; } }
 
@@ -363,7 +393,7 @@ td.zahl, th.zahl { text-align: right; font-variant-numeric: tabular-nums; }
 .stufen li { display: grid; grid-template-columns: 2.6rem 1fr; gap: .9rem; margin-bottom: 1.1rem; }
 .stufen .stufe-nr { width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border: 2px solid var(--rubrik); color: var(--rubrik); border-radius: 50%; font-weight: 700; }
 .stufen li.erledigt .stufe-nr { background: var(--rubrik); color: var(--blatt); }
-.stufen h3 { margin: 0; color: var(--tinte); font-family: var(--schrift-text); font-size: 1.12rem; }
+.stufen h2.klein { margin: 0; color: var(--tinte); font-family: var(--schrift-text); font-size: 1.12rem; }
 .stufen p { margin: .2rem 0 0; }
 
 
@@ -422,13 +452,13 @@ section[id] > h2 a:hover { color: var(--rubrik); }
 @media (max-width: 780px) {
   .rahmen { grid-template-columns: minmax(0, 1fr); padding: 0; gap: 0; }
   main { border-radius: 0; box-shadow: none; padding-top: 1.75rem; }
-  .menue-knopf { display: inline-block; }
+  .kopf .menue-knopf { display: inline-flex; }
   .navigation {
-    display: none; position: fixed; top: 3.4rem; left: 0; right: 0; bottom: 0; max-height: none; overflow-y: auto;
+    display: none; position: fixed; top: 3.4rem; left: 0; right: 0; bottom: 0; max-height: none; overflow-y: auto; align-self: auto;
     background: var(--grund); z-index: 25; padding: 1rem 1.25rem 2rem;
   }
   .navigation.offen { display: block; }
-  .umschalter > span:last-child { display: none; }
+  .umschalter > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .knopf-text { display: none; }
   .kopf { padding: .5rem .9rem; }
   .kopf-werkzeuge { gap: .6rem; }
@@ -440,12 +470,7 @@ section[id] > h2 a:hover { color: var(--rubrik); }
   .figur-kopf .portraet { width: 5.5rem; height: 7rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-@media print {
-  .kopf, .navigation, .blaettern, .fuss, .vorschau { display: none; }
-  .rahmen { display: block; padding: 0; }
-  body::before { display: none; }
-  main { box-shadow: none; background: #fff; }
-}
+
 
 /* ---------- Chronik ---------- */
 .chronik-eintrag { max-width: var(--mass); padding-bottom: 1rem; border-bottom: 1px solid var(--linie); }
@@ -465,7 +490,6 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .moeglichkeiten li.gilt::before { background: var(--meister-akzent); color: var(--meister-grund, #2a2a33); }
 .gilt-marke { display: block; font-size: .85rem; font-style: italic; margin-top: .15rem; }
 .nav-zahl { font-size: .8rem; color: var(--tinte-weich); }
-@media print { .vorlage-kopf button { display: none; } }
 
 /* ---------- Karten und Pläne ---------- */
 .karte-gross { margin: 1rem 0 1.4rem; }
@@ -499,6 +523,7 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .etappe-zeile { color: var(--tinte-weich); font-style: italic; margin-top: -.4rem; }
 .wegpunkt { margin: 1rem 0 0 .2rem; padding-left: .9rem; border-left: 3px solid var(--linie); }
 .wegpunkt h3 { margin: 0; }
+.wegpunkt h3 .typ-zeichen { margin-right: .5rem; }
 .weg-szene { font-size: .98rem; }
 @media (max-width: 780px) { .weg-liste li { flex-direction: column; gap: 0; } .weg-meile { flex: none; } }
 
@@ -513,7 +538,6 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .dok-schluss { text-align: right; font-style: italic; margin-top: 1.4rem; }
 .dok-siegel { display: inline-block; margin-top: .6rem; padding: .5rem .9rem; border: 2px solid var(--rubrik); border-radius: 50%; color: var(--rubrik); font-family: var(--schrift-kapit); font-style: normal; font-size: .82rem; transform: rotate(-6deg); }
 @media (max-width: 780px) { .dok-blatt { padding: 1.1rem 1rem; } }
-@media print { .dok-blatt { box-shadow: none; } }
 
 /* ---------- Titelseite: Wegweiser-Gruppen, Sprungliste ---------- */
 .wegweiser-gruppe { font-family: var(--schrift-kapit); color: var(--rubrik); font-size: 1.05rem; margin: 1.4rem 0 .5rem; font-weight: 500; }
@@ -582,14 +606,8 @@ pre.vorlage { overflow-x: auto; background: var(--blatt); border: 1px solid var(
 .w-tabelle tr.gewuerfelt td { background: var(--blatt-hell); box-shadow: inset 0 2px 0 var(--gold), inset 0 -2px 0 var(--gold); }
 .meister-zeile { display: none; }
 body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3rem .6rem; font-size: .92rem; font-style: italic; background: var(--meister-grund); color: var(--meister-text); border-left: 3px solid var(--meister-akzent); }
+.meister-zeile a, .meister-zeile a.qv { color: var(--meister-akzent); }
 .wurf { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem; margin: .6rem 0 .2rem; }
-.wurf-knopf, .reisetag-knopf, .namen-werkzeug button {
-  font: inherit; font-family: var(--schrift-kapit); font-size: .95rem; cursor: pointer;
-  background: var(--blatt-hell); color: var(--tinte); border: 1px solid var(--tinte-weich); border-radius: 2px; padding: .35rem .9rem;
-}
-.wurf-knopf:hover, .reisetag-knopf:hover, .namen-werkzeug button:hover { border-color: var(--rubrik); color: var(--rubrik); }
-.reisetag-knopf { background: var(--tinte); color: var(--blatt); border-color: var(--tinte); }
-.reisetag-knopf:hover { background: var(--rubrik); color: var(--blatt); }
 .wurf-ergebnis { font-style: italic; color: var(--tinte-weich); }
 .reisetag { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .8rem 1.2rem; margin: 1rem 0; padding: 1rem 1.1rem; border: 1px solid var(--linie); background: var(--blatt-hell); max-width: var(--mass); }
 .reisetag label { display: flex; flex-direction: column; gap: .2rem; font-family: var(--schrift-kapit); font-size: .9rem; color: var(--tinte-weich); }
@@ -609,10 +627,9 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
 .namen-liste ol { margin: 0; padding-left: 2rem; font-size: .95rem; }
 .namen-liste ol li::marker { color: var(--rubrik); font-family: var(--schrift-kapit); }
 .namen-liste .leise { margin: .2rem 0 0; font-size: .85rem; }
-@media print { .wurf, .reisetag, .reisetag-ergebnis, .namen-werkzeug { display: none; } }
 
 /* ---------- Wegpunkt-Arten ---------- */
-.typ-zeichen { display: inline-block; width: .8rem; height: .8rem; margin-right: .5rem; vertical-align: .05em; background: var(--rubrik); border-radius: 50%; }
+.typ-zeichen { display: inline-block; flex: none; width: .8rem; height: .8rem; margin-right: .1rem; vertical-align: .05em; background: var(--rubrik); border-radius: 50%; }
 .typ-zeichen.typ-bauwerk { border-radius: 1px; background: var(--tinte); }
 .typ-zeichen.typ-landmarke { border-radius: 0; background: var(--gold); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
 .typ-zeichen.typ-natur { background: var(--feld); clip-path: polygon(50% 0, 90% 70%, 60% 70%, 60% 100%, 40% 100%, 40% 70%, 10% 70%); border-radius: 0; }
@@ -624,7 +641,32 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
 .wegpunkt.typ-abseits { border-left-style: dashed; border-left-color: var(--indigo); }
 .weg-abseits { font-size: .92rem; color: var(--indigo); margin: .2rem 0 .4rem; }
 .weg-filter { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.2rem 0; }
-.weg-filter button { font: inherit; font-family: var(--schrift-kapit); font-size: .9rem; cursor: pointer; background: var(--blatt-hell); color: var(--tinte); border: 1px solid var(--linie); border-radius: 999px; padding: .25rem .8rem; display: inline-flex; align-items: center; }
-.weg-filter button span { margin-left: .35rem; color: var(--tinte-weich); font-size: .8rem; }
-.weg-filter button[aria-pressed="true"] { background: var(--tinte); color: var(--blatt); border-color: var(--tinte); }
-.weg-filter button[aria-pressed="true"] span { color: var(--blatt-tief); }
+
+/* ---------- Kleinteile: Aufklapper, Nach oben ---------- */
+.aufklapp { max-width: var(--mass); margin: 0 0 1.5rem; border: 1px solid var(--linie); background: var(--blatt-hell); padding: .2rem 1rem; }
+.aufklapp summary { cursor: pointer; font-family: var(--schrift-kapit); color: var(--rubrik); padding: .5rem 0; min-height: 2.25rem; }
+.aufklapp[open] summary { margin-bottom: .4rem; }
+.nach-oben { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; box-shadow: var(--schatten); }
+.nach-oben[hidden] { display: none; }
+@media (max-width: 780px) {
+  .navigation a { padding: .45rem .5rem; }
+  .blaettern { grid-template-columns: 1fr; }
+  .blatt-knopf.weiter { grid-column: 1; }
+  body.menue-offen { overflow: hidden; }
+}
+
+/* ---------- Druck ---------- */
+@media print {
+  .kopf, .navigation, .blaettern, .fuss, .vorschau, .nach-oben, .knopf-reihe, .wurf, .reisetag, .reisetag-ergebnis,
+  .namen-werkzeug, .weg-filter, .vorlage-kopf button, .sprungliste, .band-huelle, .aufklapp { display: none !important; }
+  .rahmen { display: block; padding: 0; }
+  body { background: #fff; }
+  body::before { display: none; }
+  main { box-shadow: none; background: #fff; padding: 0; }
+  .dok-blatt { box-shadow: none; }
+  a { color: inherit; text-decoration: none; }
+  /* Einzeldruck: nur das gewählte Dokument oder den Plan */
+  body.druck-einzeln main > :not(.druck-ziel) { display: none !important; }
+  body.druck-einzeln .druck-ziel .dok-kurz { display: none; }
+  body.druck-einzeln .karte-gross img { border: 0; filter: none !important; }
+}

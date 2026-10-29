@@ -13,8 +13,11 @@
      #/tempel[/<id>]        Die zwölf Tempel
      #/dokumente[/<id>]     Edikt, Briefe, Verlautbarungen
      #/karten               Karten und Pläne  #/karte/<id>
+     #/spielhilfen[/<id>]   Begegnungen, Gerüchte, Wetter, Namen (Anker: Abschnitt oder Tabelle)
      #/chronik[/<id>]       Chronik der gespielten Geschichten
      #/bauplan              Ausbaustufen
+   Einzelseiten (station, ort, figur, karte, macht) nutzen den dritten Pfadteil als Anker,
+   alle anderen Seiten den zweiten.
    Daten: data/*.js (window.RW), Reihenfolge der Skripte in index.html
    ========================================================== */
 (function () {
@@ -40,12 +43,14 @@
   const ohneMeister = html => String(html).replace(/<div class="meister">[\s\S]*?<\/div>/g, " ");
   const statusText = { fertig: "fertig", erweiterung: "Erweiterung", rohbau: "Rohbau" };
 
+  const haltVon = id => RW.stationen.find(s => s.id === id);
+  const sanft = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
   const vorgaenger = h => RW.stationen.find(s => s.nr === h.nr - 1);
   const meileText = h => (h.schaetzung ? "~" : "") + h.meile;
   const etappeText = h => h.etappe == null ? "–" : (h.schaetzung || (vorgaenger(h) || {}).schaetzung ? "~" : "") + h.etappe;
-  const kanonMarke = h => h.kanon
-    ? `<span class="marke-kanon" title="Ort aus offiziellen Quellen">Kanon</span>`
-    : `<span class="marke-eigen" title="Für diesen Band ergänzter Ort">Ergänzung</span>`;
+  const kanonMarke = x => x.kanon
+    ? `<span class="marke-kanon" title="Aus offiziellen Quellen">Kanon</span>`
+    : `<span class="marke-eigen" title="Für diesen Band ergänzt">Ergänzung</span>`;
   const bauMarke = h => h.status ? `<span class="bau bau-${h.status}">${statusText[h.status]}</span>` : "";
 
   /* ==========================================================
@@ -84,7 +89,7 @@
   const WEG_TYP = { siedlung: "Dörfer und Höfe", bauwerk: "Bauwerke", landmarke: "Felsen und Landmarken", natur: "Bäume und Wiesen", abseits: "Abseits der Straße" };
   const BAU_ARTEN = ["Adelssitz", "Brücke", "Straßenbaustelle", "Gasthaus", "Kontrollstelle"];
   wegpunkte.forEach(w => { if (!w.typ) w.typ = BAU_ARTEN.includes(w.art) ? "bauwerk" : "siedlung"; });
-  const haltName = id => (RW.stationen.find(s => s.id === id) || {}).name || id;
+  const haltName = id => (haltVon(id) || {}).name || id;
   wegpunkte.forEach(w => eintragen({
     schluessel: "wegpunkt:" + w.id, art: `${w.art} auf dem Weg nach ${haltName(w.nach)}`, name: w.name,
     begriffe: [w.name, ...(w.begriffe || []), ...(w.name.includes("„") ? [w.name.replace(/^.*„|“.*$/g, "")] : []), ...(/^(Der|Die|Das) /.test(w.name) ? [w.name.replace(/^(Der|Die|Das) /, "")] : [])],
@@ -152,7 +157,7 @@
      Chronik: gespielte Geschichten und was sie festgelegt haben
      ========================================================== */
   const chronik = RW.chronik || [];
-  const kartenNr = c => c.station ? (RW.stationen.find(s => s.id === c.station) || {}).nr ?? 99 : -1;
+  const kartenNr = c => c.station ? (haltVon(c.station) || {}).nr ?? 99 : -1;
   const karten = (RW.karten || []).slice().sort((a, b) => kartenNr(a) - kartenNr(b));
   const kartenAn = id => karten.filter(c => c.station === id);
   const haltSchluessel = id => (orte.some(o => o.id === id) ? "ort:" : "station:") + id;
@@ -217,7 +222,7 @@
 
   /* ---------- Vorschau beim Überfahren ---------- */
   const vorschau = document.createElement("div");
-  vorschau.className = "vorschau"; vorschau.setAttribute("role", "tooltip");
+  vorschau.className = "vorschau"; vorschau.setAttribute("aria-hidden", "true");
   document.body.append(vorschau);
   let vorschauZeit;
   function vorschauZeigen(a) {
@@ -279,8 +284,10 @@
     nav.innerHTML = `
       <div class="suche" role="search">
         <label for="suchfeld">Suchen</label>
-        <input id="suchfeld" type="search" placeholder="Ort, Macht, Begriff …" autocomplete="off">
-        <ul class="suche-treffer" id="suche-treffer"></ul>
+        <input id="suchfeld" type="search" placeholder="Ort, Macht, Begriff …" autocomplete="off" aria-describedby="suche-hilfe" aria-controls="suche-treffer">
+        <span class="nur-vorlesen" id="suche-hilfe">Treffer erscheinen unter dem Feld. Mit Pfeil nach unten in die Treffer, Eingabe öffnet den ersten.</span>
+        <p class="nur-vorlesen" id="suche-status" role="status"></p>
+        <ul class="suche-treffer" id="suche-treffer" aria-label="Suchergebnisse"></ul>
       </div>
       <p class="nav-gruppe">Einführung</p>
       <ul>
@@ -337,21 +344,30 @@
   function sucheEinrichten() {
     const feld = document.getElementById("suchfeld");
     const liste = document.getElementById("suche-treffer");
-    const leeren = () => { feld.value = ""; liste.innerHTML = ""; };
+    const status = document.getElementById("suche-status");
+    const leeren = () => { feld.value = ""; liste.innerHTML = ""; status.textContent = ""; };
     function suchen() {
       const w = feld.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-      if (!w.length) { liste.innerHTML = ""; return; }
+      if (!w.length) { liste.innerHTML = ""; status.textContent = ""; return; }
       const treffer = suchindex
         .map(e => ({ e, punkte: w.every(x => e.text.includes(x)) ? w.reduce((p, x) => p + (e.titel.toLowerCase().includes(x) ? 10 : 1), 0) : 0 }))
         .filter(x => x.punkte > 0).sort((a, b) => b.punkte - a.punkte).slice(0, 8);
       liste.innerHTML = treffer.length
         ? treffer.map(({ e }) => `<li><a href="${e.href}">${esc(e.titel)}<small>${esc(e.art)}</small></a></li>`).join("")
         : `<li class="suche-leer">Nichts gefunden. Versuch einen Ortsnamen oder Begriff.</li>`;
+      status.textContent = treffer.length ? `${treffer.length} Treffer` : "Nichts gefunden";
     }
     feld.addEventListener("input", suchen);
     feld.addEventListener("keydown", ev => {
       if (ev.key === "Enter") { const a = liste.querySelector("a"); if (a) { location.hash = a.getAttribute("href"); leeren(); } }
       if (ev.key === "Escape") leeren();
+      if (ev.key === "ArrowDown") { const a = liste.querySelector("a"); if (a) { ev.preventDefault(); a.focus(); } }
+    });
+    liste.addEventListener("keydown", ev => {
+      const links = [...liste.querySelectorAll("a")], i = links.indexOf(document.activeElement);
+      if (ev.key === "ArrowDown" && i < links.length - 1) { ev.preventDefault(); links[i + 1].focus(); }
+      if (ev.key === "ArrowUp") { ev.preventDefault(); (i > 0 ? links[i - 1] : feld).focus(); }
+      if (ev.key === "Escape") { leeren(); feld.focus(); }
     });
     liste.addEventListener("click", ev => { if (ev.target.closest("a")) leeren(); });
   }
@@ -365,13 +381,16 @@
     });
   }
   const menueKnopf = document.getElementById("menue-knopf");
-  menueKnopf.addEventListener("click", () => {
-    const offen = nav.classList.toggle("offen");
-    menueKnopf.setAttribute("aria-expanded", offen);
-  });
-  nav.addEventListener("click", e => {
-    if (e.target.closest("a")) { nav.classList.remove("offen"); menueKnopf.setAttribute("aria-expanded", "false"); }
-  });
+  function menueSetzen(offen, fokus) {
+    nav.classList.toggle("offen", offen);
+    menueKnopf.setAttribute("aria-expanded", String(offen));
+    document.body.classList.toggle("menue-offen", offen);
+    if (offen) document.getElementById("suchfeld").focus();
+    else if (fokus) menueKnopf.focus();
+  }
+  menueKnopf.addEventListener("click", () => menueSetzen(!nav.classList.contains("offen")));
+  nav.addEventListener("click", e => { if (e.target.closest("a")) menueSetzen(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && nav.classList.contains("offen")) menueSetzen(false, true); });
 
   /* ==========================================================
      Bausteine
@@ -472,6 +491,11 @@
       img.addEventListener("error", () => {
         const n = Number(img.dataset.versuch) + 1;
         if (n < BILD_ENDUNGEN.length) { img.dataset.versuch = n; img.src = `${img.dataset.basis}.${BILD_ENDUNGEN[n]}`; }
+        else if (img.dataset.ersatz) {
+          // kleines Vorschaubild fehlt: großes Bild versuchen
+          img.dataset.basis = img.dataset.ersatz; delete img.dataset.ersatz; img.dataset.versuch = 0;
+          img.src = `${img.dataset.basis}.${BILD_ENDUNGEN[0]}`;
+        }
         else {
           const platz = document.createElement("div");
           if (img.dataset.ausblenden !== undefined) { (img.closest(img.dataset.ausblenden || "figure") || img).remove(); return; }
@@ -505,8 +529,9 @@
   }
 
   function portraet(f, klein) {
-    return `<span class="portraet${klein ? " klein" : ""}"><img data-basis="img/figuren/${f.bild || f.id}" data-versuch="0" data-monogramm="${esc(initialen(f.name))}"
-        src="img/figuren/${f.bild || f.id}.${BILD_ENDUNGEN[0]}" alt="Porträt: ${esc(f.name)}" loading="lazy"></span>`;
+    const gross = `img/figuren/${f.bild || f.id}`, basis = klein ? `img/figuren/klein/${f.bild || f.id}` : gross;
+    return `<span class="portraet${klein ? " klein" : ""}"><img data-basis="${basis}" data-versuch="0" data-monogramm="${esc(initialen(f.name))}"${klein ? ` data-ersatz="${gross}"` : ""}
+        src="${basis}.${BILD_ENDUNGEN[0]}" alt="Porträt: ${esc(f.name)}" loading="lazy" width="${klein ? 240 : 800}" height="${klein ? 300 : 1000}"></span>`;
   }
   function figurKarten(liste) {
     if (!liste.length) return "";
@@ -528,7 +553,7 @@
           <dt>Stempel</dt><dd>${esc(t.stempel)}</dd>
           <dt>Gehütet von</dt><dd>${esc(t.geweihte)}</dd>
         </dl>
-        <p><a href="#/tempel/${t.id}">Ganzer Eintrag im Tempelverzeichnis</a></p>
+        <p><a class="knopf knopf-link" href="#/tempel/${t.id}">Ganzer Eintrag im Tempelverzeichnis</a></p>
       </section>`;
   }
   const figurenAn = id => figuren.filter(f => f.station === id);
@@ -543,13 +568,19 @@
     return html;
   }
 
+  // Blättern zwischen Einträgen: zwei große Schaltflächen mit Richtung und Ziel
+  const blaettern = (label, vor, nach) => `<nav class="blaettern" aria-label="${esc(label)}">
+      ${vor ? `<a class="blatt-knopf zurueck" href="${vor[0]}" rel="prev"><span class="blatt-richtung">${esc(vor[2] || "Zurück")}</span>${vor[1]}</a>` : "<span></span>"}
+      ${nach ? `<a class="blatt-knopf weiter" href="${nach[0]}" rel="next"><span class="blatt-richtung">${esc(nach[2] || "Weiter")}</span>${nach[1]}</a>` : ""}
+    </nav>`;
+
   /* ==========================================================
      Seiten
      ========================================================== */
   function seiteTitel() {
     return {
       html: `
-      <section class="titel" style="background-image:url('img/titel.webp'), url('img/titel.jpg')">
+      <section class="titel">
         <div class="titel-text"><h1>Der Raulsweg</h1><p>${esc(RW.titel.untertitel)}</p></div>
       </section>
       ${RW.titel.einleitung.replace('class="einleitung"', 'class="einleitung initiale"')}
@@ -606,7 +637,7 @@
       <li>
         <span class="station-siegel${s.kanon ? "" : " ergaenzt"}">${s.nr}</span>
         <div>
-          <h3><a href="#/station/${s.id}">${esc(s.name)}</a></h3>
+          <h2 class="klein"><a href="#/station/${s.id}">${esc(s.name)}</a></h2>
           <div class="zeile-marken"><span>${esc(s.gottheit)}</span>${kanonMarke(s)}${bauMarke(s)}<span class="leise">Meile ${meileText(s)}</span></div>
           <p>${esc(s.kurz)}</p>
         </div>
@@ -641,7 +672,8 @@
       ${dokumente.map(d => `<section class="dokument" id="${d.id}">
         <h2>${esc(d.titel)}</h2>
         <p class="dok-herkunft">${esc(d.art)} · ${esc(d.herkunft)}</p>
-        <p>${esc(d.kurz)}</p>
+        <p class="dok-kurz">${esc(d.kurz)}</p>
+        <p class="knopf-reihe"><button type="button" class="knopf" data-drucken="${d.id}">Als Handout drucken</button></p>
         <div class="dok-blatt">${d.text}</div>
       </section>`).join("")}`,
       eigene: []
@@ -653,9 +685,9 @@
     const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Etappen</p><ul>${etappen.map(e => `<li><a href="#/unterwegs/etappe-${e.nach.id}">${esc(e.von.name)} → ${esc(e.nach.name)}</a></li>`).join("")}</ul></nav>`;
     const zahl = t => wegpunkte.filter(w => w.typ === t).length;
     const filter = `<div class="weg-filter" role="group" aria-label="Nach Art filtern">
-      <button type="button" data-typ="" aria-pressed="true">Alle <span>${wegpunkte.length}</span></button>
-      ${Object.entries(WEG_TYP).map(([t, n]) => `<button type="button" data-typ="${t}" aria-pressed="false"><i class="typ-zeichen typ-${t}" aria-hidden="true"></i>${esc(n)} <span>${zahl(t)}</span></button>`).join("")}
-    </div>`;
+      <button type="button" class="knopf knopf-pille" data-typ="" aria-pressed="true">Alle <span>${wegpunkte.length}</span></button>
+      ${Object.entries(WEG_TYP).map(([t, n]) => `<button type="button" class="knopf knopf-pille" data-typ="${t}" aria-pressed="false"><i class="typ-zeichen typ-${t}" aria-hidden="true"></i>${esc(n)} <span>${zahl(t)}</span></button>`).join("")}
+    </div><p class="nur-vorlesen" id="weg-status" role="status"></p>`;
     const inhalt = etappen.map(e => {
       const liste = wegpunkteNach(e.nach.id);
       return `<section class="etappe" id="etappe-${e.nach.id}">
@@ -663,7 +695,7 @@
         <p class="etappe-zeile">Meile ${meileText(e.von)} bis ${meileText(e.nach)} · ${etappeText(e.nach)} Meilen</p>
         ${liste.map(w => `<section class="wegpunkt typ-${w.typ}" id="${w.id}" data-typ="${w.typ}">
           <h3><i class="typ-zeichen typ-${w.typ}" aria-hidden="true"></i>${esc(w.name)}</h3>
-          <p class="weg-art">${esc(w.art)}, Meile ${w.meile} ${w.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</p>
+          <p class="weg-art">${esc(w.art)}, Meile ${w.meile} ${kanonMarke(w)}</p>
           ${w.abseits ? `<p class="weg-abseits">Abseits der Straße: ${esc(w.abseits)}</p>` : ""}
           <p>${esc(w.kurz)}</p>
           ${absaetze(w.beschreibung || [])}
@@ -687,11 +719,14 @@
     leiste.querySelectorAll("button").forEach(k => k.addEventListener("click", () => {
       const typ = k.dataset.typ;
       leiste.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === k)));
+      let gesamt = 0;
       main.querySelectorAll(".etappe").forEach(et => {
         let sichtbar = 0;
         et.querySelectorAll(".wegpunkt").forEach(w => { const an = !typ || w.dataset.typ === typ; w.hidden = !an; if (an) sichtbar++; });
         et.hidden = !!typ && !sichtbar;
+        gesamt += sichtbar;
       });
+      main.querySelector("#weg-status").textContent = `${gesamt} Orte angezeigt${typ ? ": " + WEG_TYP[typ] : ""}.`;
     }));
   }
 
@@ -712,7 +747,8 @@
     const s = stationen[i];
     const vor = i > 0 ? stationen[i - 1] : orte[0];
     const nach = i < stationen.length - 1 ? stationen[i + 1] : orte[1];
-    const haltName = h => `${h.typ === "stadt" ? "" : h.nr + " "}${esc(h.name)}`;
+    const abstecher = wegpunkte.filter(w => w.nach === s.id && w.typ === "abseits");
+    const beschriftung = h => `${h.typ === "stadt" ? "" : h.nr + " "}${esc(h.name)}`;
     return {
       html: `
       <div class="station-kopf">
@@ -734,7 +770,7 @@
           ${figurenAn(s.id).length ? `<h2 id="figuren">Wer hier anzutreffen ist</h2>${figurKarten(figurenAn(s.id))}` : ""}
           ${kartenAn(s.id).map(c => `<section class="karte-verweis" id="plan"><h2>Plan: ${esc(c.titel)}</h2>
             <a href="#/karte/${c.id}"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}" loading="lazy"></a>
-            <p><a href="#/karte/${c.id}">${esc(c.art)} mit Legende</a></p>${gebaeudeBlock(c)}</section>`).join("")}
+            <p><a class="knopf knopf-link" href="#/karte/${c.id}">${esc(c.art)} mit Legende öffnen</a></p>${gebaeudeBlock(c)}</section>`).join("")}
           ${wegNach(s)}
           ${chronikBezug("station:" + s.id)}
         </div>
@@ -753,7 +789,7 @@
               <dt>Bauzustand</dt><dd>${bauMarke(s)}</dd>
               <dt>Herkunft</dt><dd>${kanonMarke(s)}</dd>
               <dt>Stimmung</dt><dd>${esc(s.jahreszeit)}</dd>
-              ${wegpunkte.filter(w => w.nach === s.id && w.typ === "abseits").length ? `<dt>Abstecher</dt><dd>${wegpunkte.filter(w => w.nach === s.id && w.typ === "abseits").map(w => `<a href="#/unterwegs/${w.id}">${esc(w.name)}</a>`).join("<br>")}</dd>` : ""}
+              ${abstecher.length ? `<dt>Abstecher</dt><dd>${abstecher.map(w => `<a href="#/unterwegs/${w.id}">${esc(w.name)}</a>`).join("<br>")}</dd>` : ""}
               ${abschnittVon(s.id) ? `<dt>Unterwegs</dt><dd><a href="#/spielhilfen/${abschnittVon(s.id).id}">Begegnungen: ${esc(abschnittVon(s.id).name)}</a></dd>` : ""}
             </dl>
           </section>
@@ -761,10 +797,7 @@
         </aside>
       </div>
       ${streckenband(s.id, true)}
-      <nav class="blaettern" aria-label="Weiterreisen">
-        <a href="${linkZu(vor)}">← ${haltName(vor)}</a>
-        <a href="${linkZu(nach)}">${haltName(nach)} →</a>
-      </nav>`,
+      ${blaettern("Weiterreisen", [linkZu(vor), beschriftung(vor), "Zurück nach"], [linkZu(nach), beschriftung(nach), "Weiter nach"])}`,
       eigene: ["station:" + s.id]
     };
   }
@@ -794,10 +827,8 @@
         </aside>
       </div>
       ${streckenband(o.id, true)}
-      <nav class="blaettern" aria-label="Weiterreisen">
-        ${erste ? `<a href="#/stationen">Alle Stationen</a><a href="#/station/${nachbar.id}">${nachbar.nr} ${esc(nachbar.name)} →</a>`
-                : `<a href="#/station/${nachbar.id}">← ${nachbar.nr} ${esc(nachbar.name)}</a><a href="#/maechte">Mächte am Weg →</a>`}
-      </nav>`,
+      ${erste ? blaettern("Weiterreisen", ["#/stationen", "Alle Stationen", "Übersicht"], [`#/station/${nachbar.id}`, `${nachbar.nr} ${esc(nachbar.name)}`, "Erste Station"])
+              : blaettern("Weiterreisen", [`#/station/${nachbar.id}`, `${nachbar.nr} ${esc(nachbar.name)}`, "Letzte Station"], ["#/maechte", "Mächte am Weg", "Hintergrund"])}`,
       eigene: ["ort:" + o.id]
     };
   }
@@ -811,7 +842,7 @@
   function begegnungZeile(b, i) {
     return `<tr data-w="${i + 1}"><td class="w-zahl">${i + 1}</td><td><strong>${esc(b.titel)}.</strong> ${esc(b.text)}${b.wendung ? `<span class="meister-zeile">Wendung: ${esc(b.wendung)}</span>` : ""}</td></tr>`;
   }
-  const wuerfelKnopf = (ziel, n = 20) => `<p class="wurf"><button type="button" class="wurf-knopf" data-tabelle="${ziel}" data-seiten="${n}">W${n} würfeln</button><span class="wurf-ergebnis" aria-live="polite"></span></p>`;
+  const wuerfelKnopf = (ziel, n = 20) => `<p class="wurf"><button type="button" class="knopf wurf-knopf" data-tabelle="${ziel}" data-seiten="${n}" aria-describedby="${ziel}-titel">W${n} würfeln</button><span class="wurf-ergebnis" aria-live="polite"></span></p>`;
 
   function seiteSpielhilfen() {
     const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>
@@ -821,18 +852,18 @@
       <li><a href="#/spielhilfen/wetter">Wetter</a></li>
       <li><a href="#/spielhilfen/namen">Namen und Eigenheiten</a></li></ul></nav>`;
     const abschnitte = SH.abschnitte.map(a => {
-      const st = a.stationen.map(id => RW.stationen.find(s => s.id === id)).filter(Boolean);
+      const st = a.stationen.map(haltVon).filter(Boolean);
       return `<section class="sh-abschnitt" id="${a.id}">
         <h3>${esc(a.name)}</h3>
         <p class="leise">Meile ${a.meilen[0]} bis ${a.meilen[1]} · ${st.map(s => `<a href="#/station/${s.id}">${s.nr} ${esc(s.name)}</a>`).join(", ")} · Begegnung bei ${a.verkehr === 1 ? "1" : "1–" + a.verkehr} auf W6</p>
         <p>${esc(a.kurz)}</p>
         ${wuerfelKnopf("beg-" + a.id)}
-        <table class="w-tabelle" id="beg-${a.id}"><thead><tr><th>W20</th><th>Begegnung</th></tr></thead><tbody>${a.begegnungen.map(begegnungZeile).join("")}</tbody></table>
+        <table class="w-tabelle" id="beg-${a.id}"><caption class="nur-vorlesen" id="beg-${a.id}-titel">Begegnungen: ${esc(a.name)}</caption><thead><tr><th scope="col">W20</th><th scope="col">Begegnung</th></tr></thead><tbody>${a.begegnungen.map(begegnungZeile).join("")}</tbody></table>
       </section>`;
     }).join("");
-    const geruechte = `<table class="w-tabelle" id="tab-geruechte"><thead><tr><th>W20</th><th>Gerücht</th></tr></thead><tbody>${SH.geruechte.map((g, i) => `<tr data-w="${i + 1}"><td class="w-zahl">${i + 1}</td><td>»${esc(g.text)}«${g.meister ? `<span class="meister-zeile">${esc(g.meister)}</span>` : ""}</td></tr>`).join("")}</tbody></table>`;
+    const geruechte = `<table class="w-tabelle" id="tab-geruechte"><caption class="nur-vorlesen" id="tab-geruechte-titel">Gerüchte am Weg</caption><thead><tr><th scope="col">W20</th><th scope="col">Gerücht</th></tr></thead><tbody>${SH.geruechte.map((g, i) => `<tr data-w="${i + 1}"><td class="w-zahl">${i + 1}</td><td>»${esc(g.text)}«${g.meister ? `<span class="meister-zeile">${esc(g.meister)}</span>` : ""}</td></tr>`).join("")}</tbody></table>`;
     const wetter = SH.wetter.map(w => `<section class="sh-wetter" id="wetter-${w.id}"><h3>${esc(w.name)}</h3><p class="leise">${esc(w.monde)}</p>${wuerfelKnopf("tab-wetter-" + w.id)}
-      <table class="w-tabelle" id="tab-wetter-${w.id}"><thead><tr><th>W20</th><th>Wetter</th><th>Folgen</th></tr></thead><tbody>${w.tabelle.map(z => `<tr data-von="${z.von}" data-bis="${z.bis}"><td class="w-zahl">${z.von === z.bis ? z.von : z.von + "–" + z.bis}</td><td>${esc(z.wetter)}</td><td>${esc(z.folge)}</td></tr>`).join("")}</tbody></table></section>`).join("");
+      <table class="w-tabelle" id="tab-wetter-${w.id}"><caption class="nur-vorlesen" id="tab-wetter-${w.id}-titel">Wetter im ${esc(w.name)}</caption><thead><tr><th scope="col">W20</th><th scope="col">Wetter</th><th scope="col">Folgen</th></tr></thead><tbody>${w.tabelle.map(z => `<tr data-von="${z.von}" data-bis="${z.bis}"><td class="w-zahl">${z.von === z.bis ? z.von : z.von + "–" + z.bis}</td><td>${esc(z.wetter)}</td><td>${esc(z.folge)}</td></tr>`).join("")}</tbody></table></section>`).join("");
     const N = SH.namen;
     const liste = (titel, l, w) => `<div class="namen-liste"><h3>${titel}</h3><ol>${(l || []).map(x => `<li>${esc(x)}</li>`).join("")}</ol><p class="leise">W${w || (l || []).length}</p></div>`;
     const auswahl = (name, opts) => `<select name="${name}">${opts.map(([v, t]) => `<option value="${v}">${esc(t)}</option>`).join("")}</select>`;
@@ -843,11 +874,11 @@
       ${toc}
       <h2 id="reisetag">Einen Reisetag würfeln</h2>
       <p>Ein Wurf für Wetter, je ein W6 für Morgen, Mittag, Abend und Nacht, und ein Gerücht für den Abend in der Herberge. Wer in einer Station übernachtet, würfelt für die Nacht nicht.</p>
-      <form class="reisetag" onsubmit="return false">
+      <form class="reisetag">
         <label>Abschnitt ${auswahl("abschnitt", SH.abschnitte.map(a => [a.id, a.name]))}</label>
         <label>Jahreszeit ${auswahl("jahreszeit", SH.wetter.map(w => [w.id, w.name]))}</label>
         <label class="haken"><input type="checkbox" name="station" checked> Nacht in einer Station</label>
-        <button type="button" class="reisetag-knopf">Reisetag würfeln</button>
+        <button type="submit" class="knopf knopf-voll reisetag-knopf">Reisetag würfeln</button>
       </form>
       <div class="reisetag-ergebnis" aria-live="polite"></div>
 
@@ -867,11 +898,11 @@
       <h2 id="namen">Namen und Eigenheiten</h2>
       <p>Für Wirte, Fuhrleute, Händlerinnen und alle, die der Runde unterwegs über den Weg laufen. Familiennamen sind am Raulsweg oft Berufe, Orte oder Spottnamen.</p>
       <div class="namen-werkzeug">
-        <button type="button" data-namen="person">Mittelreicher</button>
-        <button type="button" data-namen="tulamide">Tulamide</button>
-        <button type="button" data-namen="herberge">Herberge</button>
-        <button type="button" data-namen="haendler">Händler</button>
-        <button type="button" data-namen="reisend">Wer noch unterwegs ist</button>
+        <button type="button" class="knopf" data-namen="person">Mittelreicher</button>
+        <button type="button" class="knopf" data-namen="tulamide">Tulamide</button>
+        <button type="button" class="knopf" data-namen="herberge">Herberge</button>
+        <button type="button" class="knopf" data-namen="haendler">Händler</button>
+        <button type="button" class="knopf" data-namen="reisend">Wer noch unterwegs ist</button>
         <p class="namen-ergebnis" aria-live="polite"></p>
       </div>
       <div class="namen-raster">
@@ -894,7 +925,7 @@
       zeile.classList.add("gewuerfelt");
       const titel = zeile.querySelector("strong") ? zeile.querySelector("strong").textContent.replace(/\.$/, "") : zeile.cells[1].textContent.slice(0, 60);
       k.nextElementSibling.textContent = `Gewürfelt: ${w}, ${titel}`;
-      zeile.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      zeile.scrollIntoView({ block: "nearest", behavior: sanft() });
     }));
     const N = SH.namen, aus = main.querySelector(".namen-ergebnis");
     const person = () => Math.random() < .5 ? `${ziehe(N.maenner)} ${ziehe(N.familien)}` : `${ziehe(N.frauen)} ${ziehe(N.familien)}`;
@@ -909,7 +940,8 @@
     main.querySelectorAll("[data-namen]").forEach(k => k.addEventListener("click", () => { if (aus) aus.textContent = machen[k.dataset.namen](); }));
     if (!seite) return;
     const ergebnis = main.querySelector(".reisetag-ergebnis");
-    main.querySelector(".reisetag-knopf").addEventListener("click", () => {
+    seite.addEventListener("submit", ev => {
+      ev.preventDefault();
       const a = SH.abschnitte.find(x => x.id === seite.abschnitt.value), wz = SH.wetter.find(x => x.id === seite.jahreszeit.value);
       const ww = wuerfel(20), wetter = wz.tabelle.find(z => ww >= z.von && ww <= z.bis);
       const zeiten = SH.tagesabschnitte.filter(t => !(t === "Nacht" && seite.station.checked)).map(t => {
@@ -963,7 +995,7 @@
         <text x="${x.toFixed(1)}" y="${(y + 5.5).toFixed(1)}" text-anchor="middle">${esc(name)}</text></a>`;
     }).join("");
     const legende = Object.entries(BEZIEHUNG).map(([k, n]) => `<span><svg width="34" height="12" aria-hidden="true"><line class="${k}" x1="2" y1="6" x2="32" y2="6"/></svg>${n}</span>`).join("");
-    return `<figure class="netz"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Beziehungsnetz der Mächte am Weg">${kanten}${knoten}</svg>
+    return `<figure class="netz"><svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Beziehungsnetz der Mächte am Weg">${kanten}${knoten}</svg>
       <figcaption><div class="netz-legende">${legende}</div>Öffentlich bekannte Verhältnisse. Ein Klick auf eine Macht öffnet ihr Profil, ein Fingertipp oder Mauszeiger auf eine Linie zeigt, worum es geht.</figcaption></figure>`;
   }
   function netzBeleben() {
@@ -987,7 +1019,7 @@
     const karten = RW.maechte.map(m => `
       <li class="macht-karte">
         <a class="macht-name" href="#/macht/${m.id}">${esc(m.name)}</a>
-        <span class="macht-sitz">${esc(m.sitz)} ${m.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</span>
+        <span class="macht-sitz">${esc(m.sitz)} ${kanonMarke(m)}</span>
         <p>${esc(m.haltung || "")}</p>
         <p class="leise">${beziehungenVon(m.id).length} Beziehungen · ${figurenVon(m.id).length} Figuren</p>
       </li>`).join("");
@@ -996,6 +1028,9 @@
       <p class="einleitung initiale">Der Raulsweg gehört der Kaiserin. Verdienen wollen an ihm viele.</p>
       <p>Keine dieser Parteien ist einfach gut oder böse, und keine handelt allein. Das Netz zeigt, was am Weg über ihre Verhältnisse bekannt ist. Was sich dahinter abspielen könnte, steht in den Meisterinformationen der einzelnen Profile, als Möglichkeiten, nicht als Wahrheit.</p>
       ${beziehungsnetz()}
+      <details class="aufklapp"><summary>Alle Beziehungen als Liste</summary>
+        <ul class="beziehungen">${beziehungen.map(b => `<li><span class="bez-art ${b.art}">${esc(BEZIEHUNG[b.art])}</span> <a href="#/macht/${b.a}">${esc(machtVon(b.a).name)}</a> und <a href="#/macht/${b.b}">${esc(machtVon(b.b).name)}</a><br><small>${esc(b.text)}</small></li>`).join("")}</ul>
+      </details>
       <h2>Die Mächte</h2>
       <ul class="macht-raster">${karten}</ul>`,
       eigene: []
@@ -1008,7 +1043,7 @@
     const m = RW.maechte[i];
     const vor = RW.maechte[(i - 1 + RW.maechte.length) % RW.maechte.length], nach = RW.maechte[(i + 1) % RW.maechte.length];
     const bez = beziehungenVon(m.id);
-    const st = (m.stationen || []).map(sid => RW.stationen.find(s => s.id === sid)).filter(Boolean);
+    const st = (m.stationen || []).map(haltVon).filter(Boolean);
     const doks = (m.dokumente || []).map(did => dokumente.find(d => d.id === did)).filter(Boolean);
     const fig = figurenVon(m.id);
     return {
@@ -1018,12 +1053,12 @@
         <div>
           <p class="einleitung initiale">${esc((m.beschreibung || [])[0] || "")}</p>
           ${absaetze((m.beschreibung || []).slice(1))}
-          <h3>Was sie wollen</h3><p>${esc(m.will)}</p>
-          <h3>Wo es reibt</h3><p>${esc(m.konflikt)}</p>
-          ${(m.mittel || []).length ? `<h3>Womit sie wirken</h3><ul>${m.mittel.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
-          ${m.vertreter ? `<h3>Wer für sie spricht</h3><p>${esc(m.vertreter)}</p>` : ""}
+          <h2 class="klein">Was sie wollen</h2><p>${esc(m.will)}</p>
+          <h2 class="klein">Wo es reibt</h2><p>${esc(m.konflikt)}</p>
+          ${(m.mittel || []).length ? `<h2 class="klein">Womit sie wirken</h2><ul>${m.mittel.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+          ${m.vertreter ? `<h2 class="klein">Wer für sie spricht</h2><p>${esc(m.vertreter)}</p>` : ""}
           ${m.stimme ? `<blockquote class="zitat"><p>»${esc(m.stimme)}«</p></blockquote>` : ""}
-          ${m.hebel ? `<h3>Wie man mit ihnen umgeht</h3><p>${esc(m.hebel)}</p>` : ""}
+          ${m.hebel ? `<h2 class="klein">Wie man mit ihnen umgeht</h2><p>${esc(m.hebel)}</p>` : ""}
           <div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(m.meister)}</p>
             ${(m.moeglichkeiten || []).length ? `<p class="moeglich-titel">Was hinter den Kulissen laufen könnte</p>${moeglichkeitenListe(m.moeglichkeiten, "macht:" + m.id)}<p class="moeglich-hinweis">Wähle eine, verbinde sie oder erfinde eine eigene.</p>` : ""}</div>
           ${fig.length ? `<h2 id="figuren">Figuren</h2>${figurKarten(fig)}` : ""}
@@ -1034,7 +1069,7 @@
             <h3>Steckbrief</h3>
             <dl>
               <dt>Sitz</dt><dd>${esc(m.sitz)}</dd>
-              <dt>Herkunft</dt><dd>${m.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</dd>
+              <dt>Herkunft</dt><dd>${kanonMarke(m)}</dd>
               ${st.length ? `<dt>Am Weg</dt><dd>${st.map(s => `<a href="#/station/${s.id}">${s.nr} ${esc(s.name)}</a>`).join("<br>")}</dd>` : m.id === "kirchen" ? `<dt>Am Weg</dt><dd><a href="#/tempel">alle zwölf Tempel</a></dd>` : ""}
               ${doks.length ? `<dt>Dokument</dt><dd>${doks.map(d => `<a href="#/dokumente/${d.id}">${esc(d.titel)}</a>`).join("<br>")}</dd>` : ""}
             </dl>
@@ -1045,10 +1080,7 @@
       </div>
       <h2 id="netz">Im Netz der Mächte</h2>
       ${beziehungsnetz(m.id)}
-      <nav class="blaettern" aria-label="Weitere Mächte">
-        <a href="#/macht/${vor.id}">← ${esc(vor.name)}</a>
-        <a href="#/macht/${nach.id}">${esc(nach.name)} →</a>
-      </nav>`,
+      ${blaettern("Weitere Mächte", [`#/macht/${vor.id}`, esc(vor.name), "Vorige Macht"], [`#/macht/${nach.id}`, esc(nach.name), "Nächste Macht"])}`,
       eigene: ["macht:" + m.id]
     };
   }
@@ -1073,7 +1105,7 @@
     if (i < 0) return seiteFehlt();
     const f = figuren[i];
     const vor = figuren[(i - 1 + figuren.length) % figuren.length], nach = figuren[(i + 1) % figuren.length];
-    const st = RW.stationen.find(s => s.id === f.station);
+    const st = haltVon(f.station);
     const ortHtml = st ? `<a href="${linkZu(st)}">${st.typ === "stadt" ? "" : st.nr + " "}${esc(st.name)}</a>` : "unterwegs auf der ganzen Strecke";
     const maechte = (f.maechte || []).map(mid => RW.maechte.find(m => m.id === mid)).filter(Boolean);
     const andere = figurenAn(f.station).filter(x => x.id !== f.id);
@@ -1086,9 +1118,9 @@
       <div class="station-raster">
         <div>
           <p class="einleitung">${esc(f.kurz)}</p>
-          <h3>Erscheinung</h3><p>${esc(f.aussehen)}</p>
-          <h3>Auftreten</h3><p>${esc(f.auftreten)}</p>
-          <h3>Antrieb</h3><p>${esc(f.motiv)}</p>
+          <h2 class="klein">Erscheinung</h2><p>${esc(f.aussehen)}</p>
+          <h2 class="klein">Auftreten</h2><p>${esc(f.auftreten)}</p>
+          <h2 class="klein">Antrieb</h2><p>${esc(f.motiv)}</p>
           <blockquote class="zitat"><p>»${esc(f.zitat)}«</p></blockquote>
           <div class="meister"><p class="meister-titel">Meisterinformationen: Mögliche Geheimnisse</p>${moeglichkeitenListe(f.geheimnisse, "figur:" + f.id)}<p class="moeglich-hinweis">Wähle eines, verbinde sie oder erfinde ein eigenes.</p></div>
           ${chronikBezug("figur:" + f.id)}
@@ -1106,21 +1138,18 @@
           ${verbindungsBlock("figur:" + f.id)}
         </aside>
       </div>
-      <nav class="blaettern" aria-label="Weitere Figuren">
-        <a href="#/figur/${vor.id}">← ${esc(vor.name)}</a>
-        <a href="#/figur/${nach.id}">${esc(nach.name)} →</a>
-      </nav>`,
+      ${blaettern("Weitere Figuren", [`#/figur/${vor.id}`, esc(vor.name), "Vorige Figur"], [`#/figur/${nach.id}`, esc(nach.name), "Nächste Figur"])}`,
       eigene: ["figur:" + f.id]
     };
   }
 
   function seiteTempel() {
     const zeilen = tempel.map(t => {
-      const st = RW.stationen.find(s => s.id === t.station);
+      const st = haltVon(t.station);
       return `<tr><td class="zahl">${st.nr}</td><td><a href="#/station/${st.id}">${esc(st.name)}</a></td><td>${esc(t.gottheit)}</td><td><a href="#/tempel/${t.id}">${esc(t.name)}</a></td><td>${esc(t.art)}</td><td>${bauMarke({ status: t.zustand })}</td></tr>`;
     }).join("");
     const eintraege = tempel.map(t => {
-      const st = RW.stationen.find(s => s.id === t.station);
+      const st = haltVon(t.station);
       return `
       <section class="tempel-eintrag" id="${t.id}">
         <h2>${esc(t.name)}</h2>
@@ -1204,14 +1233,14 @@
         <p>Nach dem Spielabend die Vorlage ausfüllen und an die Person schicken, die den Band pflegt. Sie landet in <code>data/chronik.js</code>. Die Kennungen für Orte und Figuren stehen in der Adresszeile ihrer Seiten, etwa <code>#/figur/<strong>bruna-lehmkuhl</strong></code>.</p>
         <p>Was nicht zutrifft, einfach leer lassen. <em>Enthüllt</em> ist nur, was am Tisch wirklich aufgedeckt wurde; was die Spielleitung bloß für sich entschieden hat, gehört unter <em>meister</em>.</p>
         <div class="vorlage-kopf"><span>Vorlage</span><button class="knopf" type="button" id="vorlage-kopieren">Kopieren</button></div>
-        <pre class="vorlage"><code>${esc(CHRONIK_VORLAGE)}</code></pre>
+        <pre class="vorlage" tabindex="0" aria-label="Vorlage für einen Chronik-Eintrag"><code>${esc(CHRONIK_VORLAGE)}</code></pre>
       </section>`,
       eigene: []
     };
   }
 
   function kartenLink(c) {
-    const st = RW.stationen.find(s => s.id === c.station);
+    const st = haltVon(c.station);
     return st ? `${c.art}, <a href="#/station/${st.id}">${st.nr} ${esc(st.name)}</a>` : esc(c.art);
   }
 
@@ -1238,14 +1267,14 @@
       html: `<h1>${esc(c.titel)}</h1>
       <p class="station-unterzeile">${kartenLink(c)}</p>
       <figure class="karte-gross"><a href="${c.datei}" target="_blank" rel="noopener" title="In voller Größe öffnen"><img src="${c.datei}" alt="${esc(c.art)}: ${esc(c.titel)}"></a>
-        <figcaption>${esc(c.massstab || "")} · <a href="${c.datei}" target="_blank" rel="noopener">in voller Größe öffnen</a></figcaption></figure>
+        <figcaption>${esc(c.massstab || "")}</figcaption></figure>
+      <p class="knopf-reihe"><a class="knopf knopf-link" href="${c.datei}" target="_blank" rel="noopener">In voller Größe öffnen<span class="nur-vorlesen"> (neues Fenster)</span></a>
+        <a class="knopf knopf-link" href="${c.datei}" download>Als SVG herunterladen</a>
+        <button type="button" class="knopf" data-drucken="karte">Plan drucken</button></p>
       ${gebaeudeBlock(c)}
       <p class="einleitung">${esc(c.kurz)}</p>
       ${legende}
-      <nav class="blaettern" aria-label="Weitere Karten">
-        <a href="#/karte/${vor.id}">← ${esc(vor.titel)}</a>
-        <a href="#/karte/${nach.id}">${esc(nach.titel)} →</a>
-      </nav>`,
+      ${blaettern("Weitere Karten", [`#/karte/${vor.id}`, esc(vor.titel), "Vorige Karte"], [`#/karte/${nach.id}`, esc(nach.titel), "Nächste Karte"])}`,
       eigene: []
     };
   }
@@ -1254,7 +1283,7 @@
     const liste = RW.ausbaustufen.map(a => `
       <li class="${a.erledigt ? "erledigt" : ""}">
         <span class="stufe-nr">${a.nr}</span>
-        <div><h3>${esc(a.titel)}${a.erledigt ? " (vorhanden)" : ""}</h3><p>${esc(a.text)}</p></div>
+        <div><h2 class="klein">${esc(a.titel)}${a.erledigt ? " (vorhanden)" : ""}</h2><p>${esc(a.text)}</p></div>
       </li>`).join("");
     return {
       html: `<h1>Bauplan des Bandes</h1>
@@ -1269,56 +1298,72 @@
   }
 
   /* ==========================================================
+     Werkzeuge auf den Seiten
+     ========================================================== */
+  function vorlageBeleben() {
+    const kopieren = document.getElementById("vorlage-kopieren");
+    if (!kopieren) return;
+    kopieren.addEventListener("click", () => {
+      const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };
+      try { navigator.clipboard.writeText(CHRONIK_VORLAGE).then(() => fertig("Kopiert"), () => fertig("Bitte markieren")); }
+      catch (e) { fertig("Bitte markieren"); }
+    });
+  }
+  // Einzelnes Dokument oder einen Plan drucken: alles andere blendet die Druckansicht aus
+  function druckBeleben() {
+    main.querySelectorAll("[data-drucken]").forEach(k => k.addEventListener("click", () => {
+      const ziel = k.dataset.drucken === "karte" ? main.querySelector(".karte-gross") : document.getElementById(k.dataset.drucken);
+      if (!ziel) return;
+      ziel.classList.add("druck-ziel");
+      document.body.classList.add("druck-einzeln");
+      const aufraeumen = () => { ziel.classList.remove("druck-ziel"); document.body.classList.remove("druck-einzeln"); window.removeEventListener("afterprint", aufraeumen); };
+      window.addEventListener("afterprint", aufraeumen);
+      window.print();
+    }));
+  }
+  const BELEBEN = [bilderAbsichern, gebaeudeLaden, netzBeleben, spielhilfenBeleben, wegFilterBeleben, vorlageBeleben, druckBeleben];
+
+  /* ---------- Nach oben ---------- */
+  const nachOben = document.createElement("button");
+  nachOben.type = "button"; nachOben.className = "knopf nach-oben"; nachOben.hidden = true;
+  nachOben.innerHTML = `<span aria-hidden="true">↑</span> Nach oben`;
+  document.body.append(nachOben);
+  nachOben.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: sanft() }); main.focus({ preventScroll: true }); });
+  window.addEventListener("scroll", () => { nachOben.hidden = window.scrollY < 1400; }, { passive: true });
+
+  /* ==========================================================
      Router
      ========================================================== */
+  const SEITEN = {
+    "": seiteTitel, stationen: seiteStationen, station: seiteStation, ort: seiteOrt,
+    maechte: seiteMaechte, macht: seiteMacht, figuren: seiteFiguren, figur: seiteFigur,
+    tempel: seiteTempel, unterwegs: seiteUnterwegs, dokumente: seiteDokumente, chronik: seiteChronik,
+    spielhilfen: seiteSpielhilfen, karten: seiteKarten, karte: seiteKarte, bauplan: seiteBauplan
+  };
+  KAPITEL.forEach(k => { SEITEN[k] = () => seiteKapitel(k); });
+  const EINZELSEITEN = ["station", "ort", "figur", "karte", "macht"];
+  // Seiten mit vielen Einträgen: Querverweise je Abschnitt neu zählen, kein Eintrag verweist auf sich selbst
+  const ABSCHNITTWEISE = {
+    tempel: [".tempel-eintrag", "tempel:"], unterwegs: [".wegpunkt", "wegpunkt:"],
+    dokumente: [".dokument", "dokument:"], chronik: [".chronik-eintrag", null]
+  };
+
   let letzteSeite = null;
   function zeigen() {
     const route = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
     const [teil, id, abschnitt] = route.split("/");
     if (teil === "maechte" && id) { location.replace(`#/macht/${id}`); return; }
-    const einzelseite = ["station", "ort", "figur", "karte", "macht"].includes(teil);
+    const einzelseite = EINZELSEITEN.includes(teil);
     const anker = einzelseite ? abschnitt : id;
     const seitenSchluessel = einzelseite ? `${teil}/${id}` : teil;
 
     if (seitenSchluessel !== letzteSeite) {
-      let seite;
-      if (teil === "") seite = seiteTitel();
-      else if (KAPITEL.includes(teil)) seite = seiteKapitel(teil);
-      else if (teil === "stationen") seite = seiteStationen();
-      else if (teil === "station") seite = seiteStation(id);
-      else if (teil === "ort") seite = seiteOrt(id);
-      else if (teil === "maechte") seite = seiteMaechte();
-      else if (teil === "macht") seite = seiteMacht(id);
-      else if (teil === "figuren") seite = seiteFiguren();
-      else if (teil === "figur") seite = seiteFigur(id);
-      else if (teil === "tempel") seite = seiteTempel();
-      else if (teil === "unterwegs") seite = seiteUnterwegs();
-      else if (teil === "dokumente") seite = seiteDokumente();
-      else if (teil === "chronik") seite = seiteChronik();
-      else if (teil === "spielhilfen") seite = seiteSpielhilfen();
-      else if (teil === "karten") seite = seiteKarten();
-      else if (teil === "karte") seite = seiteKarte(id);
-      else if (teil === "bauplan") seite = seiteBauplan();
-      else seite = seiteFehlt();
+      const seite = (SEITEN[teil] || seiteFehlt)(id);
       main.innerHTML = seite.html;
-      if (teil === "tempel" || teil === "chronik" || teil === "unterwegs" || teil === "dokumente") {
-        // Jeder Eintrag verweist nicht auf sich selbst; Querverweise je Abschnitt neu zählen
-        if (teil === "tempel") main.querySelectorAll(".tempel-eintrag").forEach(sek => verlinken(sek, ["tempel:" + sek.id]));
-        else if (teil === "unterwegs") main.querySelectorAll(".wegpunkt").forEach(sek => verlinken(sek, ["wegpunkt:" + sek.id]));
-        else if (teil === "dokumente") main.querySelectorAll(".dokument").forEach(sek => verlinken(sek, ["dokument:" + sek.id]));
-        else main.querySelectorAll(".chronik-eintrag").forEach(sek => verlinken(sek, []));
-      } else verlinken(main, seite.eigene);
-      bilderAbsichern();
-      gebaeudeLaden();
-      netzBeleben();
-      spielhilfenBeleben();
-      wegFilterBeleben();
-      const kopieren = document.getElementById("vorlage-kopieren");
-      if (kopieren) kopieren.addEventListener("click", () => {
-        const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };
-        try { navigator.clipboard.writeText(CHRONIK_VORLAGE).then(() => fertig("Kopiert"), () => fertig("Bitte markieren")); }
-        catch (e) { fertig("Bitte markieren"); }
-      });
+      const je = ABSCHNITTWEISE[teil];
+      if (je) main.querySelectorAll(je[0]).forEach(sek => verlinken(sek, je[1] ? [je[1] + sek.id] : []));
+      else verlinken(main, seite.eigene);
+      BELEBEN.forEach(f => f());
       letzteSeite = seitenSchluessel;
       document.title = teil ? `${main.querySelector("h1")?.textContent} – Der Raulsweg` : "Der Raulsweg – Quellenband";
     }

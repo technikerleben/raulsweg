@@ -23,7 +23,7 @@ SKALA = 1.0   # Vergrößerung für Nummern und Beschriftungen (EPUB: größer, 
 def schriften_css():
     regeln = []
     for name, (datei, stil, gewicht) in SCHRIFTEN.items():
-        with open(os.path.join(HIER, "fonts", datei), "rb") as f:
+        with open(os.path.join(HIER, "..", "fonts", datei), "rb") as f:
             daten = base64.b64encode(f.read()).decode()
         familie = "Alegreya" if name == "Alegreya Kursiv" else name
         regeln.append(f"@font-face{{font-family:'{familie}';font-style:{stil};font-weight:{gewicht};"

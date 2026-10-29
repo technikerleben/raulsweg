@@ -197,6 +197,11 @@ RW.kapitel = {
       <p>Den ganzen Band gibt es auch als <a href="export/der-raulsweg.epub" download>EPUB für E-Reader</a>, mit Meisterinformationen in umrandeten Kästen und Bildern in Graustufen.</p>
       <figure class="station-bild"><img src="img/stempelheft.webp" alt="Ein ausgefülltes Stempelheft des Raulswegs" loading="lazy"><figcaption>So sieht ein Stempelheft am Ende der Reise aus.</figcaption></figure>
       <p>Für den Spieltisch gibt es das <a href="export/stempelheft.pdf" download>Stempelheft des Raulswegs</a> als PDF (vier Seiten A5) und als <a href="export/stempelheft-a4-bogen.pdf" download>Druckbogen für A4</a>: ein Blatt beidseitig über die kurze Kante drucken und in der Mitte falten.</p>
+      <p class="knopf-reihe">
+        <a class="knopf knopf-voll" href="export/der-raulsweg.epub" download>EPUB herunterladen <small>5 MB</small></a>
+        <a class="knopf knopf-link" href="export/stempelheft.pdf" download>Stempelheft A5 <small>PDF, 0,3 MB</small></a>
+        <a class="knopf knopf-link" href="export/stempelheft-a4-bogen.pdf" download>Druckbogen A4 <small>PDF, 0,8 MB</small></a>
+      </p>
 
       <h2>Quellen</h2>
       <ul>

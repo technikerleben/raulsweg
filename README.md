@@ -20,12 +20,19 @@ data/wegpunkte.js     Orte und Szenen zwischen den Stationen
 data/karten.js        Karten und Pläne (Texte, Legenden)
 data/dokumente.js     Edikt, Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan
 data/chronik.js       Chronik der gespielten Geschichten
-img/                  Titelbild, Stationsbilder, Porträts, Stempelheft, Karten (SVG)
-tools/                EPUB, Karten, Stempelheft, Streckengeometrie, Schriften
+img/                  Titelbild, Stationsbilder, Porträts (klein/ = Vorschaubilder), Stempelheft, Karten (SVG), Zeichen
+fonts/                Alegreya, Alegreya SC, Grenze Gotisch (woff2, SIL Open Font License) für Website und Werkzeuge
+tools/                EPUB, Karten, Stempelheft, Streckengeometrie, Vorschaubilder, Prüfskript
 export/               EPUB und Stempelheft-PDFs (erzeugt)
 ```
 
-Querverweise entstehen automatisch: Jeder Name und jede Namensform aus `begriffe` wird beim ersten Vorkommen auf einer Seite verlinkt. Neue Namensformen also dort ergänzen statt Links von Hand zu setzen. Seiten-Anker: `#/kapitel/abschnitt`, auf Stations-, Orts-, Figuren- und Kartenseiten `#/station/<id>/<abschnitt>`.
+## Prüfen
+
+`node tools/pruefen.js` prüft die Daten auf Widersprüche: doppelte IDs, Verweise auf unbekannte Stationen, Figuren, Mächte oder Dokumente, Wegpunkte außerhalb ihrer Etappe, fehlende Karten- und Bilddateien, lückenhafte Würfeltabellen. Außerdem achtet es auf die Vorgaben des Bandes: kein Haus Stoerrebrandt, kein Menschenhandel, Bezüge zu Japan nur in den Quellen. Fehler beenden das Skript mit Code 1.
+
+Die Seite lädt keine fremden Dienste: Schriften liegen in `fonts/`, alle Bilder im Repo.
+
+Querverweise entstehen automatisch: Jeder Name und jede Namensform aus `begriffe` wird beim ersten Vorkommen auf einer Seite verlinkt. Neue Namensformen also dort ergänzen statt Links von Hand zu setzen. Seiten-Anker: `#/kapitel/abschnitt`, auf Einzelseiten (Station, Ort, Figur, Karte, Macht) `#/station/<id>/<abschnitt>`. Die Seiten stehen in `js/app.js` in der Tabelle `SEITEN`, Werkzeuge mit eigener Bedienung (Würfel, Filter, Druck) in `BELEBEN`.
 
 Die Daten liegen als `.js` statt `.json`, damit die Seite auch lokal per Doppelklick funktioniert.
 
@@ -50,7 +57,9 @@ Verzeichnis: `img/stationen/`
 
 Endung `.webp`, `.jpg`, `.jpeg` oder `.png`; die Seite probiert sie in dieser Reihenfolge. Seitenverhältnis 3:2, empfohlen etwa 1600 × 1067 Pixel. Fehlt ein Bild, erscheint ein Platzhalter.
 
-Titelbild: `img/titel.webp` (oder `.jpg`), Querformat, etwa 2400 × 1000 Pixel.
+Titelbild: `img/titel.webp`, Querformat, etwa 2400 × 1000 Pixel.
+
+Porträts: `img/figuren/<id>.webp` im Hochformat 4:5 (800 × 1000). Für die Übersichten danach `python3 tools/vorschaubilder.py` ausführen; es schreibt kleine Fassungen nach `img/figuren/klein/`. Fehlt eine, zeigt die Seite das große Bild.
 
 ## Tempelbilder
 
@@ -62,7 +71,7 @@ Verzeichnis: `img/gebaeude/`, Dateiname = ID des Plans (z. B. `rabicum.webp`, we
 
 ## Herkunft und Rechte
 
-Seite, Texte, Karten und Bilder sind mit KI erzeugt und gelten als gemeinfrei. Ausgenommen sind die Marken und Inhalte von Das Schwarze Auge (Ulisses Spiele GmbH) und die Schriften in `tools/fonts/` (SIL Open Font License).
+Seite, Texte, Karten und Bilder sind mit KI erzeugt und gelten als gemeinfrei. Ausgenommen sind die Marken und Inhalte von Das Schwarze Auge (Ulisses Spiele GmbH) und die Schriften in `fonts/` (SIL Open Font License).
 
 ## Figurenporträts
 
@@ -70,7 +79,7 @@ Verzeichnis: `img/figuren/`, Dateiname = Figuren-ID aus `data/figuren.js`, z. B.
 
 ## Karten und Pläne
 
-`python3 tools/karten.py` zeichnet die schwarz-weißen Karten und Grundrisse neu nach `img/karten/*.svg` (Schriften liegen in `tools/fonts/`, SIL Open Font License). Texte und Legenden stehen in `data/karten.js`; die Nummern in den Plänen müssen zur Legende passen. Die EPUB-Fassung zeichnet die Pläne mit größeren Nummern und dreht sie hochkant. Die Streckenkarte folgt `tools/strecke_geo.py`: Orte, Straßen und Flüsse nach avesmaps.de (1 Karteneinheit ≈ 2,99 Meilen); erfundene Stationen werden nach ihrer Meilenzahl zwischen die Nachbarn gesetzt.
+`python3 tools/karten.py` zeichnet die schwarz-weißen Karten und Grundrisse neu nach `img/karten/*.svg` (Schriften liegen in `fonts/`, SIL Open Font License). Texte und Legenden stehen in `data/karten.js`; die Nummern in den Plänen müssen zur Legende passen. Die EPUB-Fassung zeichnet die Pläne mit größeren Nummern und dreht sie hochkant. Die Streckenkarte folgt `tools/strecke_geo.py`: Orte, Straßen und Flüsse nach avesmaps.de (1 Karteneinheit ≈ 2,99 Meilen); erfundene Stationen werden nach ihrer Meilenzahl zwischen die Nachbarn gesetzt.
 
 ## Stempelheft
 

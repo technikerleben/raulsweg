@@ -5,9 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Der Raulsweg – Quellenband</title>
 <meta name="description" content="Fan-Quellenband zum Raulsweg, der neuen Kaiserstraße von Gareth nach Perricum. Das Schwarze Auge.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Grenze+Gotisch:wght@500;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#D9C7A1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#110E0A" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Der Raulsweg – Quellenband">
+<meta property="og:description" content="Fan-Quellenband zum Raulsweg, der neuen Kaiserstraße von Gareth nach Perricum. Das Schwarze Auge.">
+<meta property="og:image" content="img/titel.webp">
+<link rel="icon" href="img/ui/zeichen.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/alegreya-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/grenze-gotisch-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 <script>try{var t=localStorage.getItem("raulsweg-ansicht");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
@@ -21,7 +27,7 @@
   </a>
   <div class="kopf-werkzeuge">
     <label class="umschalter" title="Meisterinformationen ein- oder ausblenden">
-      <input type="checkbox" id="meister-schalter">
+      <input type="checkbox" id="meister-schalter" role="switch">
       <span class="umschalter-bahn" aria-hidden="true"></span>
       <span>Meisterinformationen</span>
     </label>

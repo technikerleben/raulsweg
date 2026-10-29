@@ -16,7 +16,7 @@ from playwright.sync_api import sync_playwright
 from pypdf import PdfReader, PdfWriter, Transformation, PageObject
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FONTS = os.path.join(WURZEL, "tools", "fonts")
+FONTS = os.path.join(WURZEL, "fonts")
 ZIEL = os.path.join(WURZEL, "export")
 
 RW = json.loads(subprocess.check_output(["node", "-e", """
