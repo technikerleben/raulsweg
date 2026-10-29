@@ -220,9 +220,9 @@ RW.stationen = [
     gottheit: "Firun", emblem: "Bär und Eiskristall",
     meile: 235, etappe: 35, schaetzung: true,
     status: "rohbau", kanon: false, bild: "09-wandlether-hof", jahreszeit: "Winterdämmerung",
-    kurz: "Einsame Wehrstation im Wald, an der die Straße nach Wandleth abzweigt. Neu befestigt, weil der Abschnitt gefährlich ist.",
+    kurz: "Einsame Wehrstation im Wald, an der die Nebenstraße nach Blitztann abzweigt. Neu befestigt, weil der Abschnitt gefährlich ist.",
     beschreibung: [
-      "Hinter Wasserburg, kurz bevor der Darpat nach Osten abbiegt, führt der Raulsweg durch dichten Wald. Beim Weiler Gräfenweiche zweigt eine schmale Nebenstraße nach Westen ab, über die Hänge nach Blitztann und weiter nach Wandleth. An dieser Abzweigung steht der Wandlether Hof, ursprünglich ein Gehöft, jetzt eine kleine Wehrstation mit neuer Palisade und Wachturm.",
+      "Hinter Wasserburg, kurz bevor der Darpat nach Osten abbiegt, führt der Raulsweg durch dichten Wald. Beim Weiler Gräfenweiche zweigt eine schmale Nebenstraße nach Westen ab, über die Hänge nach Blitztann. An dieser Abzweigung steht der Wandlether Hof, ursprünglich ein Gehöft, jetzt eine kleine Wehrstation mit neuer Palisade und Wachturm.",
       "Der Abschnitt gilt als der unsicherste der Strecke. Im Winter liegt hier Schnee, und es gibt Wölfe, aber die Reisenden fürchten vor allem die Menschen: Wegelagerer, Wilderer und Gestalten, die lieber nicht gefragt werden, wohin sie wollen."
     ],
     vorlesetext: [
@@ -231,12 +231,12 @@ RW.stationen = [
     geruechte: [
       "Die Wegelagerer im Wald kennen die Termine der Geldtransporte. Woher?",
       "Der Wachhauptmann am Hof jagt lieber, als zu wachen. Was er erlegt, landet nicht immer in der Küche der Station.",
-      "Die Straße nach Wandleth wird seit dem Edikt kaum noch gepflegt. Trotzdem sieht man dort nachts Wagenspuren.",
+      "Die Nebenstraße nach Blitztann wird seit dem Edikt kaum noch gepflegt. Trotzdem sieht man dort nachts Wagenspuren.",
       "Wer den Bärenstempel aus Blitztann besitzt, ist den Weg dorthin allein gegangen. Zwei Händler aus Gareth haben es zu zweit versucht und kamen mit leeren Büchlein zurück."
     ],
     konflikt: "Die Wehrstation soll den Wald sicher machen, ist aber unterbesetzt und schlecht ausgerüstet. Wer hier Überfälle verhindern oder geschehen lassen will, hat leichtes Spiel.",
     meister: {
-      hintergrund: "Der Wandlether Hof ist der einsamste Ort der Reise und eignet sich für Stimmung, Gefahr und Wildnis. Die Seitenstraße nach Wandleth ist ein guter Weg, auf dem Dinge den Raulsweg verlassen oder betreten können, ohne an einem Kontrollposten vorbeizukommen."
+      hintergrund: "Der Wandlether Hof ist der einsamste Ort der Reise und eignet sich für Stimmung, Gefahr und Wildnis. Die Nebenstraße nach Blitztann ist ein guter Weg, auf dem Dinge den Raulsweg verlassen oder betreten können, ohne an einem Kontrollposten vorbeizukommen."
     },
     figuren: [], gebaeude: []
   },

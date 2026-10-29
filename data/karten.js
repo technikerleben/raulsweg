@@ -81,7 +81,7 @@ RW.karten = [
   {
     id: "wandlether-hof", titel: "Wehrstation im Forst", art: "Lageplan", station: "wandlether-hof",
     datei: "img/karten/wandlether-hof.svg", massstab: "1 Kästchen der Leiste = 10 Schritt",
-    kurz: "Ein altes Gehöft auf einer Lichtung, jetzt mit Palisade und Wachturm. Hier zweigt die Straße nach Wandleth ab. Ringsum nur Wald.",
+    kurz: "Ein altes Gehöft auf einer Lichtung, jetzt mit Palisade und Wachturm. Hier zweigt die Nebenstraße nach Blitztann ab. Ringsum nur Wald.",
     legende: [
       [1, "Tor", "Wird bei Einbruch der Dunkelheit geschlossen."],
       [2, "Wachturm", ""],
@@ -92,7 +92,7 @@ RW.karten = [
       [7, "Brunnen", "Daneben der Holzstapel."],
       [8, "Hinterpforte", "Ein Pfad führt in den Wald."],
       [9, "Jägerschrein", "Drei Stämme und ein Bärenschädel auf einer kleinen Lichtung."],
-      [10, "Nebenstraße nach Blitztann und Wandleth", "Kaum gepflegt, aber mit frischen Wagenspuren. Über diesen Weg führt auch der Firunsgang nach Blitztann."],
+      [10, "Nebenstraße nach Blitztann", "Kaum gepflegt, aber mit frischen Wagenspuren. Über diesen Weg führt auch der Firunsgang nach Blitztann."],
       [11, "Köhlerplatz", "Meiler und Hütte, abseits im Wald."]
     ]
   },

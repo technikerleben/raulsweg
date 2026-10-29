@@ -342,7 +342,7 @@ RW.figuren = [
     motiv: "Ruhe, Wildbret und kein Ärger mit der Kanzlei.",
     zitat: "Wölfe? Die tun keinem was, der nicht nach Schaf riecht.",
     geheimnisse: [
-      "Eiber lässt die Nebenstraße nach Wandleth nachts unbewacht, weil ihm jemand dafür Pulver, Pfeile und Wein liefert. Was auf dieser Straße fährt, will er nicht wissen.",
+      "Eiber lässt die Nebenstraße nach Blitztann nachts unbewacht, weil ihm jemand dafür Pulver, Pfeile und Wein liefert. Was auf dieser Straße fährt, will er nicht wissen.",
       "Eiber lässt die Nebenstraße unbewacht, weil er nachts selbst auf die Jagd geht. Mit den nächtlichen Wagen hat er nichts zu tun, aber er hat sie gesehen.",
       "Eiber bewacht die Straße gewissenhaft. Die nächtlichen Wagen gehören einem Adligen aus der Gegend, der sein eigenes Holz an den Zöllen vorbeischafft, und Eiber traut sich nicht, ihn anzuzeigen."
     ],
@@ -355,7 +355,7 @@ RW.figuren = [
     aussehen: "Rußgeschwärzt, zerzaust, mit einem Hund an der Seite und Fallen am Gürtel.",
     auftreten: "Misstrauisch, scheu, spricht nur, wenn sie muss. Taucht auf, verschwindet wieder. Wer ihren Hund freundlich behandelt, hat schon halb gewonnen.",
     motiv: "In Ruhe gelassen werden, und dass ihr Wald nicht noch mehr Straßen bekommt.",
-    zitat: "Wagen ohne Licht fahren nachts nach Wandleth. Wagen ohne Licht fahren nicht für die Kaiserin.",
+    zitat: "Wagen ohne Licht fahren nachts in den Wald. Wagen ohne Licht fahren nicht für die Kaiserin.",
     geheimnisse: [
       "Rauke hat die nächtlichen Wagen gezählt und weiß, wo sie im Wald halten. Sie würde es nur jemandem verraten, der ihr verspricht, dass ihre Wilderei unerwähnt bleibt.",
       "Rauke ist die Tochter des früheren Försters, der wegen des Raulswegs seine Stelle verlor. Sie hält den Wandlether Hof für Diebesgut und tut alles, um ihm zu schaden.",

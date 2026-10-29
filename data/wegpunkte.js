@@ -244,7 +244,7 @@ RW.wegpunkte.push(
     meister: "Die Münzen holt der Schrein am Kreuz und gibt sie Händlern zurück, die unterwegs Pech hatten. Oder ein Dieb, der fromm genug ist, das für Phexens Willen zu halten."
   },
   {
-    id: "rommilys", name: "Rommilys", nach: "rommilyser-kreuz", meile: 115, kanon: true, typ: "abseits", art: "Hauptstadt Darpatiens", abseits: "geradeaus auf der Feidewaldstraße, etwa zwei Tagesreisen vom Kreuz (geschätzt)",
+    id: "rommilys", name: "Rommilys", nach: "rommilyser-kreuz", meile: 115, kanon: true, typ: "abseits", art: "Hauptstadt Darpatiens", abseits: "geradeaus auf der Feidewaldstraße, etwa 25 Meilen vom Kreuz, eine Tagesreise (Luftlinie nach avesmaps)",
     kurz: "Die alte Hauptstadt Darpatiens und Sitz des Hauses Rabenmund. Die Stadt, die der Raulsweg am Kreuz links liegen lässt.",
     beschreibung: [
       "Rommilys ist eine Stadt mit Mauern, Brücken, Tempeln und einem Selbstbewusstsein, das älter ist als jedes Edikt. Seit Generationen ziehen Händler, Boten und Heere zwischen Garetien und dem Osten durch ihre Tore. Dass die neue Straße am Kreuz nach Süden abbiegt, empfindet man hier als Kränkung.",
@@ -313,7 +313,7 @@ RW.wegpunkte.push(
   },
   {
     id: "graefenweiche", name: "Gräfenweiche", nach: "wandlether-hof", meile: 233, kanon: true, typ: "siedlung", art: "Weiler an der Abzweigung",
-    kurz: "Ein paar Höfe kurz vor dem Wandlether Hof, dort, wo die Nebenstraße nach Blitztann und Wandleth abzweigt. Hier beginnt der Firunsgang.",
+    kurz: "Ein paar Höfe kurz vor dem Wandlether Hof, dort, wo die Nebenstraße nach Blitztann abzweigt. Hier beginnt der Firunsgang.",
     szene: "Ein Pilger in Fellen sitzt am Wegweiser und schnürt seine Stiefel. Er bittet, dass niemand ihm folgt, und meint es ernst."
   },
   {
@@ -324,15 +324,8 @@ RW.wegpunkte.push(
       "Gruppen sind willkommen, bekommen aber keinen Bärenstempel. Sie bekommen Suppe, einen Platz am Ofen und viele Fragen, die nicht gestellt werden."
     ],
     szene: "Der Dorfälteste prüft die Stiefel eines Pilgers, ohne ein Wort zu sagen. Dann holt er die Bärentatze, oder er holt sie nicht.",
-    meister: "Blitztann ist ein guter Ort für Geschichten, die vom Raulsweg in den Wald führen: Wilderei, ein verschwundener Pilger, Fremde auf der Nebenstraße nach Wandleth."
+    meister: "Blitztann ist ein guter Ort für Geschichten, die vom Raulsweg in den Wald führen: Wilderei, ein verschwundener Pilger, Fremde auf der Nebenstraße, Wagen, die nachts ohne Licht durch den Wald fahren."
   },
-  {
-    id: "wandleth", name: "Wandleth", nach: "wandlether-hof", meile: 233, kanon: true, typ: "abseits", art: "Ort am Ende der Nebenstraße", abseits: "westlich hinter Blitztann, am Ende der Nebenstraße",
-    kurz: "Der Ort, nach dem der Hof benannt ist und zu dem die Nebenstraße eigentlich führt. Seit dem Edikt fährt kaum noch jemand dorthin, und doch sieht man nachts Wagenspuren.",
-    szene: "Ein Fuhrmann aus Wandleth will nicht sagen, was er geladen hat. Er sagt nur, dass er den Kontrollposten am Hof nicht braucht, weil er nicht auf den Raulsweg will. Er steht aber schon darauf.",
-    meister: "Wer an keinem Kontrollposten vorbei will, nimmt die Straße über Wandleth. Was dort durchkommt, bestimmt die Spielleitung."
-  },
-
   /* ---------- Wandlether Hof → Gnitzenkuhl ---------- */
   {
     id: "baerenfels", name: "Der Bärenfels", nach: "gnitzenkuhl", meile: 243, kanon: false, typ: "landmarke", art: "Felsformation",

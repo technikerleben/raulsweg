@@ -15,7 +15,7 @@ ORTE = {
     "perricum": (631.28, 507.35),
     # Nebenorte
     "wandlether-hof": (606.307, 505.061),  # beim Weiler Gräfenweiche
-    "blitztann": (604.03, 505.85), "rommilys": (596.85, 536.88), "wandleth": (577.89, 523.54), "rabenbruecke": (589.072, 534.016),
+    "blitztann": (604.03, 505.85), "rommilys": (596.85, 536.88), "rabenbruecke": (589.072, 534.016),
 }
 
 VERLAUF = ["gareth", (556.5, 533.1), "nattersquell", (565.5, 534.7), (568.4, 535.2), "hartsteen", (573.0, 535.0),
