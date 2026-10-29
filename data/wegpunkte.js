@@ -8,6 +8,12 @@
    id, name, nach (ID der Station oder Stadt, auf die die Etappe zuläuft),
    meile (ab Gareth, gerundet), kanon (Ort aus avesmaps/Kanon),
    art, kurz (was man dort vorfindet), szene (was dort passieren kann)
+   Optional (Ergänzung Landmarken und Orte abseits):
+   typ      siedlung | bauwerk | landmarke | natur | abseits
+            (fehlt er, gilt siedlung, bei Brücke, Gasthaus usw. bauwerk)
+   abseits  wo der Ort liegt, wenn er nicht an der Straße liegt
+   beschreibung [] längerer Text für größere Orte
+   meister  eine Möglichkeit für die Spielleitung, keine Wahrheit
    ========================================================== */
 
 window.RW = window.RW || {};
@@ -174,3 +180,205 @@ RW.wegpunkte = [
     szene: "Der Zöllner liest den Geleitbrief der Helden zweimal, nickt freundlich und verlangt trotzdem den Stadtzoll. „Die Kaiserin regiert das Reich. Perricum regiert der Markgraf.“"
   }
 ];
+
+/* ==========================================================
+   Ergänzung: Landmarken, Bauwerke, Bäume, Felsen
+   und Orte abseits der Straße. Alle Erfindung dieses Bandes,
+   außer wo kanon: true steht.
+   ========================================================== */
+RW.wegpunkte.push(
+  /* ---------- Gareth → Nattersquell ---------- */
+  {
+    id: "nullstein", name: "Der Nullstein", nach: "nattersquell", meile: 0, kanon: false, typ: "bauwerk", art: "Meilenstein",
+    kurz: "Der erste Stein des Raulswegs vor dem Osttor von Gareth, mannshoch, mit dem Greifen der Kaiserin und einer Null, die eigentlich ein Kreis ist. Hier beginnt die Zählung des Edikts.",
+    szene: "Wer aufbricht, legt die Hand auf den Stein. Ein Stadtbüttel achtet darauf, dass niemand Splitter abschlägt, denn ein Splitter vom Nullstein soll eine Reise vor Unglück bewahren. Ein Händler bietet trotzdem welche an, unter dem Mantel.",
+    meister: "Der Stein ist schon zweimal heimlich ausgetauscht worden, weil zu viele Splitter fehlten. Der jetzige ist der dritte, und das weiß außer der Kanzlei niemand."
+  },
+  {
+    id: "gerichtslinde", name: "Die Gerichtslinde von Alfenmohn", nach: "nattersquell", meile: 17, kanon: false, typ: "natur", art: "Alter Baum",
+    kurz: "Eine uralte Linde am Dorfrand, unter der seit Generationen Recht gesprochen wird. Ein steinerner Tisch steht im Schatten, die Rinde ist voller eingeschnittener Zeichen.",
+    szene: "Unter der Linde tagt das Dorfgericht: Ein Fuhrmann soll einen Zaun umgefahren haben. Der Dorfschulze bittet Reisende als unparteiische Zeugen an den Tisch, denn die Kanzlei hat ein eigenes Gericht angekündigt, und das will man im Dorf nicht."
+  },
+  {
+    id: "brotkapelle", name: "Die Brotkapelle", nach: "nattersquell", meile: 27, kanon: false, typ: "bauwerk", art: "Wegkapelle",
+    kurz: "Eine winzige Kapelle der Travia, kaum größer als ein Backofen. Reisende legen ein Stück Brot hinein, wer Hunger hat, darf eines nehmen.",
+    szene: "In der Kapelle liegt kein Brot, sondern ein sauber gefalteter Zettel: Jemand bittet um ein Treffen in Nattersquell, ohne Namen, mit einer Zeichnung einer Gans."
+  },
+
+  /* ---------- Nattersquell → Hartsteen ---------- */
+  {
+    id: "steinerner-hirte", name: "Der Steinerne Hirte", nach: "hartsteen", meile: 48, kanon: false, typ: "landmarke", art: "Felsnadel",
+    kurz: "Eine schmale Felsnadel auf einer Kuppe neben der Straße. Von Westen sieht sie aus wie ein Hirte, der sich auf seinen Stab stützt. Die Steinmetze aus Hartsteen haben ihr nie etwas abgeschlagen.",
+    szene: "Ein Kanzleibeamter vermisst die Kuppe. Der Fels steht der neuen Trasse im Weg, und ein Gildenmeister aus Hartsteen ist schon unterwegs, um das zu verhindern.",
+    meister: "Die Gilde schützt den Fels, weil im Fuß eine Ader besonders feinen Steins steckt, die sie für sich behalten will."
+  },
+  {
+    id: "kaiserbruch", name: "Der Kaiserbruch", nach: "hartsteen", meile: 59, kanon: false, typ: "bauwerk", art: "Steinbruch", abseits: "eine halbe Meile südlich, über einen Karrenweg",
+    kurz: "Der große Steinbruch, aus dem die Quader für die Pfalzen kommen. Eine graue Wand, Kräne aus Holz, Staub über allem und ein Lärm, den man bis zur Straße hört.",
+    szene: "Ein Block ist aus dem Seil gerutscht und liegt auf dem Karrenweg. Die Steinmetze bitten jeden, der vorbeikommt, mit anzupacken, und wer hilft, bekommt einen Splitter mit dem Zeichen der Gilde."
+  },
+
+  /* ---------- Hartsteen → Sonnenfeld ---------- */
+  {
+    id: "dreibrueder", name: "Die Drei Brüder", nach: "sonnenfeld", meile: 68, kanon: false, typ: "natur", art: "Eichengruppe",
+    kurz: "Drei mächtige Eichen in einer Reihe auf freiem Feld, so gleich gewachsen, als hätte sie jemand gepflanzt. Schon von weitem zu sehen, und ein beliebter Rastplatz.",
+    szene: "Zwischen den Eichen ist ein Seil gespannt, darauf hängen Bänder mit Namen. Eine Bäuerin erklärt: Wer ein Band aufhängt, kommt sicher wieder heim. Ein Band hängt dort, das den Namen eines Helden trägt."
+  },
+  {
+    id: "schattenstein", name: "Der Schattenstein", nach: "sonnenfeld", meile: 80, kanon: false, typ: "landmarke", art: "Stele",
+    kurz: "Eine Steinsäule am Feldrain, deren Schatten zur Mittagsstunde genau auf eine Kerbe im Boden fällt. Die Bauern ringsum richten ihren Tag danach, und die Praioskirche hat sie geweiht.",
+    szene: "Die Kerbe im Boden ist frisch versetzt worden, die Mittagsstunde stimmt nicht mehr. In Sonnenfeld streitet man, ob das ein Frevel war oder eine Verbesserung.",
+    meister: "Die Baumeisterin der Pfalz hat die Kerbe versetzen lassen, damit die Pfalz auf dem Plan genau nach Süden ausgerichtet erscheint."
+  },
+
+  /* ---------- Sonnenfeld → Rommilyser Kreuz ---------- */
+  {
+    id: "zaehlturm", name: "Der Zählturm", nach: "rommilyser-kreuz", meile: 95, kanon: false, typ: "bauwerk", art: "Alter Wachturm",
+    kurz: "Ein halb verfallener Wachturm aus Feldsteinen auf einer Anhöhe. Seit dem Edikt steht oben fast immer jemand und zählt die Wagen auf der neuen Straße.",
+    szene: "Oben auf dem Turm sitzt ein Mann mit einer Tafel und Kreide. Er ruft den Helden zu, wie viele Wagen sie heute schon sind, und fragt, wohin sie wollen. Bezahlt wird er von jemandem in Rommilys."
+  },
+  {
+    id: "phexens-daumen", name: "Phexens Daumen", nach: "rommilyser-kreuz", meile: 106, kanon: false, typ: "landmarke", art: "Fels",
+    kurz: "Ein runder Fels mit einer Mulde, so groß wie ein Daumen. Händler legen auf dem Weg nach Osten eine Münze hinein, für gute Geschäfte. Am Morgen ist die Mulde immer leer.",
+    szene: "Ein Kind liegt im Gras und beobachtet den Fels. Es will wissen, wer die Münzen nimmt, und hat schon eine Wette darauf laufen.",
+    meister: "Die Münzen holt der Schrein am Kreuz und gibt sie Händlern zurück, die unterwegs Pech hatten. Oder ein Dieb, der fromm genug ist, das für Phexens Willen zu halten."
+  },
+  {
+    id: "rommilys", name: "Rommilys", nach: "rommilyser-kreuz", meile: 115, kanon: true, typ: "abseits", art: "Hauptstadt Darpatiens", abseits: "geradeaus auf der Feidewaldstraße, etwa zwei Tagesreisen vom Kreuz (geschätzt)",
+    kurz: "Die alte Hauptstadt Darpatiens und Sitz des Hauses Rabenmund. Die Stadt, die der Raulsweg am Kreuz links liegen lässt.",
+    beschreibung: [
+      "Rommilys ist eine Stadt mit Mauern, Brücken, Tempeln und einem Selbstbewusstsein, das älter ist als jedes Edikt. Seit Generationen ziehen Händler, Boten und Heere zwischen Garetien und dem Osten durch ihre Tore. Dass die neue Straße am Kreuz nach Süden abbiegt, empfindet man hier als Kränkung.",
+      "Für den Raulsweg ist Rommilys der große Abstecher: wer zu den Rabenmunds will, wer Klagen hören oder Gegenstimmen sammeln möchte, wer Handel abseits der Kanzlei sucht, reist am Kreuz geradeaus. Die Feidewaldstraße ist älter, schmaler und schlechter gepflegt als der Raulsweg, aber sie hat Herbergen, die nicht erst gebaut werden müssen."
+    ],
+    szene: "Am Stadttor fragt die Wache nicht nach dem Geleitbrief, sondern ob man über die neue Straße gekommen ist. Wer ja sagt, zahlt den vollen Zoll. Wer nein sagt, wird zum Bleiben eingeladen.",
+    meister: "Rommilys ist der Ort, an dem eine Geschichte vom Raulsweg wegführen und mit neuen Verbündeten oder Feinden zurückkehren kann. Was dort gilt, bestimmt die Spielleitung; die offiziellen Quellen zu Darpatien haben Vorrang."
+  },
+
+  /* ---------- Rommilyser Kreuz → Feste Hohenstein ---------- */
+  {
+    id: "wachtfeuerhoehe", name: "Die Wachtfeuerhöhe", nach: "feste-hohenstein", meile: 118, kanon: false, typ: "landmarke", art: "Hügel mit Feuerstelle",
+    kurz: "Ein kahler Hügel mit einer gemauerten Feuerstelle. Von hier aus sieht man die Feste Hohenstein und das Kreuz zugleich. Ein Feuer hier heißt: Gefahr an der Kreuzung.",
+    szene: "Auf der Höhe liegt frisch aufgeschichtetes Holz, trocken und mit Pech getränkt. Niemand von der Feste weiß, wer es hingelegt hat."
+  },
+
+  /* ---------- Feste Hohenstein → Natterbrücke ---------- */
+  {
+    id: "schwurweide", name: "Die Schwurweide", nach: "natterbruecke", meile: 126, kanon: false, typ: "natur", art: "Alte Weide am Ufer",
+    kurz: "Eine knorrige Silberweide am Natterufer, deren Äste bis ins Wasser hängen. Die Flussträger schwören hier ihre Bündnisse, die Hand im Wasser, die andere am Stamm.",
+    szene: "Zwei junge Flussträger stehen bis zu den Knien im Wasser und schwören sich etwas. Als sie die Helden sehen, verstummen sie. Später bittet einer von ihnen, den Schwur zu bezeugen, falls es Streit gibt."
+  },
+  {
+    id: "treidelhaus", name: "Das Treidelhaus", nach: "natterbruecke", meile: 136, kanon: false, typ: "bauwerk", art: "Altes Fachwerkhaus",
+    kurz: "Ein schiefes Fachwerkhaus am alten Treidelpfad, Versammlungshaus der Flussträger. An der Wand hängen Seile, Tragegurte und eine Tafel mit den Namen aller, die im Fluss geblieben sind.",
+    szene: "Im Treidelhaus wird abgestimmt, ob man der Kanzlei beim Brückenbau hilft oder nicht. Fremde dürfen zuhören, wenn sie ein Seil mit anfassen.",
+    meister: "Die Abstimmung ist knapp, und das Ergebnis lässt sich mit einem guten Wort, einem Fass Bier oder einem Gerücht noch drehen."
+  },
+
+  /* ---------- Natterbrücke → Mardramund ---------- */
+  {
+    id: "schreiberstein", name: "Der Schreiberstein", nach: "mardramund", meile: 155, kanon: false, typ: "landmarke", art: "Fels mit Inschriften",
+    kurz: "Ein glatter Findling am Wegrand, über und über mit eingeritzten Namen, Daten und Sprüchen bedeckt. Jeder neue Schreiber der Stationskanzlei ritzt hier seinen Namen ein, bevor er in Mardramund anfängt.",
+    szene: "Ein junger Schreiber kniet vor dem Stein und sucht einen Platz für seinen Namen. Er bittet um ein Messer, seins ist stumpf, und um Rat, welcher Spruch Hesinde gefällt.",
+    meister: "Unter den Namen der Schreiber liegt eine viel ältere Inschrift, kaum noch lesbar. Wer sie entziffert, findet einen Grenzverlauf, der heutigen Ansprüchen widerspricht."
+  },
+  {
+    id: "hohle-esche", name: "Die Hohle Esche", nach: "mardramund", meile: 165, kanon: false, typ: "natur", art: "Hohler Baum",
+    kurz: "Eine vom Blitz gespaltene Esche, innen hohl, aber noch grün. Boten und Fuhrleute hinterlegen darin Nachrichten füreinander, ein Postamt ohne Kanzlei.",
+    szene: "In der Höhlung steckt ein Brief, adressiert an einen Namen, der zu einem der Helden passt, oder fast."
+  },
+
+  /* ---------- Mardramund → Wasserburg ---------- */
+  {
+    id: "darpatmuehle", name: "Die Darpatmühle", nach: "wasserburg", meile: 177, kanon: false, typ: "bauwerk", art: "Wassermühle",
+    kurz: "Eine große Mühle an einem Seitenarm des Darpat, mit zwei Rädern und einem Wehr. Seit die Stationen Mehl brauchen, mahlt sie Tag und Nacht.",
+    szene: "Das Wehr ist geschlossen, das Wasser staut sich über die Wiesen. Der Müller sagt, die Kanzlei habe es befohlen. Die Bauern sagen, der Müller lügt."
+  },
+  {
+    id: "tsas-wiege", name: "Tsas Wiege", nach: "wasserburg", meile: 194, kanon: false, typ: "landmarke", art: "Runder Stein in einer Mulde",
+    kurz: "Ein fast kugelrunder Stein in einer grasbewachsenen Mulde, der leicht schaukelt, wenn man ihn anstößt. Wer neu anfangen will, gibt ihm einen Stoß und geht, ohne sich umzusehen.",
+    szene: "Gaukler aus Wasserburg haben den Stein mit Blumen geschmückt und verkaufen Wünsche: Man flüstert einen Neuanfang auf einen Zettel, sie legen ihn unter den Stein."
+  },
+
+  /* ---------- Wasserburg → Wandlether Hof ---------- */
+  {
+    id: "bannbuche", name: "Die Bannbuche", nach: "wandlether-hof", meile: 214, kanon: false, typ: "natur", art: "Grenzbaum",
+    kurz: "Eine gewaltige Buche mit einem eisernen Ring um den Stamm. Hier beginnt der Bannwald des Wandlether Hofs. Wer dahinter jagt, braucht Erlaubnis.",
+    szene: "Am Ring hängt ein frischer Hasenbalg, sorgfältig ausgenommen. Eine Warnung, ein Opfer oder ein Spott, je nachdem, wen man fragt.",
+    meister: "Der Balg stammt von Rauke, der Köhlerin. Er bedeutet: Der Wald gehört nicht der Krone, sondern Firun."
+  },
+  {
+    id: "koehlerlichtung", name: "Die Köhlerlichtung", nach: "wandlether-hof", meile: 223, kanon: false, typ: "landmarke", art: "Lichtung mit Meilern",
+    kurz: "Eine weite Lichtung, auf der drei Meiler rauchen. Hütten aus Rinde, schwarze Gesichter, ein Geruch, der tagelang in den Kleidern bleibt.",
+    szene: "Die Köhler bieten Holzkohle zu einem Preis, für den man in Gareth nicht einmal Brennholz bekommt. Woher das Holz kommt, fragt man besser nicht."
+  },
+  {
+    id: "graefenweiche", name: "Gräfenweiche", nach: "wandlether-hof", meile: 233, kanon: true, typ: "siedlung", art: "Weiler an der Abzweigung",
+    kurz: "Ein paar Höfe kurz vor dem Wandlether Hof, dort, wo die Nebenstraße nach Blitztann und Wandleth abzweigt. Hier beginnt der Firunsgang.",
+    szene: "Ein Pilger in Fellen sitzt am Wegweiser und schnürt seine Stiefel. Er bittet, dass niemand ihm folgt, und meint es ernst."
+  },
+  {
+    id: "blitztann", name: "Blitztann", nach: "wandlether-hof", meile: 233, kanon: true, typ: "abseits", art: "Dorf im Wald", abseits: "gut neun Meilen westlich von Gräfenweiche, über die Nebenstraße",
+    kurz: "Ein Walddorf an steinigen Hängen, mit niedrigen Häusern und hohen Holzstapeln. Hier verwahrt der Dorfälteste die eiserne Bärentatze für den Bärenstempel.",
+    beschreibung: [
+      "Blitztann lebt vom Holz, von der Jagd und davon, dass hier nichts schneller geht als im Wald. Die Leute reden wenig und sehen viel. Wer den Firunsgang allein und ohne Feuer gemacht hat, erkennen sie an den Spuren, nicht an den Worten.",
+      "Gruppen sind willkommen, bekommen aber keinen Bärenstempel. Sie bekommen Suppe, einen Platz am Ofen und viele Fragen, die nicht gestellt werden."
+    ],
+    szene: "Der Dorfälteste prüft die Stiefel eines Pilgers, ohne ein Wort zu sagen. Dann holt er die Bärentatze, oder er holt sie nicht.",
+    meister: "Blitztann ist ein guter Ort für Geschichten, die vom Raulsweg in den Wald führen: Wilderei, ein verschwundener Pilger, Fremde auf der Nebenstraße nach Wandleth."
+  },
+  {
+    id: "wandleth", name: "Wandleth", nach: "wandlether-hof", meile: 233, kanon: true, typ: "abseits", art: "Ort am Ende der Nebenstraße", abseits: "westlich hinter Blitztann, am Ende der Nebenstraße",
+    kurz: "Der Ort, nach dem der Hof benannt ist und zu dem die Nebenstraße eigentlich führt. Seit dem Edikt fährt kaum noch jemand dorthin, und doch sieht man nachts Wagenspuren.",
+    szene: "Ein Fuhrmann aus Wandleth will nicht sagen, was er geladen hat. Er sagt nur, dass er den Kontrollposten am Hof nicht braucht, weil er nicht auf den Raulsweg will. Er steht aber schon darauf.",
+    meister: "Wer an keinem Kontrollposten vorbei will, nimmt die Straße über Wandleth. Was dort durchkommt, bestimmt die Spielleitung."
+  },
+
+  /* ---------- Wandlether Hof → Gnitzenkuhl ---------- */
+  {
+    id: "baerenfels", name: "Der Bärenfels", nach: "gnitzenkuhl", meile: 243, kanon: false, typ: "landmarke", art: "Felsformation",
+    kurz: "Ein Felsbrocken am Waldrand, der aussieht wie ein schlafender Bär. Pilger, die vom Firunsgang zurückkommen, ritzen eine Kerbe in seinen Rücken.",
+    szene: "Jemand hat den Bärenfels mit Kreide bemalt, Augen und Zähne. Ein Firungläubiger ist außer sich und sucht den Täter."
+  },
+  {
+    id: "storchenwiese", name: "Die Storchenwiese", nach: "gnitzenkuhl", meile: 257, kanon: false, typ: "natur", art: "Feuchtwiese",
+    kurz: "Eine nasse Wiese kurz vor Gnitzenkuhl, auf der im Sommer Dutzende Störche staken. Wer hier einen Storch aufscheucht, bringt Unglück nach Gnitzenkuhl, sagen die Leute.",
+    szene: "Bauleute vom Damm wollen die Wiese trockenlegen. Ein Peraine-Novize steht mit ausgebreiteten Armen vor ihnen."
+  },
+
+  /* ---------- Gnitzenkuhl → Gaulsfurt ---------- */
+  {
+    id: "kriegseiche", name: "Die Kriegseiche", nach: "gaulsfurt", meile: 279, kanon: false, typ: "natur", art: "Alte Eiche",
+    kurz: "Eine einzelne Eiche am Rand des alten Schlachtfelds. In ihrer Rinde stecken noch Pfeilspitzen, überwachsen und rostig. Niemand nimmt sie heraus.",
+    szene: "Ein Mann versucht, mit einem Messer eine Pfeilspitze aus dem Stamm zu lösen, für einen Sammler in Perricum. Eine Borongeweihte kommt gerade den Weg herauf."
+  },
+  {
+    id: "steinfeld", name: "Das Feld der Steine", nach: "gaulsfurt", meile: 283, kanon: false, typ: "landmarke", art: "Gedenksteine",
+    kurz: "Hunderte kleiner Steine stehen in Reihen auf dem Feld vor Gaulsfurt, manche mit Namen, die meisten ohne. Jeder, der vorbeikommt, stellt einen dazu oder richtet einen auf, der umgefallen ist.",
+    szene: "Eine alte Frau geht die Reihen ab und liest jeden Namen laut. Sie sucht einen bestimmten, seit Jahren, und bittet die Helden, ihr beim Lesen zu helfen."
+  },
+
+  /* ---------- Gaulsfurt → Rabicum ---------- */
+  {
+    id: "lange-mauer", name: "Die Lange Mauer", nach: "rabicum", meile: 300, kanon: false, typ: "bauwerk", art: "Trockenmauer",
+    kurz: "Eine kniehohe Mauer aus Feldsteinen, die über eine Meile neben der Straße herläuft und die Weinberge einfasst. Sie ist älter als jede Urkunde über die Grenzen der Winzer.",
+    szene: "Ein Stück der Mauer ist über Nacht versetzt worden, drei Schritt näher an die Straße. Zwei Winzer stehen davor und schreien sich an.",
+    meister: "Wem gehört der Streifen zwischen Mauer und Straße, der Kanzlei, dem Winzer oder der Markgrafschaft? Davon hängt ab, wer an der neuen Straße eine Schenke bauen darf."
+  },
+  {
+    id: "zwei-liebende", name: "Die zwei Liebenden", nach: "rabicum", meile: 303, kanon: false, typ: "landmarke", art: "Felsformation",
+    kurz: "Zwei hohe Felsen, die sich einander zuneigen, als wollten sie sich küssen. Paare aus Rabicum gehen am Rahjatag hindurch.",
+    szene: "Zwischen den Felsen sitzt ein Lautenspieler und singt für jeden, der durch die Lücke geht, eine Strophe. Für die Helden singt er eine, die sie besser nicht weitererzählen."
+  },
+
+  /* ---------- Rabicum → Perricum ---------- */
+  {
+    id: "meerblick", name: "Der Meerblick", nach: "perricum", meile: 312, kanon: false, typ: "landmarke", art: "Hügelkuppe",
+    kurz: "Die Kuppe, von der aus man zum ersten Mal das Perlenmeer sieht. Hier halten fast alle an, auch die Eiligen, und viele weinen ein bisschen.",
+    szene: "Auf der Kuppe steht ein Händler mit einem Fernrohr und verlangt einen Heller für einen Blick auf die Schiffe im Hafen. Durch sein Glas sieht man auch, welche Flagge gerade einläuft."
+  },
+  {
+    id: "salzgaerten", name: "Die Salzgärten", nach: "perricum", meile: 317, kanon: false, typ: "bauwerk", art: "Salinen", abseits: "eine halbe Meile seewärts von Gliesensand",
+    kurz: "Flache Becken am Ufer, in denen Meerwasser verdunstet. Salzsieder harken weiße Krusten zusammen, die Luft schmeckt bitter.",
+    szene: "Ein Salzsieder fragt, ob die Helden Platz im Gepäck haben. Ein Sack Salz bis Gareth bringt dort das Dreifache, und Zoll darauf zahlt niemand, sagt er."
+  }
+);

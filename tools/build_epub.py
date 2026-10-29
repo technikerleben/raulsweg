@@ -289,7 +289,9 @@ def weg_html(h):
     liste = sorted((w for w in RW.get("wegpunkte", []) if w["nach"] == nach["id"]), key=lambda w: w["meile"])
     teile = [f"<h2>Auf dem Weg nach {e(nach['name'])}</h2><p class=\"leise\">{etappe_text(nach)} Meilen bis zur nächsten Station.</p>"]
     for w in liste:
-        teile.append(f"<h3>{e(w['name'])}</h3><p class=\"leise\">{e(w['art'])}, Meile {w['meile']}</p><p>{e(w['kurz'])}</p><p><b>Am Weg:</b> {e(w['szene'])}</p>")
+        zusatz = f", abseits der Straße: {e(w['abseits'])}" if w.get("abseits") else ""
+        teile.append(f"<h3>{e(w['name'])}</h3><p class=\"leise\">{e(w['art'])}, Meile {w['meile']}{zusatz}</p><p>{e(w['kurz'])}</p>{absaetze(w.get('beschreibung'))}<p><b>Am Weg:</b> {e(w['szene'])}</p>"
+                     + (meister("Meisterinformation", f"<p>{e(w['meister'])}</p>") if w.get("meister") else ""))
     if not liste:
         teile.append("<p>Auf dieser kurzen Etappe gibt es keinen eigenen Halt.</p>")
     return "".join(teile)

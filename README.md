@@ -95,7 +95,7 @@ Nach jeder gespielten Geschichte einen Eintrag in `data/chronik.js` ergänzen (V
 1. Grundgerüst (vorhanden)
 2. Figuren (vorhanden; Porträts und Spielwerte offen)
 3. Gebäude und Orte – Feld `gebaeude: []`
-4. Karte und Strecke, Wegpunkte (vorhanden); Reisezeitrechner offen
+4. Karte und Strecke, Wegpunkte mit Landmarken, Bauwerken, Bäumen, Felsen und Abstechern (vorhanden; Feld `typ`, `abseits`, `meister` in data/wegpunkte.js); Reisezeitrechner offen
 5. Mächte und Beziehungsnetz (vorhanden; `RW.beziehungen` in data/maechte.js, Profil unter `#/macht/<id>`)
 6. Spielhilfen (vorhanden; `data/spielhilfen.js`, Seite `#/spielhilfen`): Begegnungen je Abschnitt, Gerüchte, Wetter, Namen, Reisetag-Würfel
 7. Handouts (Geleitbrief, Leumundsbrief, Stempelheft)

@@ -610,3 +610,21 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
 .namen-liste ol li::marker { color: var(--rubrik); font-family: var(--schrift-kapit); }
 .namen-liste .leise { margin: .2rem 0 0; font-size: .85rem; }
 @media print { .wurf, .reisetag, .reisetag-ergebnis, .namen-werkzeug { display: none; } }
+
+/* ---------- Wegpunkt-Arten ---------- */
+.typ-zeichen { display: inline-block; width: .8rem; height: .8rem; margin-right: .5rem; vertical-align: .05em; background: var(--rubrik); border-radius: 50%; }
+.typ-zeichen.typ-bauwerk { border-radius: 1px; background: var(--tinte); }
+.typ-zeichen.typ-landmarke { border-radius: 0; background: var(--gold); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.typ-zeichen.typ-natur { background: var(--feld); clip-path: polygon(50% 0, 90% 70%, 60% 70%, 60% 100%, 40% 100%, 40% 70%, 10% 70%); border-radius: 0; }
+.typ-zeichen.typ-abseits { background: transparent; border: 2px dashed var(--indigo); }
+.weg-liste li.typ-bauwerk::before { border-radius: 1px; border-color: var(--tinte); }
+.weg-liste li.typ-landmarke::before { border-color: var(--gold); }
+.weg-liste li.typ-natur::before { border-color: var(--feld); }
+.weg-liste li.typ-abseits::before { border-style: dashed; border-color: var(--indigo); }
+.wegpunkt.typ-abseits { border-left-style: dashed; border-left-color: var(--indigo); }
+.weg-abseits { font-size: .92rem; color: var(--indigo); margin: .2rem 0 .4rem; }
+.weg-filter { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.2rem 0; }
+.weg-filter button { font: inherit; font-family: var(--schrift-kapit); font-size: .9rem; cursor: pointer; background: var(--blatt-hell); color: var(--tinte); border: 1px solid var(--linie); border-radius: 999px; padding: .25rem .8rem; display: inline-flex; align-items: center; }
+.weg-filter button span { margin-left: .35rem; color: var(--tinte-weich); font-size: .8rem; }
+.weg-filter button[aria-pressed="true"] { background: var(--tinte); color: var(--blatt); border-color: var(--tinte); }
+.weg-filter button[aria-pressed="true"] span { color: var(--blatt-tief); }

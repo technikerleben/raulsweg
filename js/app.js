@@ -80,11 +80,15 @@
     Firun: "des Firun", Tsa: "der Tsa", Phex: "des Phex", Peraine: "der Peraine", Ingerimm: "des Ingerimm", Rahja: "der Rahja" };
   const tempelArt = t => `${t.art} ${GENITIV[t.gottheit] || t.gottheit}`;
   const wegpunkte = RW.wegpunkte || [];
+  // Typ der Wegpunkte: fehlt er, gilt Siedlung, bei Brücken, Gasthäusern usw. Bauwerk
+  const WEG_TYP = { siedlung: "Dörfer und Höfe", bauwerk: "Bauwerke", landmarke: "Felsen und Landmarken", natur: "Bäume und Wiesen", abseits: "Abseits der Straße" };
+  const BAU_ARTEN = ["Adelssitz", "Brücke", "Straßenbaustelle", "Gasthaus", "Kontrollstelle"];
+  wegpunkte.forEach(w => { if (!w.typ) w.typ = BAU_ARTEN.includes(w.art) ? "bauwerk" : "siedlung"; });
   const haltName = id => (RW.stationen.find(s => s.id === id) || {}).name || id;
   wegpunkte.forEach(w => eintragen({
     schluessel: "wegpunkt:" + w.id, art: `${w.art} auf dem Weg nach ${haltName(w.nach)}`, name: w.name,
-    begriffe: [w.name, ...(w.begriffe || []), ...(w.name.includes("„") ? [w.name.replace(/^.*„|“.*$/g, "")] : [])],
-    href: `#/unterwegs/${w.id}`, kurz: w.kurz, text: [w.kurz, w.szene].join(" ")
+    begriffe: [w.name, ...(w.begriffe || []), ...(w.name.includes("„") ? [w.name.replace(/^.*„|“.*$/g, "")] : []), ...(/^(Der|Die|Das) /.test(w.name) ? [w.name.replace(/^(Der|Die|Das) /, "")] : [])],
+    href: `#/unterwegs/${w.id}`, kurz: w.kurz, text: [w.kurz, ...(w.beschreibung || []), w.szene].join(" ")
   }));
   const dokumente = RW.dokumente || [];
   dokumente.forEach(d => eintragen({
@@ -184,7 +188,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .reisetag, .namen-werkzeug, .namen-liste, .w-zahl, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .reisetag, .namen-werkzeug, .weg-filter, .weg-abseits, .namen-liste, .w-zahl, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -625,7 +629,7 @@
     const liste = wegpunkteNach(nach.id);
     const kopf = `<h2>Auf dem Weg nach ${esc(nach.name)}</h2><p class="leise">${etappeText(nach)} Meilen bis zur nächsten Station.${liste.length ? "" : " Unterwegs nur Feld und Wald."}</p>`;
     return `<section class="weg-nach" id="weiter">${kopf}${liste.length ? `<ul class="weg-liste">${liste.map(w => `
-      <li><span class="weg-meile">Meile ${w.meile}</span><div><a class="weg-name" href="#/unterwegs/${w.id}">${esc(w.name)}</a><span class="weg-art">${esc(w.art)}</span><p>${esc(w.kurz)}</p></div></li>`).join("")}</ul>` : ""}</section>`;
+      <li class="typ-${w.typ}"><span class="weg-meile">Meile ${w.meile}</span><div><a class="weg-name" href="#/unterwegs/${w.id}">${esc(w.name)}</a><span class="weg-art">${esc(w.art)}${w.abseits ? `, abseits: ${esc(w.abseits)}` : ""}</span><p>${esc(w.kurz)}</p></div></li>`).join("")}</ul>` : ""}</section>`;
   }
 
   function seiteDokumente() {
@@ -647,26 +651,48 @@
   function seiteUnterwegs() {
     const etappen = RW.stationen.slice(0, -1).map(h => ({ von: h, nach: naechsterHalt(h) }));
     const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Etappen</p><ul>${etappen.map(e => `<li><a href="#/unterwegs/etappe-${e.nach.id}">${esc(e.von.name)} → ${esc(e.nach.name)}</a></li>`).join("")}</ul></nav>`;
+    const zahl = t => wegpunkte.filter(w => w.typ === t).length;
+    const filter = `<div class="weg-filter" role="group" aria-label="Nach Art filtern">
+      <button type="button" data-typ="" aria-pressed="true">Alle <span>${wegpunkte.length}</span></button>
+      ${Object.entries(WEG_TYP).map(([t, n]) => `<button type="button" data-typ="${t}" aria-pressed="false"><i class="typ-zeichen typ-${t}" aria-hidden="true"></i>${esc(n)} <span>${zahl(t)}</span></button>`).join("")}
+    </div>`;
     const inhalt = etappen.map(e => {
       const liste = wegpunkteNach(e.nach.id);
       return `<section class="etappe" id="etappe-${e.nach.id}">
         <h2><a href="${linkZu(e.von)}">${esc(e.von.name)}</a> → <a href="${linkZu(e.nach)}">${esc(e.nach.name)}</a></h2>
         <p class="etappe-zeile">Meile ${meileText(e.von)} bis ${meileText(e.nach)} · ${etappeText(e.nach)} Meilen</p>
-        ${liste.map(w => `<section class="wegpunkt" id="${w.id}">
-          <h3>${esc(w.name)}</h3>
+        ${liste.map(w => `<section class="wegpunkt typ-${w.typ}" id="${w.id}" data-typ="${w.typ}">
+          <h3><i class="typ-zeichen typ-${w.typ}" aria-hidden="true"></i>${esc(w.name)}</h3>
           <p class="weg-art">${esc(w.art)}, Meile ${w.meile} ${w.kanon ? `<span class="marke-kanon">Kanon</span>` : `<span class="marke-eigen">Ergänzung</span>`}</p>
+          ${w.abseits ? `<p class="weg-abseits">Abseits der Straße: ${esc(w.abseits)}</p>` : ""}
           <p>${esc(w.kurz)}</p>
+          ${absaetze(w.beschreibung || [])}
           <p class="weg-szene"><strong>Am Weg:</strong> ${esc(w.szene)}</p>
+          ${w.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(w.meister)}</p></div>` : ""}
         </section>`).join("") || `<p class="leise">Auf dieser kurzen Etappe gibt es keinen eigenen Halt.</p>`}
       </section>`;
     }).join("");
     return {
       html: `<h1>Zwischen den Stationen</h1>
-      <p class="einleitung initiale">Zwischen zwei Stationen liegt ein Tag auf der Straße, und der ist selten leer. Dörfer, Brücken, Schenken und Baustellen säumen den Raulsweg.</p>
-      <p>Die Orte stammen überwiegend aus der Karte von avesmaps.de; was dort geschieht, ist Erfindung dieses Bandes. Zu jedem Ort gehört eine kurze Szene, die sich unterwegs einstreuen lässt.</p>
+      <p class="einleitung initiale">Zwischen zwei Stationen liegt ein Tag auf der Straße, und der ist selten leer. Dörfer, Brücken, Schenken und Baustellen säumen den Raulsweg, dazu alte Bäume, Felsen, Steine und Orte, an denen jeder anhält.</p>
+      <p>Die Dörfer stammen überwiegend aus der Karte von avesmaps.de, die Landmarken und Bauwerke sind Ergänzungen dieses Bandes. Zu jedem Ort gehört eine kurze Szene zum Einstreuen. Unter <em>Abseits der Straße</em> stehen Orte, zu denen ein Abstecher führt.</p>
+      ${filter}
       ${toc}${inhalt}`,
       eigene: []
     };
+  }
+  function wegFilterBeleben() {
+    const leiste = main.querySelector(".weg-filter");
+    if (!leiste) return;
+    leiste.querySelectorAll("button").forEach(k => k.addEventListener("click", () => {
+      const typ = k.dataset.typ;
+      leiste.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === k)));
+      main.querySelectorAll(".etappe").forEach(et => {
+        let sichtbar = 0;
+        et.querySelectorAll(".wegpunkt").forEach(w => { const an = !typ || w.dataset.typ === typ; w.hidden = !an; if (an) sichtbar++; });
+        et.hidden = !!typ && !sichtbar;
+      });
+    }));
   }
 
   function sprungliste(s) {
@@ -727,6 +753,7 @@
               <dt>Bauzustand</dt><dd>${bauMarke(s)}</dd>
               <dt>Herkunft</dt><dd>${kanonMarke(s)}</dd>
               <dt>Stimmung</dt><dd>${esc(s.jahreszeit)}</dd>
+              ${wegpunkte.filter(w => w.nach === s.id && w.typ === "abseits").length ? `<dt>Abstecher</dt><dd>${wegpunkte.filter(w => w.nach === s.id && w.typ === "abseits").map(w => `<a href="#/unterwegs/${w.id}">${esc(w.name)}</a>`).join("<br>")}</dd>` : ""}
               ${abschnittVon(s.id) ? `<dt>Unterwegs</dt><dd><a href="#/spielhilfen/${abschnittVon(s.id).id}">Begegnungen: ${esc(abschnittVon(s.id).name)}</a></dd>` : ""}
             </dl>
           </section>
@@ -1285,6 +1312,7 @@
       gebaeudeLaden();
       netzBeleben();
       spielhilfenBeleben();
+      wegFilterBeleben();
       const kopieren = document.getElementById("vorlage-kopieren");
       if (kopieren) kopieren.addEventListener("click", () => {
         const fertig = t => { kopieren.textContent = t; setTimeout(() => { kopieren.textContent = "Kopieren"; }, 1800); };
