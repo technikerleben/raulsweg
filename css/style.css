@@ -667,6 +667,23 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
   a { color: inherit; text-decoration: none; }
   /* Einzeldruck: nur das gewählte Dokument oder den Plan */
   body.druck-einzeln main > :not(.druck-ziel) { display: none !important; }
-  body.druck-einzeln .druck-ziel .dok-kurz { display: none; }
+  body.druck-einzeln .druck-ziel > h2, body.druck-einzeln .druck-ziel .dok-herkunft, body.druck-einzeln .druck-ziel .dok-kurz { display: none; }
+  body.druck-einzeln .dokument.druck-ziel, body.druck-einzeln .druck-ziel .dok-blatt { max-width: none; margin: 0; }
+  body.druck-einzeln .druck-ziel .dok-blatt { font-size: 11pt; padding: 10mm 12mm; }
+  body.druck-einzeln .dok-tabelle { break-before: page; margin-top: 0; }
+  body.druck-einzeln .dok-tabelle td { height: 2.4rem; padding-top: .2rem; padding-bottom: .2rem; }
   body.druck-einzeln .karte-gross img { border: 0; filter: none !important; }
 }
+
+/* ---------- Vordrucke: Schreiblinien, Ankreuzfelder, Vermerktabelle ---------- */
+.dok-kopf { text-align: center; font-family: var(--schrift-titel); font-size: 1.6rem; line-height: 1.2; margin-bottom: 1.2rem; }
+.dok-kopf-zeile { display: block; font-family: var(--schrift-kapit); font-size: 1rem; margin-top: .3rem; }
+.feld { display: inline-block; position: relative; border-bottom: 1px solid var(--tinte); height: 1.1em; vertical-align: baseline; margin: 0 .15em .9em; }
+.feld::after { content: attr(data-was); position: absolute; left: 0; right: 0; top: 100%; font-family: var(--schrift-text); font-size: .62rem; font-style: italic; line-height: 1.3; color: var(--tinte-weich); text-align: center; }
+.ankreuz { display: inline-block; width: .85em; height: .85em; border: 1px solid var(--tinte); vertical-align: -.05em; margin: 0 .25em 0 .1em; }
+.dok-auswahl { line-height: 2.3; }
+.dok-tabelle { margin-top: 1.6rem; font-size: .92rem; }
+.dok-tabelle caption { font-family: var(--schrift-kapit); color: var(--rubrik); text-align: left; margin-bottom: .3rem; }
+.dok-tabelle td { height: 2rem; }
+.dok-tabelle td:first-child { width: 40%; }
+.dok-tabelle tbody tr:hover { background: none; }

@@ -69,3 +69,61 @@ RW.dokumente = [
     `
   }
 ];
+
+/* ----------------------------------------------------------
+   Vordrucke zum Ausfüllen (Handouts für die Helden)
+   feld(was, breite) erzeugt eine leere Schreiblinie mit kleiner Beschriftung.
+   ---------------------------------------------------------- */
+(function () {
+  const feld = (was, breite = 10) => `<span class="feld" data-was="${was}" style="min-width:${breite}em"></span>`;
+  const kasten = "<span class=\"ankreuz\" aria-hidden=\"true\"></span>";
+
+  RW.dokumente.push(
+    {
+      id: "geleitbrief",
+      titel: "Geleitbrief der Kanzlei",
+      art: "Vordruck",
+      herkunft: "Ausgestellt von der Kanzlei des Stationswesens zu Gareth, eingetragen in Mardramund",
+      begriffe: [],
+      kurz: "Das Papier, das nach dem sechsten Artikel des Edikts die Pfalzen öffnet, Wechselpferde gewährt und an den Kontrollen Vorrang gibt. Zum Ausfüllen für die Helden.",
+      text: `
+      <p class="dok-kopf">Kanzlei des Stationswesens<br><span class="dok-kopf-zeile">Geleitbrief Nr. ${feld("Nummer", 5)}</span></p>
+      <p class="dok-anrede">Kraft des sechsten Artikels des Edikts Ihrer Kaiserlichen Majestät Rohaja über die Straße von Gareth nach Perricum ergeht an alle Pfalzvögte, Relaismeister, Herbergswirte, Torwachen und Kontrollposten dieser Straße folgendes Geheiß:</p>
+      <p>Der Inhaber dieses Briefes, ${feld("Name", 14)}, ${feld("Stand und Herkunft", 12)}, reist ${kasten} im Auftrag ${kasten} auf Einladung des Hofes, in Begleitung von ${feld("Zahl", 3)} Personen mit ${feld("Zahl", 3)} Pferden und ${feld("Zahl", 3)} Wagen.</p>
+      <p>Ihm ist zu gewähren:</p>
+      <p><b>Erstens.</b> Einlass in die Kaiserpfalzen der Stationen und Unterkunft nach seinem Rang.</p>
+      <p><b>Zweitens.</b> Wechselpferde an den Relais, soweit vorhanden, zum angeschlagenen Preis, zu tragen ${kasten} von der Kanzlei ${kasten} vom Reisenden.</p>
+      <p><b>Drittens.</b> Vorrang an den Kontrollen, unbeschadet des Rechts der Wachen, Gepäck und Papiere zu prüfen, wie es der achte Artikel bestimmt.</p>
+      <p>Dieser Brief gilt von ${feld("Ort", 8)} bis ${feld("Ort", 8)}, vom ${feld("Tag", 7)} bis zum ${feld("Tag", 7)}, und nur in der Hand dessen, auf den er ausgestellt ist. Er ist an jeder Station vorzuzeigen und dort zu vermerken.</p>
+      <p>Wer diesen Brief fälscht, verändert, verleiht oder verkauft, verfällt der Strafe des Reiches.</p>
+      <p class="dok-schluss">Gegeben zu Gareth, am ${feld("Tag", 8)}<br>für den Kaiserlichen Wegemeister<br>${feld("Unterschrift", 12)}<br><span class="dok-siegel">Siegel der Kanzlei</span></p>
+      <table class="dok-tabelle">
+        <caption>Rückseite: Vermerke der Stationen</caption>
+        <thead><tr><th scope="col">Station</th><th scope="col">Tag</th><th scope="col">Pferde</th><th scope="col">Zeichen</th></tr></thead>
+        <tbody>${["Nattersquell", "Hartsteen", "Sonnenfeld", "Rommilyser Kreuz", "Feste Hohenstein", "Natterbrücke", "Mardramund", "Wasserburg", "Wandlether Hof", "Gnitzenkuhl", "Gaulsfurt", "Rabicum"].map((s, i) => `<tr><td>${i + 1} ${s}</td><td></td><td></td><td></td></tr>`).join("")}</tbody>
+      </table>`
+    },
+    {
+      id: "leumundsbrief",
+      titel: "Leumundsbrief der Stationskanzlei",
+      art: "Vordruck",
+      herkunft: "Ausgestellt in der Stationskanzlei zu Mardramund",
+      begriffe: [],
+      kurz: "Die Bescheinigung über guten Ruf und geordnete Geschäfte, ohne die niemand Stationen beliefern oder eine Pacht übernehmen darf. Zum Ausfüllen für die Helden.",
+      text: `
+      <p class="dok-kopf">Stationskanzlei zu Mardramund<br><span class="dok-kopf-zeile">Leumundsbrief, Register Nr. ${feld("Nummer", 5)}</span></p>
+      <p class="dok-anrede">Die Stationskanzlei zu Mardramund, bestellt durch das Edikt Ihrer Kaiserlichen Majestät über die Straße nach Perricum, bescheinigt hiermit allen, die es angeht:</p>
+      <p>${feld("Name", 14)}, ${feld("Gewerbe", 10)}, ansässig zu ${feld("Ort", 9)}, ist der Kanzlei bekannt als Person von gutem Ruf und geordneten Geschäften.</p>
+      <p>Nach Prüfung der vorgelegten Bücher, Bürgschaften und Zeugnisse ist gegen die genannte Person nichts bekannt geworden: keine offene Schuld gegenüber dem Reich, kein Urteil wegen Betrugs, Unterschlagung oder Missbrauchs von Siegeln, keine Klage aus früheren Pachten.</p>
+      <p>Für den guten Leumund bürgen mit Stand und Wohnort:<br>
+        1. ${feld("Name, Stand, Wohnort", 20)}<br>
+        2. ${feld("Name, Stand, Wohnort", 20)}</p>
+      <p>Die genannte Person ist damit zugelassen</p>
+      <p class="dok-auswahl">${kasten} zur Belieferung der Stationen mit ${feld("Ware", 10)}<br>
+        ${kasten} zum Gebot auf die Pacht der Herberge zu ${feld("Station", 9)}<br>
+        ${kasten} zum Handel auf den Märkten der Stationen</p>
+      <p>Dieser Brief gilt ein Jahr und einen Tag. Er erlischt, sobald die genannte Person gegen das Edikt verstößt oder sich ihre Angaben als falsch erweisen. Gebühr entrichtet: ${feld("Betrag", 4)} Silbertaler.</p>
+      <p class="dok-schluss">Gegeben zu Mardramund, am ${feld("Tag", 8)}<br>${feld("Unterschrift", 12)}<br>Odilo Federlein, Vorsteher der Stationskanzlei<br><span class="dok-siegel">Siegel der Stationskanzlei</span></p>`
+    }
+  );
+})();

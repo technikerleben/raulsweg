@@ -65,9 +65,9 @@ RW.kapitel = {
 
       <h2>Papiere</h2>
       <h3>Der Geleitbrief</h3>
-      <p>Wer im Auftrag oder auf Einladung des Hofes reist, erhält von der Kanzlei einen Geleitbrief. Er öffnet die Türen der Kaiserpfalzen, gewährt Wechselpferde und beschleunigt die Kontrollen.</p>
+      <p>Wer im Auftrag oder auf Einladung des Hofes reist, erhält von der Kanzlei einen Geleitbrief. Er öffnet die Türen der Kaiserpfalzen, gewährt Wechselpferde und beschleunigt die Kontrollen. Einen Vordruck zum Ausfüllen gibt es unter <a href="#/dokumente/geleitbrief">Dokumente</a>.</p>
       <h3>Der Leumundsbrief</h3>
-      <p>Weil schon in den ersten Monaten des Baus Gelder versickert sind, verlangt die Kanzlei von allen, die Stationen beliefern oder Pachten übernehmen wollen, einen Leumundsbrief. Er bescheinigt einen untadeligen Ruf, geordnete Geschäfte und keine offenen Schulden gegenüber dem Reich. Ausgestellt wird er in Mardramund. Wie gründlich dort geprüft wird, ist umstritten.</p>
+      <p>Weil schon in den ersten Monaten des Baus Gelder versickert sind, verlangt die Kanzlei von allen, die Stationen beliefern oder Pachten übernehmen wollen, einen Leumundsbrief. Er bescheinigt einen untadeligen Ruf, geordnete Geschäfte und keine offenen Schulden gegenüber dem Reich. Ausgestellt wird er in Mardramund (Vordruck unter <a href="#/dokumente/leumundsbrief">Dokumente</a>). Wie gründlich dort geprüft wird, ist umstritten.</p>
       <h3>Der Stationsstempel</h3>
       <p>Viele Reisende lassen sich an jeder Station einen Stempel mit dem Emblem der Gottheit in ein Büchlein drücken. Was als Nachweis für Boten begann, ist inzwischen eine Mode geworden. Wer alle zwölf Stempel besitzt, gilt als jemand, der den Raulsweg wirklich bereist hat.</p>
       <p>Die Kanzlei gibt dafür kleine Hefte in rotem Leder aus. Innen haben sie eine einzige Doppelseite mit zwölf Feldern, sechs links, sechs rechts, und daneben Platz für das Datum. Was danach noch hineingedrückt wird, etwa die Bärentatze aus Blitztann, findet irgendwo am Rand Platz.</p>
@@ -202,6 +202,11 @@ RW.kapitel = {
         <a class="knopf knopf-link" href="export/stempelheft.pdf" download>Stempelheft A5 <small>PDF, 0,3 MB</small></a>
         <a class="knopf knopf-link" href="export/stempelheft-a4-bogen.pdf" download>Druckbogen A4 <small>PDF, 0,8 MB</small></a>
       </p>
+      <p>Die Vordrucke für <a href="#/dokumente/geleitbrief">Geleitbrief</a> und <a href="#/dokumente/leumundsbrief">Leumundsbrief</a> gibt es druckfertig als PDF zum Ausfüllen am Tisch. Der Geleitbrief hat eine Rückseite für die Vermerke der Stationen.</p>
+      <p class="knopf-reihe">
+        <a class="knopf knopf-link" href="export/vordruck-geleitbrief.pdf" download>Geleitbrief <small>PDF, A4, zwei Seiten</small></a>
+        <a class="knopf knopf-link" href="export/vordruck-leumundsbrief.pdf" download>Leumundsbrief <small>PDF, A4</small></a>
+      </p>
 
       <h2>Quellen</h2>
       <ul>
@@ -243,7 +248,7 @@ RW.ausbaustufen = [
   { nr: 4, titel: "Karte und Strecke", text: "Karte der ganzen Strecke nach avesmaps.de, Entfernungen nach der Routenplanung, Wegpunkte mit Szenen zwischen den Stationen, dazu Landmarken, Bauwerke, alte Bäume, Felsen und Orte abseits der Straße, nach Art filterbar (vorhanden). Offen: Reisezeitrechner, Landmarken auf der Streckenkarte.", erledigt: true },
   { nr: 5, titel: "Mächte und Netz", text: "Neun Mächte mit eigener Profilseite: Haltung, Machtmittel, Fürsprecher, Stimme, Umgang, Stationen, Figuren und Dokumente; Beziehungsnetz mit fünfzehn öffentlich bekannten Verhältnissen; drei Möglichkeiten je Macht in den Meisterinformationen (vorhanden). Offen: Geldflüsse am Weg.", erledigt: true },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen für vier Abschnitte der Strecke (je W20, mit Wendungen in den Meisterinformationen), Gerüchte am Weg (W20), Wetter für alle Jahreszeiten, Namen, Herbergen, Waren, Reisende und Eigenheiten; Reisetag und Namen per Knopf würfeln (vorhanden). Ergänzt: neunundzwanzig Landmarken, Bauwerke, Bäume und Felsen am Weg sowie Abstecher nach Rommilys und Blitztann.", erledigt: true },
-  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken, Dokumente: Stationsedikt, offener Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan (vorhanden). Offen: Geleitbrief, Leumundsbrief, Botenbriefe." },
+  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken, Dokumente: Stationsedikt, offener Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan, Vordrucke für Geleitbrief und Leumundsbrief zum Ausfüllen (vorhanden). Offen: Botenbriefe." },
   { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten mit Eintragsvorlage, Verweisen von Stationen, Figuren, Tempeln und Mächten und Markierung der geltenden Möglichkeiten (vorhanden). Offen: Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }
 ];

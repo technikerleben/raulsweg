@@ -26,6 +26,10 @@ tools/                EPUB, Karten, Stempelheft, Streckengeometrie, Vorschaubild
 export/               EPUB und Stempelheft-PDFs (erzeugt)
 ```
 
+## Vordrucke
+
+Geleitbrief und Leumundsbrief stehen in `data/dokumente.js` als Vordrucke mit Schreiblinien (`feld("Name", Breite)`) und Ankreuzfeldern. Auf der Seite druckt „Als Handout drucken“ nur das eine Dokument. `node tools/vordrucke.js` schreibt dieselbe Druckansicht als A4-PDF nach `export/vordruck-*.pdf` (braucht Playwright); der Geleitbrief bekommt eine Rückseite für die Vermerke der Stationen.
+
 ## Prüfen
 
 `node tools/pruefen.js` prüft die Daten auf Widersprüche: doppelte IDs, Verweise auf unbekannte Stationen, Figuren, Mächte oder Dokumente, Wegpunkte außerhalb ihrer Etappe, fehlende Karten- und Bilddateien, lückenhafte Würfeltabellen. Außerdem achtet es auf die Vorgaben des Bandes: kein Haus Stoerrebrandt, kein Menschenhandel, Bezüge zu Japan nur in den Quellen. Fehler beenden das Skript mit Code 1.

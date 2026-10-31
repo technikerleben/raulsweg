@@ -667,7 +667,7 @@
     const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>${dokumente.map(d => `<li><a href="#/dokumente/${d.id}">${esc(d.titel)}</a></li>`).join("")}</ul></nav>`;
     return {
       html: `<h1>Dokumente</h1>
-      <p class="einleitung initiale">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird. Alle Texte sind öffentlich und können den Spielern als Handout dienen.</p>
+      <p class="einleitung initiale">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird. Alle Texte sind öffentlich und können den Spielern als Handout dienen. Geleitbrief und Leumundsbrief sind Vordrucke: ausdrucken und für die Helden von Hand ausfüllen.</p>
       ${toc}
       ${dokumente.map(d => `<section class="dokument" id="${d.id}">
         <h2>${esc(d.titel)}</h2>

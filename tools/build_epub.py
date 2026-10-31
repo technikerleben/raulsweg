@@ -178,6 +178,8 @@ def kapitel_aufbereiten(roh):
         return (f'<div class="bild"><img src="{pfad}" alt="{m.group(2)}" style="width:100%"/></div><p class="leise">{m.group(3)}</p>' if pfad else "")
     t = re.sub(r'<figure[^>]*>\s*<img src="(img/[^"]+?)\.\w+" alt="([^"]*)"[^>]*>\s*<figcaption>(.*?)</figcaption>\s*</figure>', abbildung, t, flags=re.S)
     t = re.sub(r'<p class="knopf-reihe">.*?</p>', "", t, flags=re.S)        # Schaltflächen gibt es nur auf der Website
+    t = re.sub(r'<span class="feld" data-was="([^"]*)"[^>]*></span>', r"______ (\1)", t)   # Schreiblinien der Vordrucke
+    t = t.replace('<span class="ankreuz" aria-hidden="true"></span>', "☐ ")
     t = re.sub(r"<a [^>]*>(.*?)</a>", r"\1", t, flags=re.S)                   # interne Links entfernen
     t = re.sub(r'<span class="(marke-kanon|marke-eigen|bau[^"]*)">(.*?)</span>', r"[\2]", t)
     t = re.sub(r"<span[^>]*>(.*?)</span>", r"\1", t, flags=re.S)
