@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Druckt die Vordrucke (Geleitbrief, Leumundsbrief) als A4-PDF nach export/.
+/* Druckt die Vordrucke (Geleitbrief, Leumundsbrief, Botenbrief) und den Preisanschlag als A4-PDF nach export/.
    Aufruf im Wurzelverzeichnis: node tools/vordrucke.js   (braucht Playwright mit Chromium) */
 "use strict";
 const path = require("path");
 const { chromium } = require("playwright");
 
 const WURZEL = path.join(__dirname, "..");
-const VORDRUCKE = ["geleitbrief", "leumundsbrief"];
+const VORDRUCKE = ["geleitbrief", "leumundsbrief", "botenbrief", "preisanschlag"];
 
 (async () => {
   const browser = await chromium.launch();

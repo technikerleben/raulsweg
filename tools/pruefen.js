@@ -10,7 +10,7 @@ const path = require("path");
 const vm = require("vm");
 
 const WURZEL = path.join(__dirname, "..");
-const DATEIEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "spielhilfen", "karten", "wegpunkte", "dokumente"];
+const DATEIEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "spielhilfen", "karten", "wegpunkte", "preise", "dokumente"];
 
 const kontext = {};
 kontext.window = kontext;
@@ -104,7 +104,7 @@ RW.karten.forEach(c => {
 const ziele = new Set([
   ...RW.stationen.map(s => (s.typ === "stadt" ? "ort:" : "station:") + s.id),
   ...RW.figuren.map(f => "figur:" + f.id), ...RW.maechte.map(m => "macht:" + m.id),
-  ...RW.tempel.map(t => "tempel:" + t.id), ...RW.wegpunkte.map(w => "wegpunkt:" + w.id)
+  ...RW.tempel.map(t => "tempel:" + t.id), ...RW.wegpunkte.map(w => "wegpunkt:" + w.id), ...RW.dokumente.map(d => "dokument:" + d.id)
 ]);
 RW.chronik.forEach(c => {
   (c.orte || []).forEach(o => pruefe(halte.has(o), `chronik: ${c.id} nennt unbekannten Ort ${o}`));

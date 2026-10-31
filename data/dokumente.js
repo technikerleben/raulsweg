@@ -1,7 +1,9 @@
 /* ==========================================================
    Dokumente: Texte, wie sie in Aventurien kursieren (Stufe 7)
    ----------------------------------------------------------
-   Felder: id, titel, art, herkunft, begriffe, kurz, text (HTML)
+   Felder: id, titel, art, gruppe, herkunft, begriffe, kurz, text (HTML)
+   Optional: meister (Satz), moeglichkeiten [3] für Briefe mit offenem Hintergrund
+   gruppe: stellungnahmen | aushaenge | vordrucke | botenbriefe
    Die Texte sind Spielerwissen: Sie hängen öffentlich aus oder
    werden abgeschrieben und weitergereicht.
    ========================================================== */
@@ -11,6 +13,7 @@ window.RW = window.RW || {};
 RW.dokumente = [
   {
     id: "stationsedikt",
+    gruppe: "stellungnahmen",
     titel: "Das Stationsedikt",
     art: "Kaiserliches Edikt",
     herkunft: "Gegeben zu Gareth, ausgehängt an allen Toren der Reichsstraße",
@@ -34,6 +37,7 @@ RW.dokumente = [
   },
   {
     id: "brief-rabenmund",
+    gruppe: "stellungnahmen",
     titel: "Offener Brief des Hauses Rabenmund",
     art: "Offener Brief",
     herkunft: "Gesiegelt zu Rommilys, abgeschrieben in den Schenken der Rommilyser Mark",
@@ -52,6 +56,7 @@ RW.dokumente = [
   },
   {
     id: "verlautbarung-paligan",
+    gruppe: "stellungnahmen",
     titel: "Verlautbarung des Hauses Paligan",
     art: "Verlautbarung",
     herkunft: "Verlesen auf dem Markt zu Perricum und an den Stationen östlich von Gaulsfurt",
@@ -81,6 +86,7 @@ RW.dokumente = [
   RW.dokumente.push(
     {
       id: "geleitbrief",
+      gruppe: "vordrucke",
       titel: "Geleitbrief der Kanzlei",
       art: "Vordruck",
       herkunft: "Ausgestellt von der Kanzlei des Stationswesens zu Gareth, eingetragen in Mardramund",
@@ -97,7 +103,7 @@ RW.dokumente = [
       <p>Dieser Brief gilt von ${feld("Ort", 8)} bis ${feld("Ort", 8)}, vom ${feld("Tag", 7)} bis zum ${feld("Tag", 7)}, und nur in der Hand dessen, auf den er ausgestellt ist. Er ist an jeder Station vorzuzeigen und dort zu vermerken.</p>
       <p>Wer diesen Brief fälscht, verändert, verleiht oder verkauft, verfällt der Strafe des Reiches.</p>
       <p class="dok-schluss">Gegeben zu Gareth, am ${feld("Tag", 8)}<br>für den Kaiserlichen Wegemeister<br>${feld("Unterschrift", 12)}<br><span class="dok-siegel">Siegel der Kanzlei</span></p>
-      <table class="dok-tabelle">
+      <table class="dok-tabelle rueckseite">
         <caption>Rückseite: Vermerke der Stationen</caption>
         <thead><tr><th scope="col">Station</th><th scope="col">Tag</th><th scope="col">Pferde</th><th scope="col">Zeichen</th></tr></thead>
         <tbody>${["Nattersquell", "Hartsteen", "Sonnenfeld", "Rommilyser Kreuz", "Feste Hohenstein", "Natterbrücke", "Mardramund", "Wasserburg", "Wandlether Hof", "Gnitzenkuhl", "Gaulsfurt", "Rabicum"].map((s, i) => `<tr><td>${i + 1} ${s}</td><td></td><td></td><td></td></tr>`).join("")}</tbody>
@@ -105,6 +111,7 @@ RW.dokumente = [
     },
     {
       id: "leumundsbrief",
+      gruppe: "vordrucke",
       titel: "Leumundsbrief der Stationskanzlei",
       art: "Vordruck",
       herkunft: "Ausgestellt in der Stationskanzlei zu Mardramund",
@@ -124,6 +131,198 @@ RW.dokumente = [
         ${kasten} zum Handel auf den Märkten der Stationen</p>
       <p>Dieser Brief gilt ein Jahr und einen Tag. Er erlischt, sobald die genannte Person gegen das Edikt verstößt oder sich ihre Angaben als falsch erweisen. Gebühr entrichtet: ${feld("Betrag", 4)} Silbertaler.</p>
       <p class="dok-schluss">Gegeben zu Mardramund, am ${feld("Tag", 8)}<br>${feld("Unterschrift", 12)}<br>Odilo Federlein, Vorsteher der Stationskanzlei<br><span class="dok-siegel">Siegel der Stationskanzlei</span></p>`
+    }
+  );
+})();
+
+/* ----------------------------------------------------------
+   Aushang: Preisanschlag der Kanzlei (aus data/preise.js)
+   ---------------------------------------------------------- */
+(function () {
+  const P = RW.preise;
+  if (!P) return;
+  const gruppen = [...new Set(P.anschlag.map(a => a.gruppe))];
+  const NAMEN = { Relais: "Relais und Post", Post: "", Herberge: "Herberge", Kanzlei: "Kanzlei", Frei: "Ohne Entgelt" };
+  RW.dokumente.push({
+    id: "preisanschlag",
+    gruppe: "aushaenge",
+    titel: "Preisanschlag der Kanzlei",
+    art: "Aushang",
+    herkunft: "Angeschlagen an jedem Stationstor, nach dem siebten Artikel des Edikts",
+    begriffe: ["Preisanschlag"],
+    kurz: "Was Wechselpferde, Post, Herberge und Kanzlei an den Stationen kosten dürfen. Hängt neben dem Tor, meist etwas verwittert.",
+    text: `
+      <p class="dok-kopf">Preise der Station<br><span class="dok-kopf-zeile">festgesetzt von der Kanzlei des Stationswesens</span></p>
+      <p class="dok-anrede">Nach dem siebten Artikel des Edikts Ihrer Kaiserlichen Majestät gelten an dieser Station folgende Preise. Wer mehr verlangt, verstößt gegen das Edikt; wer mehr gezahlt hat, melde es dem Pfalzvogt.</p>
+      <table class="dok-tabelle preis-tabelle">
+        <thead><tr><th scope="col">Leistung</th><th scope="col">Preis</th></tr></thead>
+        <tbody>${gruppen.map(g => (NAMEN[g] ? `<tr class="zwischen"><th scope="rowgroup" colspan="2">${NAMEN[g]}</th></tr>` : "") +
+          P.anschlag.filter(a => a.gruppe === g).map(a => `<tr><td>${a.posten}${a.anmerkung ? `<small>${a.anmerkung}</small>` : ""}</td><td>${a.preis}</td></tr>`).join("")).join("")}</tbody>
+      </table>
+      <p class="dok-fuss">1 Dukat = 10 Silbertaler = 100 Heller = 1000 Kreuzer. Zölle an Brücken, Furten und Toren sind nicht inbegriffen.</p>
+      <p class="dok-schluss">Für die Kanzlei<br><span class="dok-siegel">Siegel der Kanzlei</span></p>`
+  });
+})();
+
+/* ----------------------------------------------------------
+   Botenbriefe: ein Vordruck der Relaispost und Briefe, die
+   unterwegs in falsche Hände geraten können. Was dahinter steckt,
+   bleibt offen (moeglichkeiten).
+   ---------------------------------------------------------- */
+(function () {
+  const feld = (was, breite = 10) => `<span class="feld" data-was="${was}" style="min-width:${breite}em"></span>`;
+  const kasten = "<span class=\"ankreuz\" aria-hidden=\"true\"></span>";
+  const zeilen = n => Array.from({ length: n }, () => `<span class="schreibzeile"></span>`).join("");
+
+  RW.dokumente.push(
+    {
+      id: "botenbrief",
+      gruppe: "vordrucke",
+      titel: "Botenbrief der Relaispost",
+      art: "Vordruck",
+      herkunft: "Zu haben in jeder Poststube der Stationen, 2 Heller das Blatt",
+      begriffe: [],
+      kurz: "Ein Briefbogen mit Postvermerk, wie ihn die Poststuben ausgeben. Für Briefe, die die Helden selbst schreiben, oder für solche, die sie abfangen.",
+      text: `
+      <p class="dok-kopf">Relaispost des Raulswegs<br><span class="dok-kopf-zeile">Botenbrief</span></p>
+      <p>An ${feld("Empfänger", 14)} zu ${feld("Ort oder Station", 10)}</p>
+      <div class="schreibfeld">${zeilen(10)}</div>
+      <p class="dok-schluss">${feld("Absender", 12)}</p>
+      <div class="postvermerk">
+        <p><b>Vermerk der Poststube</b></p>
+        <p>Aufgegeben zu ${feld("Station", 9)} am ${feld("Tag", 6)} · Gebühr ${feld("Betrag", 4)}</p>
+        <p>${kasten} gewöhnlich ${kasten} eilig ${kasten} durch die Beilunker Reiter</p>
+        <p>Siegel bei Übergabe unversehrt: ${kasten} ja ${kasten} nein · Zeichen des Boten ${feld("Zeichen", 5)}</p>
+      </div>`
+    },
+    {
+      id: "brief-kreutzer",
+      gruppe: "botenbriefe",
+      titel: "Der Wegemeister an die Stationskanzlei",
+      art: "Botenbrief",
+      herkunft: "Relaispost, Siegel der Kanzlei, aufgegeben in Sonnenfeld, bestimmt für Mardramund",
+      begriffe: [],
+      kurz: "Answald Kreutzer bittet Odilo Federlein, Abrechnungen unter Verschluss zu halten. Wer ihn liest, fragt sich: vor wem?",
+      text: `
+      <p class="dok-anrede">Werter Vorsteher Federlein,</p>
+      <p>die Abrechnungen der Station Natterbrücke für die letzten beiden Monde sind mir in einer Fassung zugegangen, die ich so nicht abgezeichnet habe. Ich bitte Euch, die Urschriften bis zu meiner Ankunft unter Verschluss zu halten und niemandem Einsicht zu gewähren, auch nicht Eurem Stellvertreter.</p>
+      <p>Ferner: Die Rücklage für die Fundamente in Sonnenfeld ist nicht anzutasten, gleich wer danach fragt und mit welchem Siegel er kommt.</p>
+      <p>Ich verlasse mich auf Eure Verschwiegenheit, wie Ihr Euch auf die meine verlassen könnt.</p>
+      <p class="dok-schluss">A. K., Wegemeister<br><span class="dok-siegel">Siegel der Kanzlei</span></p>
+      <p class="dok-nachschrift">Nachschrift: Verbrennt diesen Brief.</p>`,
+      meister: "Federlein hat den Brief nicht verbrannt. Wie er unterwegs in andere Hände gerät, entscheidet die Spielleitung: liegengeblieben im Relais, von einem Boten verkauft, oder Federlein zeigt ihn selbst herum.",
+      moeglichkeiten: [
+        "Kreutzer ist einem Fälscher in seiner eigenen Kanzlei auf der Spur und will die Urschriften sichern, bevor jemand sie austauscht.",
+        "Kreutzer will verhindern, dass jemand nachrechnet, was die Fundamente in Sonnenfeld wirklich gekostet haben, und warum.",
+        "Der Brief ist nicht von Kreutzer. Jemand prüft, ob Federlein auf ein fremdes Siegel hin Akten herausgibt oder zurückhält."
+      ]
+    },
+    {
+      id: "brief-vanstein",
+      gruppe: "botenbriefe",
+      titel: "Ein Kontorbericht nach Perricum",
+      art: "Botenbrief",
+      herkunft: "Relaispost, ohne Wappen gesiegelt, an ein Postfach in Perricum",
+      begriffe: [],
+      kurz: "Ludeger Vanstein meldet seinen Auftraggebern, wie die Pachten stehen. Wer die Auftraggeber sind, steht nicht darin.",
+      text: `
+      <p class="dok-anrede">Verehrte Auftraggeber,</p>
+      <p>wie gewünscht melde ich: Die Pacht der Herberge in Nattersquell ist zu dem genannten Gebot zu haben, sofern die Kanzlei bis zum Mond des Boron nicht anders entscheidet.</p>
+      <p>Der Leumundsbrief aus Mardramund ist mir ohne Schwierigkeiten erteilt worden. Man hat keine Fragen gestellt, was ich als Entgegenkommen deute.</p>
+      <p>In Gaulsfurt nimmt das Mondsilberkontor Eure Wechsel an, aber mit einem Abschlag, den ich für eine Beleidigung halte. Ich erbitte Weisung, ob ich weiter biete oder abwarte.</p>
+      <p>Die Abschriften Eurer letzten Anweisungen bewahre ich, wie stets, sorgfältig auf.</p>
+      <p class="dok-schluss">Euer ergebener<br>L. V.</p>
+      <p class="dok-nachschrift">Postfach 17, Perricum, abzuholen gegen das bekannte Zeichen.</p>`,
+      meister: "Der letzte Satz vor dem Gruß kann eine Höflichkeit sein oder eine Drohung. Wer das Postfach leert, ist offen.",
+      moeglichkeiten: [
+        "Vanstein sichert sich ab: Die Abschriften sind seine Versicherung, und der Satz ist an jemanden gerichtet, der ihn fallen lassen könnte.",
+        "Vanstein ist so arglos, wie er klingt. Er hält den Leumundsbrief wirklich für Entgegenkommen und ahnt nicht, wer dafür bezahlt hat.",
+        "Das Postfach leert ein Mittelsmann, der die Berichte an mehrere Häuser verkauft. Vanstein arbeitet ohne es zu wissen für alle."
+      ]
+    },
+    {
+      id: "brief-ugdalf",
+      gruppe: "botenbriefe",
+      titel: "Eine Einladung zur Jagd",
+      art: "Botenbrief",
+      herkunft: "Ohne Siegel, einem Rossknecht in Rabensbrück mitgegeben",
+      begriffe: [],
+      kurz: "Ugdalf von Rabenmund lädt einen Freund an die Kreuzung ein. Gejagt werden soll nicht Wild.",
+      text: `
+      <p class="dok-anrede">Bruder im Geiste!</p>
+      <p>Am Abend nach dem Praiostag sind wir am Kreuz, dort, wo die Krähen sitzen. Bring die Hunde nicht mit, sie bellen.</p>
+      <p>Der Fremde mit dem guten Wein hat versprochen, dass er wieder zahlt. Er sagt, die Gerüste am Hang stehen auf Sand, und wir wollen sehen, ob er recht hat.</p>
+      <p>Kein Wort zu meinem Oheim. Was wir tun, tun wir für die Ehre des Hauses, auch wenn das Haus es noch nicht weiß.</p>
+      <p class="dok-schluss">U.</p>`,
+      meister: "Die Handschrift ist schwungvoll und fleckig, der Brief riecht nach Wein. Wer ihn findet, findet auch den Rossknecht, der ihn nie abgeliefert hat.",
+      moeglichkeiten: [
+        "Ugdalf meint es ernst und wird am Hang ein Gerüst lockern. Mit den übrigen Schäden am Weg hat er nichts zu tun.",
+        "Ugdalf prahlt nur. Am Abend sitzen sie am Kreuz, trinken und reden, und niemand rührt ein Gerüst an.",
+        "Der Fremde mit dem Wein ist der eigentliche Absender der Idee. Er wird nicht kommen, aber er wird wissen, wer kam."
+      ]
+    },
+    {
+      id: "brief-lehmkuhl",
+      gruppe: "botenbriefe",
+      titel: "Ruf ins Treidelhaus",
+      art: "Botenbrief",
+      herkunft: "Von Hand zu Hand unter den Flussträgern, geschrieben von Gesa Natterer",
+      begriffe: [],
+      kurz: "Bruna Lehmkuhl ruft alle Träger zusammen. Es geht um ein Angebot der Kanzlei und um das, was am Damm passiert ist.",
+      text: `
+      <p class="dok-anrede">An alle Träger zwischen Rabenbrücke und Hausen.</p>
+      <p>Am Abend des nächsten Markttags im Treidelhaus. Jeder kommt, auch die Jungen.</p>
+      <p>Es geht um das Angebot der Kanzlei und um das, was am Damm passiert ist. Wer den Mund nicht halten kann, bleibt zu Hause. Wer etwas weiß, sagt es mir und niemandem sonst.</p>
+      <p class="dok-schluss">Bruna</p>
+      <p class="dok-nachschrift">Geschrieben von Gesa, weil Bruna die Feder nicht mag.</p>`,
+      meister: "Der Zettel geht durch viele Hände. Eine Abschrift landet früher oder später bei der Kanzlei, beim Bauaufseher oder bei den Helden.",
+      moeglichkeiten: [
+        "Bruna will herausfinden, ob ihr Schweigen über einen ihrer Träger noch zu halten ist, bevor das Angebot der Kanzlei kommt.",
+        "Bruna hat selbst einmal Hand angelegt und will ihren Leuten einschärfen, dass so etwas nie wieder geschieht.",
+        "Am Damm hat kein Träger etwas getan. Bruna lässt die Leute trotzdem rätseln, weil Angst vor den Trägern ihr bessere Bedingungen bringt."
+      ]
+    },
+    {
+      id: "brief-khorim",
+      gruppe: "botenbriefe",
+      titel: "Aus dem Mondsilberkontor",
+      art: "Botenbrief",
+      herkunft: "Relaispost, Siegel des Mondsilberkontors, von Gaulsfurt nach Perricum",
+      begriffe: [],
+      kurz: "Khorim ibn Dschelef warnt sein Haus vor den Wechseln der neuen Kontore und bittet um einen verständigen Menschen, den in Gaulsfurt niemand kennt.",
+      text: `
+      <p class="dok-anrede">An das ehrwürdige Haus zu Perricum, Friede über Euren Waagen.</p>
+      <p>Drei Wechsel der neuen Kontore sind in diesem Mond bei mir eingegangen, alle auf dasselbe Haus in Perricum gezogen, dessen Namen ich hier nicht schreibe, weil Briefe Ohren haben.</p>
+      <p>Der Damm bei Gnitzenkuhl wird mit Schuldscheinen bezahlt. Die Arbeiter tragen sie zu mir, um sie gegen Silber zu tauschen, zu einem Kurs, der mich nachts wach hält.</p>
+      <p>Ich bitte Euch, dem Kontor, dem wir geliehen haben, nichts mehr zu geben, bis ich weiß, ob es zahlen kann. Schickt mir einen verständigen Menschen, den hier niemand kennt.</p>
+      <p class="dok-schluss">Khorim, Wechselmeister zu Gaulsfurt<br><span class="dok-siegel">Siegel des Mondsilberkontors</span></p>`,
+      meister: "Der verständige Mensch, den niemand kennt, können die Helden sein, wenn sie den Brief vor seinem Empfänger lesen.",
+      moeglichkeiten: [
+        "Khorim weiß den Namen des Hauses und verschweigt ihn, um ihn teuer zu verkaufen, notfalls an die Helden.",
+        "Khorim weiß weniger, als er schreibt. Der Brief soll sein eigenes Haus beruhigen und ihm Zeit verschaffen.",
+        "Khorims Haus hat dem Kontor tatsächlich viel geliehen. Der Brief ist ein Hilferuf, und das Silber ist vielleicht schon verloren."
+      ]
+    },
+    {
+      id: "brief-haselbach",
+      gruppe: "botenbriefe",
+      titel: "Siegelbericht einer Reiterin",
+      art: "Botenbrief",
+      herkunft: "Durch die Beilunker Reiter, an das Haupthaus in Gareth",
+      begriffe: [],
+      kurz: "Jorinde Haselbach meldet ihrem Haus, dass an den Relais Siegel nachgegossen worden sein könnten.",
+      text: `
+      <p class="dok-anrede">An den Hauptmann der Reiter im Haupthaus zu Gareth,</p>
+      <p>ich melde, dass an drei Relais des Raulswegs Briefe mit Siegeln eingetroffen sind, die nicht so aussehen, wie sie aussehen sollten: zu glatt, zu frisch, das Wachs eine Spur zu dunkel. Ich habe die Siegel gezählt und gezeichnet, die Zeichnungen liegen bei.</p>
+      <p>Ich beschuldige niemanden. Aber wer Briefe öffnet und wieder verschließt, tut es nicht aus Neugier, und er tut es dort, wo die Pferde gewechselt werden.</p>
+      <p>Ich bitte um Weisung, ob ich weiter beobachte oder melde, und an wen.</p>
+      <p class="dok-schluss">J. H., Reiterin<br><span class="dok-siegel">Siegel der Beilunker Reiter</span></p>`,
+      meister: "Die Zeichnungen fehlen, wenn der Brief in andere Hände gerät. Wer sie herausgenommen hat, ist die erste Frage.",
+      moeglichkeiten: [
+        "Ein Kollege Jorindes öffnet Briefe an den Relais und verkauft Abschriften. Sie ist ihm dicht auf den Fersen.",
+        "Jorinde verkauft selbst Nachrichten über Reisende und lenkt mit dem Bericht den Verdacht von sich weg.",
+        "Die Siegel sind echt nachgegossen, aber im Auftrag der Kanzlei, die mitlesen will. Jorinde ahnt nicht, wen sie meldet."
+      ]
     }
   );
 })();

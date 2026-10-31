@@ -13,6 +13,7 @@
      #/tempel[/<id>]        Die zwölf Tempel
      #/dokumente[/<id>]     Edikt, Briefe, Verlautbarungen
      #/karten               Karten und Pläne  #/karte/<id>
+     #/preise[/<id>]        Preise am Weg, Reisekasse
      #/spielhilfen[/<id>]   Begegnungen, Gerüchte, Wetter, Namen (Anker: Abschnitt oder Tabelle)
      #/chronik[/<id>]       Chronik der gespielten Geschichten
      #/bauplan              Ausbaustufen
@@ -193,7 +194,7 @@
   /* ==========================================================
      Automatische Querverweise im gerenderten Text
      ========================================================== */
-  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .reisetag, .namen-werkzeug, .weg-filter, .weg-abseits, .namen-liste, .w-zahl, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
+  const NICHT_VERLINKEN = "a, h1, h2, h3, .band-huelle, .station-kopf, .auf-seite, .wegweiser, figcaption, th, .glossar dt, .zeile-marken, .seitenleiste, .macht-sitz, .titel, .figur-rolle, .station-unterzeile, .figur-name, .chronik-zeile, .chronik-titel, pre, code, .reisetag, .namen-werkzeug, .preis-matrix, .muenzen, .reisekasse-ergebnis, .dok-inhalt, .weg-filter, .weg-abseits, .namen-liste, .w-zahl, .netz, .bez-art, .macht-name, .weg-meile, .weg-art, .weg-name, .etappe-zeile, .dok-blatt, .dok-herkunft";
   function verlinken(wurzel, eigene) {
     const benutzt = new Set(eigene);
     const walker = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
@@ -316,6 +317,7 @@
       <ul>
         <li><a href="#/spielleitung" data-route="spielleitung">Für Spielleitungen</a></li>
         <li><a href="#/spielhilfen" data-route="spielhilfen">Spielhilfen</a></li>
+        <li><a href="#/preise" data-route="preise">Preise am Weg</a></li>
         <li><a href="#/chronik" data-route="chronik">Chronik${chronik.length ? ` <span class="nav-zahl">${chronik.length}</span>` : ""}</a></li>
         <li><a href="#/anhang/zum-mitnehmen" data-route="anhang/zum-mitnehmen">Zum Mitnehmen</a></li>
       </ul>
@@ -603,12 +605,13 @@
         <a href="#/maechte"><strong>Mächte am Weg</strong><span>Wer am Raulsweg verdienen will</span></a>
         <a href="#/figuren"><strong>Figuren</strong><span>Wirte, Wachen, Bauleute und Geschäftemacher</span></a>
         <a href="#/tempel"><strong>Die zwölf Tempel</strong><span>Weihestätten, Bräuche und Stempel</span></a>
-        <a href="#/dokumente"><strong>Dokumente</strong><span>Das Edikt und was Rommilys und Perricum dazu sagen</span></a>
+        <a href="#/dokumente"><strong>Dokumente</strong><span>Edikt, Stellungnahmen, Vordrucke und Botenbriefe</span></a>
       </div>
       <h3 class="wegweiser-gruppe">Für die Runde</h3>
       <div class="wegweiser vier">
         <a href="#/spielleitung"><strong>Für Spielleitungen</strong><span>Eigene Geschichten am Raulsweg leiten</span></a>
         <a href="#/spielhilfen"><strong>Spielhilfen</strong><span>Begegnungen, Gerüchte, Wetter und Namen zum Würfeln</span></a>
+        <a href="#/preise"><strong>Preise am Weg</strong><span>Was die Reise kostet, vom Gesandten bis zur Streunerin</span></a>
         <a href="#/chronik"><strong>Chronik</strong><span>Was die Runde am Raulsweg erlebt hat</span></a>
         <a href="#/anhang/zum-mitnehmen"><strong>Zum Mitnehmen</strong><span>EPUB und Stempelheft zum Drucken</span></a>
       </div>`,
@@ -663,21 +666,109 @@
       <li class="typ-${w.typ}"><span class="weg-meile">Meile ${w.meile}</span><div><a class="weg-name" href="#/unterwegs/${w.id}">${esc(w.name)}</a><span class="weg-art">${esc(w.art)}${w.abseits ? `, abseits: ${esc(w.abseits)}` : ""}</span><p>${esc(w.kurz)}</p></div></li>`).join("")}</ul>` : ""}</section>`;
   }
 
-  function seiteDokumente() {
-    const toc = `<nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>${dokumente.map(d => `<li><a href="#/dokumente/${d.id}">${esc(d.titel)}</a></li>`).join("")}</ul></nav>`;
-    return {
-      html: `<h1>Dokumente</h1>
-      <p class="einleitung initiale">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird. Alle Texte sind öffentlich und können den Spielern als Handout dienen. Geleitbrief und Leumundsbrief sind Vordrucke: ausdrucken und für die Helden von Hand ausfüllen.</p>
-      ${toc}
-      ${dokumente.map(d => `<section class="dokument" id="${d.id}">
-        <h2>${esc(d.titel)}</h2>
+  const DOK_GRUPPEN = [
+    ["stellungnahmen", "Edikt und Stellungnahmen", "Was die Krone verfügt hat und was Rommilys und Perricum öffentlich dazu sagen."],
+    ["aushaenge", "Aushänge", "Was an den Toren der Stationen angeschlagen ist."],
+    ["vordrucke", "Vordrucke zum Ausfüllen", "Papiere, wie sie die Kanzlei und die Poststuben ausgeben. Ausdrucken und für die Helden von Hand ausfüllen."],
+    ["botenbriefe", "Botenbriefe", "Briefe, die unterwegs in falsche Hände geraten können: liegengeblieben im Relais, von einem Boten verkauft, abgeschrieben. Was dahinter steckt, steht in den Meisterinformationen."]
+  ];
+  function dokumentAbschnitt(d) {
+    return `<section class="dokument" id="${d.id}">
+        <h3 class="dok-titel">${esc(d.titel)}</h3>
         <p class="dok-herkunft">${esc(d.art)} · ${esc(d.herkunft)}</p>
         <p class="dok-kurz">${esc(d.kurz)}</p>
         <p class="knopf-reihe"><button type="button" class="knopf" data-drucken="${d.id}">Als Handout drucken</button></p>
-        <div class="dok-blatt">${d.text}</div>
-      </section>`).join("")}`,
+        <div class="dok-blatt${d.gruppe === "botenbriefe" ? " brief" : ""}">${d.text}</div>
+        ${d.meister || d.moeglichkeiten ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p>${d.meister ? `<p>${esc(d.meister)}</p>` : ""}
+          ${d.moeglichkeiten ? `<p class="moeglich-titel">Was dahinter stecken könnte</p>${moeglichkeitenListe(d.moeglichkeiten, "dokument:" + d.id)}` : ""}</div>` : ""}
+      </section>`;
+  }
+  function seiteDokumente() {
+    const gruppen = DOK_GRUPPEN.map(([id, titel, text]) => ({ id, titel, text, liste: dokumente.filter(d => (d.gruppe || "stellungnahmen") === id) })).filter(g => g.liste.length);
+    const toc = `<nav class="auf-seite dok-inhalt" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p>${gruppen.map(g => `
+      <div><a class="dok-gruppe-link" href="#/dokumente/${g.id}">${esc(g.titel)}</a><ul>${g.liste.map(d => `<li><a href="#/dokumente/${d.id}">${esc(d.titel)}</a></li>`).join("")}</ul></div>`).join("")}</nav>`;
+    return {
+      html: `<h1>Dokumente</h1>
+      <p class="einleitung initiale">Was am Raulsweg ausgehängt, verlesen, ausgefüllt und abgeschrieben wird. Jedes Schriftstück lässt sich einzeln als Handout drucken.</p>
+      ${toc}
+      ${gruppen.map(g => `<h2 id="${g.id}">${esc(g.titel)}</h2><p class="leise">${esc(g.text)}</p>${g.liste.map(dokumentAbschnitt).join("")}`).join("")}`,
       eigene: []
     };
+  }
+
+  /* ---------- Preise am Weg ---------- */
+  const PR = RW.preise || { staende: [], tag: [], anschlag: [], dienste: [], zoelle: [], muenzen: [] };
+  // Heller in Dukaten, Silbertaler und Heller zerlegen
+  const geld = heller => {
+    const d = Math.floor(heller / 100), s = Math.floor((heller % 100) / 10), h = Math.round(heller % 10);
+    return [d && `${d} D`, s && `${s} S`, h && `${h} H`].filter(Boolean).join(" ") || "nichts";
+  };
+  function seitePreise() {
+    const st = PR.staende;
+    const matrix = `<div class="tabelle-huelle breit preis-matrix-huelle" tabindex="0" role="region" aria-label="Ein Tag auf der Straße nach Stand"><table class="preis-matrix">
+      <caption class="nur-vorlesen">Ein Tag auf der Straße, Ausgaben nach Stand</caption>
+      <thead><tr><th scope="col"><span class="nur-vorlesen">Posten</span></th>${st.map(x => `<th scope="col">${esc(x.name)}<small>${esc(x.lebensstil)}</small></th>`).join("")}</tr></thead>
+      <tbody>${PR.tag.map(z => `<tr${z.summe ? ' class="summe"' : ""}><th scope="row">${esc(z.posten)}</th>${st.map(x => `<td>${esc(z.werte[x.id] || "")}</td>`).join("")}</tr>`).join("")}</tbody>
+    </table></div>`;
+    const wer = `<dl class="preis-wer">${st.map(x => `<dt>${esc(x.name)}</dt><dd>${esc(x.wer)}</dd>`).join("")}</dl>`;
+    const tabelle = (kopf, zeilen, titel) => `<div class="tabelle-huelle breit"><table><caption class="nur-vorlesen">${esc(titel)}</caption><thead><tr>${kopf.map(k => `<th scope="col">${k}</th>`).join("")}</tr></thead><tbody>${zeilen}</tbody></table></div>`;
+    const auswahl = `<select name="stand">${st.map((x, i) => `<option value="${x.id}"${i === 3 ? " selected" : ""}>${esc(x.name)}</option>`).join("")}</select>`;
+    return {
+      html: `<h1>Preise am Weg</h1>
+      <p class="einleitung initiale">Der Raulsweg ist frei für jedermann. Billig ist er deshalb nicht, außer für die, die nichts haben.</p>
+      <p>Die Stationen verlangen Preise, die die Kanzlei festsetzt und an jedem Tor anschlägt. Alles andere, Bader, Fährleute, Zöllner und Schenken, verhandelt man selbst. Als Maßstab dienen die Lebensstile des Regelwerks: Wer karg lebt, kommt mit knapp einem Silbertaler am Tag durch, wer üppig reist, braucht leicht das Zwanzigfache.</p>
+      <p class="muenzen"><strong>Münzen:</strong> 1 Dukat (D) = 10 Silbertaler (S) = 100 Heller (H) = 1000 Kreuzer (K)</p>
+      <nav class="auf-seite" aria-label="Auf dieser Seite"><p>Auf dieser Seite</p><ul>
+        <li><a href="#/preise/ein-tag">Ein Tag auf der Straße</a></li><li><a href="#/preise/reisekasse">Reisekasse</a></li>
+        <li><a href="#/preise/anschlag">Am Tor angeschlagen</a></li><li><a href="#/preise/dienste">Dienste unterwegs</a></li><li><a href="#/preise/zoelle">Zölle und Gebühren</a></li></ul></nav>
+
+      <h2 id="ein-tag">Ein Tag auf der Straße</h2>
+      <p>Was eine Person an einem Reisetag ausgibt, vom Gesandten mit Geleitbrief bis zur Streunerin, die von Herd zu Herd zieht. Nach dem neunten Artikel des Edikts darf keine Station Obdach, Wasser und Feuer verweigern; davon leben die Ärmsten auf dem Raulsweg.</p>
+      ${matrix}
+      ${wer}
+
+      <h2 id="reisekasse">Reisekasse</h2>
+      <p>Eine grobe Rechnung für die ganze Gruppe: Unterkunft, Essen und Pferde. Wechselpferde, Zölle und besondere Dienste kommen dazu.</p>
+      <form class="reisetag reisekasse">
+        <label>Stand ${auswahl}</label>
+        <label>Personen <input type="number" name="personen" min="1" max="60" value="4"></label>
+        <label>Pferde <input type="number" name="pferde" min="0" max="60" value="2"></label>
+        <label>Tage <input type="number" name="tage" min="1" max="60" value="11"></label>
+        <button type="submit" class="knopf knopf-voll">Rechnen</button>
+      </form>
+      <p class="reisekasse-ergebnis" role="status"></p>
+
+      <h2 id="anschlag">Am Tor angeschlagen</h2>
+      <p>Die festen Preise der Stationen. Den ganzen Anschlag gibt es als Handout unter <a href="#/dokumente/preisanschlag">Dokumente</a>.</p>
+      ${tabelle(["Leistung", "Preis", "Anmerkung"], PR.anschlag.map(a => `<tr><td>${esc(a.posten)}</td><td class="preis">${esc(a.preis)}</td><td>${esc(a.anmerkung)}</td></tr>`).join(""), "Preise der Stationen")}
+
+      <h2 id="dienste">Dienste unterwegs</h2>
+      <p>Frei verhandelt. Die Preise sind Richtwerte; wer feilscht, zahlt weniger, wer es eilig hat, mehr.</p>
+      ${tabelle(["Dienst", "Preis", "Wo"], PR.dienste.map(a => `<tr><td>${esc(a.dienst)}</td><td class="preis">${esc(a.preis)}</td><td>${esc(a.wo)}</td></tr>`).join(""), "Dienste unterwegs")}
+
+      <h2 id="zoelle">Zölle und Gebühren</h2>
+      <p>Das Edikt lässt alte Zölle bestehen, soweit sie rechtens sind. Was rechtens ist, ist nicht überall geklärt.</p>
+      ${tabelle(["Wo", "Preis", "Anmerkung"], PR.zoelle.map(a => `<tr><td>${esc(a.ort)}</td><td class="preis">${esc(a.preis)}</td><td>${esc(a.anmerkung)}</td></tr>`).join(""), "Zölle und Gebühren")}
+
+      ${PR.meister ? `<div class="meister"><p class="meister-titel">Meisterinformationen</p><p>${esc(PR.meister)}</p>
+        ${PR.moeglichkeiten ? `<p class="moeglich-titel">Was hinter den Preisen stecken könnte</p>${moeglichkeitenListe(PR.moeglichkeiten)}` : ""}</div>` : ""}`,
+      eigene: []
+    };
+  }
+  function reisekasseBeleben() {
+    const form = main.querySelector(".reisekasse");
+    if (!form) return;
+    const aus = main.querySelector(".reisekasse-ergebnis");
+    const rechnen = () => {
+      const x = PR.staende.find(s => s.id === form.stand.value);
+      const p = Math.max(1, +form.personen.value || 1), pf = Math.max(0, +form.pferde.value || 0), t = Math.max(1, +form.tage.value || 1);
+      const leute = x.heller * p * t, tiere = x.pferd * pf * t;
+      aus.innerHTML = `<strong>Etwa ${geld(leute + tiere)}</strong> für ${p} ${p === 1 ? "Person" : "Personen"} und ${pf} ${pf === 1 ? "Pferd" : "Pferde"} in ${t} ${t === 1 ? "Tag" : "Tagen"}
+        <small>Unterkunft und Essen ${geld(leute)}, Pferde ${geld(tiere)}${x.id === "adel" ? ", Pfalz mit Geleitbrief frei, Gefolge nicht gerechnet" : ""}${x.id === "streuner" ? ", wer nichts hat, zahlt auch nichts" : ""}</small>`;
+    };
+    form.addEventListener("submit", ev => { ev.preventDefault(); rechnen(); });
+    form.addEventListener("change", rechnen);
+    rechnen();
   }
 
   function seiteUnterwegs() {
@@ -1321,7 +1412,7 @@
       window.print();
     }));
   }
-  const BELEBEN = [bilderAbsichern, gebaeudeLaden, netzBeleben, spielhilfenBeleben, wegFilterBeleben, vorlageBeleben, druckBeleben];
+  const BELEBEN = [bilderAbsichern, gebaeudeLaden, netzBeleben, spielhilfenBeleben, reisekasseBeleben, wegFilterBeleben, vorlageBeleben, druckBeleben];
 
   /* ---------- Nach oben ---------- */
   const nachOben = document.createElement("button");
@@ -1338,7 +1429,7 @@
     "": seiteTitel, stationen: seiteStationen, station: seiteStation, ort: seiteOrt,
     maechte: seiteMaechte, macht: seiteMacht, figuren: seiteFiguren, figur: seiteFigur,
     tempel: seiteTempel, unterwegs: seiteUnterwegs, dokumente: seiteDokumente, chronik: seiteChronik,
-    spielhilfen: seiteSpielhilfen, karten: seiteKarten, karte: seiteKarte, bauplan: seiteBauplan
+    spielhilfen: seiteSpielhilfen, preise: seitePreise, karten: seiteKarten, karte: seiteKarte, bauplan: seiteBauplan
   };
   KAPITEL.forEach(k => { SEITEN[k] = () => seiteKapitel(k); });
   const EINZELSEITEN = ["station", "ort", "figur", "karte", "macht"];

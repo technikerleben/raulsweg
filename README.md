@@ -18,7 +18,8 @@ data/figuren.js       Figuren mit drei möglichen Geheimnissen
 data/tempel.js        Die zwölf Tempel
 data/wegpunkte.js     Orte und Szenen zwischen den Stationen
 data/karten.js        Karten und Pläne (Texte, Legenden)
-data/dokumente.js     Edikt, Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan
+data/preise.js        Preise nach Stand, Preisanschlag, Dienste, Zölle (vor dokumente.js laden)
+data/dokumente.js     Edikt, Stellungnahmen, Preisanschlag, Vordrucke, Botenbriefe (Feld gruppe)
 data/chronik.js       Chronik der gespielten Geschichten
 img/                  Titelbild, Stationsbilder, Porträts (klein/ = Vorschaubilder), Stempelheft, Karten (SVG), Zeichen
 fonts/                Alegreya, Alegreya SC, Grenze Gotisch (woff2, SIL Open Font License) für Website und Werkzeuge
@@ -28,7 +29,7 @@ export/               EPUB und Stempelheft-PDFs (erzeugt)
 
 ## Vordrucke
 
-Geleitbrief und Leumundsbrief stehen in `data/dokumente.js` als Vordrucke mit Schreiblinien (`feld("Name", Breite)`) und Ankreuzfeldern. Auf der Seite druckt „Als Handout drucken“ nur das eine Dokument. `node tools/vordrucke.js` schreibt dieselbe Druckansicht als A4-PDF nach `export/vordruck-*.pdf` (braucht Playwright); der Geleitbrief bekommt eine Rückseite für die Vermerke der Stationen.
+Geleitbrief, Leumundsbrief und Botenbrief stehen in `data/dokumente.js` als Vordrucke mit Schreiblinien (`feld("Name", Breite)`) und Ankreuzfeldern. Auf der Seite druckt „Als Handout drucken“ nur das eine Dokument. `node tools/vordrucke.js` schreibt dieselbe Druckansicht als A4-PDF nach `export/vordruck-*.pdf`, dazu den Preisanschlag (braucht Playwright); der Geleitbrief bekommt eine Rückseite für die Vermerke der Stationen.
 
 ## Prüfen
 

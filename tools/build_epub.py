@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZIEL = os.path.join(WURZEL, "export", "der-raulsweg.epub")
-DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte", "dokumente", "spielhilfen"]
+DATEN = ["stationen", "kapitel", "maechte", "figuren", "tempel", "chronik", "karten", "wegpunkte", "preise", "dokumente", "spielhilfen"]
 
 # ---------------------------------------------------------------- Daten laden
 def daten_laden():
@@ -180,6 +180,7 @@ def kapitel_aufbereiten(roh):
     t = re.sub(r'<p class="knopf-reihe">.*?</p>', "", t, flags=re.S)        # Schaltflächen gibt es nur auf der Website
     t = re.sub(r'<span class="feld" data-was="([^"]*)"[^>]*></span>', r"______ (\1)", t)   # Schreiblinien der Vordrucke
     t = t.replace('<span class="ankreuz" aria-hidden="true"></span>', "☐ ")
+    t = t.replace('<span class="schreibzeile"></span>', "<br/>__________________________________________")
     t = re.sub(r"<a [^>]*>(.*?)</a>", r"\1", t, flags=re.S)                   # interne Links entfernen
     t = re.sub(r'<span class="(marke-kanon|marke-eigen|bau[^"]*)">(.*?)</span>', r"[\2]", t)
     t = re.sub(r"<span[^>]*>(.*?)</span>", r"\1", t, flags=re.S)
@@ -256,6 +257,24 @@ def chronik_html():
                 teile.append(f"<h3>{titel}</h3><ul>" + "".join(f"<li>{e(x)}</li>" for x in c[feld]) + "</ul>")
         if c.get("meister"):
             teile.append(meister("Meisterinformation", f"<p>{e(c['meister'])}</p>"))
+    return "".join(teile)
+
+def preise_html():
+    P = RW.get("preise")
+    if not P:
+        return "<h1>Preise am Weg</h1>"
+    st = P["staende"]
+    teile = ["<h1>Preise am Weg</h1><p class=\"einleitung\">Was die Reise kostet, vom Gesandten mit Geleitbrief bis zur Streunerin, die von Herd zu Herd zieht.</p>",
+             "<p><b>Münzen:</b> 1 Dukat (D) = 10 Silbertaler (S) = 100 Heller (H) = 1000 Kreuzer (K)</p>",
+             "<h2>Ein Tag auf der Straße</h2>"]
+    for x in st:   # auf kleinen Bildschirmen besser je Stand als breite Tabelle
+        teile.append(f"<h3>{e(x['name'])} ({e(x['lebensstil'])})</h3><p class=\"leise\">{e(x['wer'])}</p><ul>"
+                     + "".join(f"<li><b>{e(z['posten'])}:</b> {e(z['werte'].get(x['id'], ''))}</li>" for z in P["tag"]) + "</ul>")
+    teile.append("<h2>Am Tor angeschlagen</h2><ul>" + "".join(f"<li><b>{e(a['posten'])}:</b> {e(a['preis'])}{(', ' + e(a['anmerkung'])) if a['anmerkung'] else ''}</li>" for a in P["anschlag"]) + "</ul>")
+    teile.append("<h2>Dienste unterwegs</h2><ul>" + "".join(f"<li><b>{e(a['dienst'])}:</b> {e(a['preis'])} ({e(a['wo'])})</li>" for a in P["dienste"]) + "</ul>")
+    teile.append("<h2>Zölle und Gebühren</h2><ul>" + "".join(f"<li><b>{e(a['ort'])}:</b> {e(a['preis'])}, {e(a['anmerkung'])}</li>" for a in P["zoelle"]) + "</ul>")
+    if P.get("meister"):
+        teile.append(meister("Meisterinformation", f"<p>{e(P['meister'])}</p>" + (f"<p><b>Was hinter den Preisen stecken könnte</b></p>{varianten(P['moeglichkeiten'], 'preise')}" if P.get("moeglichkeiten") else "")))
     return "".join(teile)
 
 def spielhilfen_html():
@@ -402,11 +421,20 @@ def baue_seiten():
 
     if RW.get("dokumente"):
         teile = ["<h1>Dokumente</h1><p class=\"einleitung\">Was am Raulsweg ausgehängt, verlesen und abgeschrieben wird.</p>"]
-        for d in RW["dokumente"]:
-            teile.append(f"<h2>{e(d['titel'])}</h2><p class=\"leise\">{e(d['art'])} · {e(d['herkunft'])}</p>" + kapitel_aufbereiten(d["text"]))
+        GRUPPEN = [("stellungnahmen", "Edikt und Stellungnahmen"), ("aushaenge", "Aushänge"), ("vordrucke", "Vordrucke zum Ausfüllen"), ("botenbriefe", "Botenbriefe")]
+        for gid, gname in GRUPPEN:
+            liste = [d for d in RW["dokumente"] if d.get("gruppe", "stellungnahmen") == gid]
+            if liste:
+                teile.append(f"<h2>{gname}</h2>")
+            for d in liste:
+                teile.append(f"<h3>{e(d['titel'])}</h3><p class=\"leise\">{e(d['art'])} · {e(d['herkunft'])}</p>" + kapitel_aufbereiten(d["text"]))
+                if d.get("meister") or d.get("moeglichkeiten"):
+                    teile.append(meister("Meisterinformation", (f"<p>{e(d['meister'])}</p>" if d.get("meister") else "")
+                                         + (f"<p><b>Was dahinter stecken könnte</b></p>{varianten(d['moeglichkeiten'], 'dokument:' + d['id'])}" if d.get("moeglichkeiten") else "")))
         seite("dokumente.xhtml", "Dokumente", "".join(teile))
     seite("spielleitung.xhtml", k["spielleitung"]["titel"], f"<h1>{e(k['spielleitung']['titel'])}</h1>" + kapitel_aufbereiten(k["spielleitung"]["html"]))
     seite("spielhilfen.xhtml", "Spielhilfen", spielhilfen_html())
+    seite("preise.xhtml", "Preise am Weg", preise_html())
     seite("chronik.xhtml", "Chronik des Raulswegs", chronik_html())
     seite("anhang.xhtml", "Anhang", f"<h1>{e(k['anhang']['titel'])}</h1>" + kapitel_aufbereiten(k["anhang"]["html"]))
     stufen = "".join(f"<li><b>{a['nr']} {e(a['titel'])}</b>{' (vorhanden)' if a.get('erledigt') else ''}: {e(a['text'])}</li>" for a in RW["ausbaustufen"])

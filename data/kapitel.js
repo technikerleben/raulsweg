@@ -109,7 +109,7 @@ RW.kapitel = {
       <p>In den Stationen bestimmt der Rang, wer wo schläft. Ein Ritter weicht einem Baron, ein Baron einem Grafen. Gegen Geld lässt sich daran wenig ändern, gegen einen Geleitbrief der Kanzlei dagegen viel. Viele Streitigkeiten auf dem Raulsweg beginnen mit der Frage, wer das bessere Zimmer verdient.</p>
 
       <h2>Gebühren und Zölle</h2>
-      <p>Die Benutzung des Raulswegs ist frei, doch Brücken, Fähren, Furten und manche Kreuzungen sind zollpflichtig. Die Stationen verlangen für Wechselpferde und Unterkunft festgelegte Preise, die an jedem Tor angeschlagen sind. Die Flussträger an der Natter verlangen, was der Wasserstand hergibt.</p>
+      <p>Die Benutzung des Raulswegs ist frei, doch Brücken, Fähren, Furten und manche Kreuzungen sind zollpflichtig. Die Stationen verlangen für Wechselpferde und Unterkunft festgelegte Preise, die an jedem Tor angeschlagen sind. Die Flussträger an der Natter verlangen, was der Wasserstand hergibt. Was die Reise kostet, vom Gesandten bis zur Streunerin, steht unter <a href="#/preise">Preise am Weg</a>; den Anschlag selbst gibt es als <a href="#/dokumente/preisanschlag">Handout</a>.</p>
 
       <div class="meister">
         <p class="meister-titel">Meisterinformationen: Reisetempo als Spannungsmittel</p>
@@ -150,7 +150,8 @@ RW.kapitel = {
         <li><strong>Unterwegs:</strong> <a href="#/unterwegs">Wegpunkte zwischen den Stationen</a>, Dörfer, Bauwerke, Landmarken, alte Bäume und Abstecher wie Rommilys oder Blitztann, jeder mit einer kurzen Szene zum Einstreuen.</li>
         <li><strong>Menschen:</strong> <a href="#/figuren">Figuren</a> mit je drei möglichen Geheimnissen und die <a href="#/maechte">Mächte am Weg</a>, die hinter ihnen stehen.</li>
         <li><strong>Glaube:</strong> <a href="#/tempel">zwölf Tempel</a> mit Bräuchen, Stempeln und schwelenden Konflikten.</li>
-        <li><strong>Handouts:</strong> das <a href="#/dokumente">Edikt und die Stellungnahmen</a> aus Rommilys und Perricum sowie das Stempelheft unter <a href="#/anhang/zum-mitnehmen">Zum Mitnehmen</a>.</li>
+        <li><strong>Handouts:</strong> das <a href="#/dokumente">Edikt und die Stellungnahmen</a> aus Rommilys und Perricum, der Preisanschlag, Vordrucke zum Ausfüllen und Botenbriefe, die in falsche Hände geraten können, sowie das Stempelheft unter <a href="#/anhang/zum-mitnehmen">Zum Mitnehmen</a>.</li>
+        <li><strong>Geld:</strong> <a href="#/preise">Preise am Weg</a> nach Stand, mit Reisekasse zum Ausrechnen, Diensten und Zöllen.</li>
         <li><strong>Unterwegs würfeln:</strong> <a href="#/spielhilfen">Spielhilfen</a> mit Zufallsbegegnungen für vier Abschnitte, Gerüchten, Wetter und Namen, dazu ein Knopf, der einen ganzen Reisetag auswürfelt.</li>
         <li><strong>Reisen:</strong> <a href="#/reisen">Reisezeiten, Wetter und Etikette</a> und die <a href="#/ueberblick/der-verlauf">Entfernungen</a>.</li>
       </ul>
@@ -202,10 +203,12 @@ RW.kapitel = {
         <a class="knopf knopf-link" href="export/stempelheft.pdf" download>Stempelheft A5 <small>PDF, 0,3 MB</small></a>
         <a class="knopf knopf-link" href="export/stempelheft-a4-bogen.pdf" download>Druckbogen A4 <small>PDF, 0,8 MB</small></a>
       </p>
-      <p>Die Vordrucke für <a href="#/dokumente/geleitbrief">Geleitbrief</a> und <a href="#/dokumente/leumundsbrief">Leumundsbrief</a> gibt es druckfertig als PDF zum Ausfüllen am Tisch. Der Geleitbrief hat eine Rückseite für die Vermerke der Stationen.</p>
+      <p>Die Vordrucke für <a href="#/dokumente/geleitbrief">Geleitbrief</a>, <a href="#/dokumente/leumundsbrief">Leumundsbrief</a> und <a href="#/dokumente/botenbrief">Botenbrief</a> gibt es druckfertig als PDF zum Ausfüllen am Tisch, dazu den <a href="#/dokumente/preisanschlag">Preisanschlag</a> für den Tisch. Der Geleitbrief hat eine Rückseite für die Vermerke der Stationen.</p>
       <p class="knopf-reihe">
         <a class="knopf knopf-link" href="export/vordruck-geleitbrief.pdf" download>Geleitbrief <small>PDF, A4, zwei Seiten</small></a>
         <a class="knopf knopf-link" href="export/vordruck-leumundsbrief.pdf" download>Leumundsbrief <small>PDF, A4</small></a>
+        <a class="knopf knopf-link" href="export/vordruck-botenbrief.pdf" download>Botenbrief <small>PDF, A4</small></a>
+        <a class="knopf knopf-link" href="export/vordruck-preisanschlag.pdf" download>Preisanschlag <small>PDF, A4</small></a>
       </p>
 
       <h2>Quellen</h2>
@@ -248,7 +251,7 @@ RW.ausbaustufen = [
   { nr: 4, titel: "Karte und Strecke", text: "Karte der ganzen Strecke nach avesmaps.de, Entfernungen nach der Routenplanung, Wegpunkte mit Szenen zwischen den Stationen, dazu Landmarken, Bauwerke, alte Bäume, Felsen und Orte abseits der Straße, nach Art filterbar (vorhanden). Offen: Reisezeitrechner, Landmarken auf der Streckenkarte.", erledigt: true },
   { nr: 5, titel: "Mächte und Netz", text: "Neun Mächte mit eigener Profilseite: Haltung, Machtmittel, Fürsprecher, Stimme, Umgang, Stationen, Figuren und Dokumente; Beziehungsnetz mit fünfzehn öffentlich bekannten Verhältnissen; drei Möglichkeiten je Macht in den Meisterinformationen (vorhanden). Offen: Geldflüsse am Weg.", erledigt: true },
   { nr: 6, titel: "Spielhilfen", text: "Zufallsbegegnungen für vier Abschnitte der Strecke (je W20, mit Wendungen in den Meisterinformationen), Gerüchte am Weg (W20), Wetter für alle Jahreszeiten, Namen, Herbergen, Waren, Reisende und Eigenheiten; Reisetag und Namen per Knopf würfeln (vorhanden). Ergänzt: neunundzwanzig Landmarken, Bauwerke, Bäume und Felsen am Weg sowie Abstecher nach Rommilys und Blitztann.", erledigt: true },
-  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken, Dokumente: Stationsedikt, offener Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan, Vordrucke für Geleitbrief und Leumundsbrief zum Ausfüllen (vorhanden). Offen: Botenbriefe." },
+  { nr: 7, titel: "Handouts", text: "Stempelheft als PDF zum Drucken, Dokumente: Stationsedikt, offener Brief des Hauses Rabenmund, Verlautbarung des Hauses Paligan, Preisanschlag der Kanzlei, Vordrucke für Geleitbrief, Leumundsbrief und Botenbrief, sechs Botenbriefe mit offenen Hintergründen; jedes Schriftstück einzeln druckbar (vorhanden).", erledigt: true },
   { nr: 8, titel: "Geschichten am Raulsweg", text: "Chronik der gespielten Geschichten mit Eintragsvorlage, Verweisen von Stationen, Figuren, Tempeln und Mächten und Markierung der geltenden Möglichkeiten (vorhanden). Offen: Vorlage für eigene Szenarien." },
   { nr: 9, titel: "Export", text: "Druckansicht, PDF und gegebenenfalls EPUB." }
 ];

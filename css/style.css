@@ -612,6 +612,7 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
 .reisetag { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .8rem 1.2rem; margin: 1rem 0; padding: 1rem 1.1rem; border: 1px solid var(--linie); background: var(--blatt-hell); max-width: var(--mass); }
 .reisetag label { display: flex; flex-direction: column; gap: .2rem; font-family: var(--schrift-kapit); font-size: .9rem; color: var(--tinte-weich); }
 .reisetag label.haken { flex-direction: row; align-items: center; gap: .4rem; }
+.reisetag input[type="number"] { font: inherit; font-family: var(--schrift-text); font-size: 1rem; width: 5rem; padding: .25rem .4rem; background: var(--blatt); color: var(--tinte); border: 1px solid var(--linie); }
 .reisetag select { font: inherit; font-family: var(--schrift-text); font-size: 1rem; padding: .25rem .4rem; background: var(--blatt); color: var(--tinte); border: 1px solid var(--linie); }
 .reisetag-ergebnis:empty { display: none; }
 .reisetag-ergebnis { border-left: 3px solid var(--gold); padding: .2rem 0 .2rem 1.1rem; margin: 0 0 2rem; max-width: var(--mass); }
@@ -667,11 +668,16 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
   a { color: inherit; text-decoration: none; }
   /* Einzeldruck: nur das gewählte Dokument oder den Plan */
   body.druck-einzeln main > :not(.druck-ziel) { display: none !important; }
-  body.druck-einzeln .druck-ziel > h2, body.druck-einzeln .druck-ziel .dok-herkunft, body.druck-einzeln .druck-ziel .dok-kurz { display: none; }
+  body.druck-einzeln .druck-ziel > h2, body.druck-einzeln .druck-ziel > h3, body.druck-einzeln .druck-ziel .dok-herkunft, body.druck-einzeln .druck-ziel .dok-kurz { display: none; }
   body.druck-einzeln .dokument.druck-ziel, body.druck-einzeln .druck-ziel .dok-blatt { max-width: none; margin: 0; }
   body.druck-einzeln .druck-ziel .dok-blatt { font-size: 11pt; padding: 10mm 12mm; }
-  body.druck-einzeln .dok-tabelle { break-before: page; margin-top: 0; }
-  body.druck-einzeln .dok-tabelle td { height: 2.4rem; padding-top: .2rem; padding-bottom: .2rem; }
+  body.druck-einzeln .dok-tabelle.rueckseite { break-before: page; margin-top: 0; }
+  body.druck-einzeln .preis-tabelle td, body.druck-einzeln .preis-tabelle th { height: auto; padding-top: .15rem; padding-bottom: .15rem; }
+  body.druck-einzeln .preis-tabelle td small { display: inline; margin-left: .5em; }
+  body.druck-einzeln .preis-tabelle { margin: .6rem 0; font-size: 10pt; }
+  body.druck-einzeln .preis-tabelle tr.zwischen th { padding-top: .45rem; }
+  body.druck-einzeln .druck-ziel .dok-schluss { margin-top: .6rem; }
+  body.druck-einzeln .dok-tabelle.rueckseite td { height: 2.4rem; padding-top: .2rem; padding-bottom: .2rem; }
   body.druck-einzeln .karte-gross img { border: 0; filter: none !important; }
 }
 
@@ -684,6 +690,45 @@ body.meister-an .meister-zeile { display: block; margin-top: .3rem; padding: .3r
 .dok-auswahl { line-height: 2.3; }
 .dok-tabelle { margin-top: 1.6rem; font-size: .92rem; }
 .dok-tabelle caption { font-family: var(--schrift-kapit); color: var(--rubrik); text-align: left; margin-bottom: .3rem; }
-.dok-tabelle td { height: 2rem; }
+.dok-tabelle.rueckseite td { height: 2rem; }
 .dok-tabelle td:first-child { width: 40%; }
 .dok-tabelle tbody tr:hover { background: none; }
+
+/* ---------- Dokumente: Gruppen, Briefe, Schreibfelder ---------- */
+.dok-titel { font-family: var(--schrift-titel); font-weight: 500; font-size: clamp(1.5rem, 2.6vw, 1.95rem); line-height: 1.15; color: var(--tinte); margin: 2.2rem 0 .5rem; }
+.dok-inhalt { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .4rem 1.5rem; }
+.dok-inhalt > p { grid-column: 1 / -1; }
+.dok-inhalt ul { display: block; }
+.dok-inhalt li { margin: .1rem 0 0 .8rem; font-size: .92rem; }
+.dok-gruppe-link { font-family: var(--schrift-kapit); }
+.dok-blatt.brief { max-width: 32rem; font-style: italic; transform: rotate(-.4deg); }
+.dok-blatt.brief .dok-anrede::first-letter { font-size: 1em; float: none; margin: 0; color: inherit; font-family: inherit; }
+.dok-nachschrift { font-size: .92rem; margin-top: 1rem; }
+.dok-fuss { font-size: .88rem; color: var(--tinte-weich); }
+.schreibfeld { margin: 1rem 0; }
+.schreibzeile { display: block; height: 2rem; border-bottom: 1px solid var(--linie); }
+.postvermerk { margin-top: 1.4rem; padding: .7rem .9rem; border: 1px dashed var(--tinte-weich); font-size: .92rem; }
+.postvermerk p { margin: 0 0 .9rem; }
+.postvermerk p:last-child { margin-bottom: 0; }
+.preis-tabelle td small { display: block; font-size: .8rem; color: var(--tinte-weich); }
+.preis-tabelle td:first-child { width: 72%; }
+.preis-tabelle td:last-child { white-space: nowrap; }
+.preis-tabelle tr.zwischen th { font-size: .85rem; padding-top: .8rem; border-bottom: 1px solid var(--linie); }
+
+/* ---------- Preise am Weg ---------- */
+.muenzen { padding: .5rem .8rem; border-left: 3px solid var(--gold); background: var(--blatt-hell); }
+.preis-matrix-huelle { max-width: none; }
+.preis-matrix { min-width: 52rem; font-size: .92rem; }
+.preis-matrix thead th { vertical-align: bottom; }
+.preis-matrix thead th small { display: block; font-family: var(--schrift-text); font-weight: 400; font-size: .78rem; color: var(--tinte-weich); }
+.preis-matrix tbody th { font-family: var(--schrift-kapit); color: var(--rubrik); font-weight: 700; border-bottom: 1px solid var(--linie); white-space: nowrap; position: sticky; left: 0; background: var(--blatt); }
+.preis-matrix tr.summe td, .preis-matrix tr.summe th { border-top: 2px solid var(--tinte-weich); font-weight: 700; }
+.preis-matrix tr.summe td { color: var(--tinte); }
+.preis-wer { display: grid; grid-template-columns: max-content 1fr; gap: .2rem 1rem; font-size: .92rem; color: var(--tinte-weich); max-width: 52rem; }
+.preis-wer dt { font-family: var(--schrift-kapit); color: var(--tinte); }
+.preis-wer dd { margin: 0; }
+td.preis { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.reisekasse-ergebnis { font-size: 1.2rem; max-width: var(--mass); }
+.reisekasse-ergebnis small { display: block; font-size: .9rem; color: var(--tinte-weich); }
+@media (max-width: 600px) { .preis-wer { grid-template-columns: 1fr; } td.preis { white-space: normal; } }
+@media print { .dok-blatt.brief { transform: none; } .reisekasse, .reisekasse-ergebnis { display: none !important; } }
